@@ -1,0 +1,39 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="biome.fresco.directMessage">
+
+    <!-- TODO: Update blank fragment layout -->
+
+
+    <LinearLayout
+        android:weightSum="5"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal"
+        android:background="#696969"
+        android:layout_width="match_parent"
+        android:layout_height="40dp">
+        
+        <EditText
+            android:layout_margin="4dp"
+            android:layout_weight="4"
+            android:layout_width="1dp"
+            android:background="#FFFFFF"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:background="#24B3A7"
+            android:layout_margin="4dp"
+            android:textColor="#FFFFFF"
+            android:textSize="18sp"
+            android:gravity="center"
+            android:text="Send"
+            android:layout_weight="1"
+            android:layout_width="1dp"
+            android:layout_height="match_parent" />
+        
+        
+    </LinearLayout>
+
+</RelativeLayout>

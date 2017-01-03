@@ -22,6 +22,8 @@ android {
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
 //   compile 'com.twitter.sdk.android:twitter:2.2.0'
+    //
+//    compile 'com.firebaseui:firebase-ui:1.0.1'
     compile 'com.android.support:appcompat-v7:25.1.0'
     compile 'com.android.support:support-v4:25.1.0'
     compile 'com.squareup.picasso:picasso:2.3.3'
@@ -37,9 +39,7 @@ dependencies {
     compile 'com.google.firebase:firebase-database:10.0.1'
     compile 'com.firebaseui:firebase-ui-database:1.0.1'
     compile 'com.firebaseui:firebase-ui-auth:1.0.1'
-   compile 'com.firebaseui:firebase-ui-storage:1.0.1'
-//
-//    compile 'com.firebaseui:firebase-ui:1.0.1'
+    compile 'com.firebaseui:firebase-ui-storage:1.0.1'
     androidTestCompile 'junit:junit:4.12'
 }
 

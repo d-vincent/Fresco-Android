@@ -4,15 +4,23 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
+import com.google.gson.annotations.SerializedName;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,8 +49,14 @@ public class Feed extends Fragment {
     private String mParam1;
     private String mParam2;
     private List<String> userChatNames;
-
+    private List<String> directChatIds;
+    private List<String> directUserIds;
+    private List<String> directUserImages;
+    private HashMap<String,String> directMessages;
     private OnFragmentInteractionListener mListener;
+
+    private RecyclerView dmRecycler;
+    private nameAdapter mAdapter;
 
     public Feed() {
         // Required empty public constructor
@@ -73,23 +87,76 @@ public class Feed extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
-        userChatNames = new ArrayList<>();
+      //  userChatNames = new ArrayList<>();
+        directChatIds = new ArrayList<>();
+        directUserIds = new ArrayList<>();
+        directMessages = new HashMap<>();
+        directUserImages = new ArrayList<>();
 
+        String mUID = mAuth.getCurrentUser().getUid();
 
-       final DatabaseReference chatNames =  mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("chats");
-        chatNames.addValueEventListener(new ValueEventListener() {
+//       final DatabaseReference chatNames =  mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("chats");
+//        chatNames.addValueEventListener(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//
+//                userChatNames.clear();
+//                for(DataSnapshot snap : dataSnapshot.getChildren()){
+//                    //snap.getKey();
+//                    userChatNames.add(snap.getKey());
+//               //     Toast.makeText(getContext(), snap.getKey(), Toast.LENGTH_SHORT).show();
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+
+        final DatabaseReference directChats = mDatabase.child("users").child(mUID).child("directMessages");
+        directChats.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+                directChatIds.clear();
+                directUserIds.clear();
+                for (DataSnapshot snap : dataSnapshot.getChildren()){
+                    final String chatId = (String)snap.child("id").getValue();
 
-                userChatNames.clear();
-                for(DataSnapshot snap : dataSnapshot.getChildren()){
-                    //snap.getKey();
-                    userChatNames.add(snap.getKey());
-                    Toast.makeText(getContext(), snap.getKey(), Toast.LENGTH_SHORT).show();
+                    directChatIds.add((String)snap.child("id").getValue());
+                    //Toast.makeText(getContext(), (String)snap.child("id").getValue(), Toast.LENGTH_SHORT).show();
+                    DatabaseReference name = mDatabase.child("users").child(snap.getKey()).child("name");
+                    name.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                            directUserIds.add((String)dataSnapshot.getValue());
+                          //  mAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+                    DatabaseReference image = mDatabase.child("users").child(snap.getKey()).child("photoUrl");
+                    image.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                            directUserImages.add((String)dataSnapshot.getValue());
+                            mAdapter.notifyDataSetChanged();
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                   // directUserIds.add((String)snap.getKey());
+                //    Toast.makeText(getContext(), (String)snap.getKey(), Toast.LENGTH_SHORT).show();
                 }
-
-
-
             }
 
             @Override
@@ -100,13 +167,22 @@ public class Feed extends Fragment {
 
 
 
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_feed, container, false);
+        View view = inflater.inflate(R.layout.fragment_feed, container, false);
+
+        dmRecycler = (RecyclerView)view.findViewById(R.id.feed_recycler);
+        dmRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        mAdapter = new nameAdapter(directUserIds);
+
+        dmRecycler.setAdapter(mAdapter);
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -137,5 +213,69 @@ public class Feed extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    private class dmHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+        private TextView contactName;
+        private ImageView contactImage;
+        public dmHolder(View itemView){
+            super(itemView);
+            contactName = (TextView)itemView.findViewById(R.id.dm_name);
+            contactImage = (ImageView)itemView.findViewById(R.id.contact_image);
+
+
+        }
+
+        @Override
+        public void onClick(View view) {
+
+        }
+
+        public void bindName(String string){
+            contactName.setText(string);
+
+        }
+    }
+
+    private class nameAdapter extends RecyclerView.Adapter<dmHolder>{
+
+        public List<String> mNames;
+        public nameAdapter(List<String> names){
+            mNames = names;
+        }
+
+        @Override
+        public void onBindViewHolder(dmHolder holder,  int position) {
+            holder.bindName(mNames.get(position));
+            Picasso.with(getContext())
+                    .load(directUserImages.get(position))
+                    .transform(new CircleTransformation()).fit()
+                    .centerCrop()
+//                    .placeholder(R.mipmap.contact)
+                    .into(holder.contactImage, new Callback() {
+                        @Override
+                        public void onSuccess() {
+
+                        }
+
+                        @Override
+                        public void onError() {
+
+                        }
+                    });
+        }
+
+        @Override
+        public int getItemCount() {
+            return mNames.size();
+        }
+
+        @Override
+        public dmHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+            View view = layoutInflater.inflate(R.layout.list_item_direct_message, parent, false);
+            return new dmHolder(view);
+        }
     }
 }

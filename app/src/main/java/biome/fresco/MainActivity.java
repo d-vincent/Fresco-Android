@@ -92,16 +92,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        switch ( requestCode){
-            case 0:{
-                GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
-                handleSignInResult(result);
-            }
-            default:
-            {
-                super.onActivityResult(requestCode,resultCode,data);
-            }
-        }
+//        switch ( requestCode){
+//            case 0:{
+//                GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+//                handleSignInResult(result);
+//            }
+//            default:
+//            {
+//                super.onActivityResult(requestCode,resultCode,data);
+//            }
+//        }
     }
 
     public void login(String email, String password){

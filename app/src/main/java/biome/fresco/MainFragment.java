@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -39,8 +40,8 @@ public class MainFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    ViewPager mainViewPager;
-    TabLayout tabs;
+
+
     Toolbar toolbar;
 
     String name;
@@ -96,43 +97,33 @@ public class MainFragment extends Fragment {
 
 
         toolbar = (Toolbar)view.findViewById(R.id.my_toolbar);
-        mainViewPager = (ViewPager)view.findViewById(R.id.pager);
-        mainViewPager.setAdapter(new PagerAdapter(getActivity().getSupportFragmentManager(),4));
-
-
-        tabs = (TabLayout)view.findViewById(R.id.sliding_tabs);
-        tabs.setSelectedTabIndicatorColor(getResources().getColor(R.color.white));
-        tabs.setupWithViewPager(mainViewPager);
-        tabs.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+        ((AppCompatActivity)getActivity()).getSupportActionBar().show();
+        ViewPager mainViewPager = (ViewPager)view.findViewById(R.id.pager);
+        mainViewPager.setAdapter(new PagerAdapter(getChildFragmentManager(),4));
+        mainViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onTabSelected(TabLayout.Tab tab) {
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
             }
 
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) {
+            public void onPageSelected(int position) {
 
             }
 
             @Override
-            public void onTabReselected(TabLayout.Tab tab) {
+            public void onPageScrollStateChanged(int state) {
 
             }
         });
 
 
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        if (user != null) {
-            // Name, email address, and profile photo Url
-            String name = user.getDisplayName();
-            String email = user.getEmail();
-            Uri photoUrl = user.getPhotoUrl();
+        TabLayout tabs = (TabLayout)view.findViewById(R.id.sliding_tabs);
+        tabs.setSelectedTabIndicatorColor(getResources().getColor(R.color.white));
+        tabs.setupWithViewPager(mainViewPager);
 
-            // The user's ID, unique to the Firebase project. Do NOT use this value to
-            // authenticate with your backend server, if you have one. Use
-            // FirebaseUser.getToken() instead.
-            String uid = user.getUid();
-        }
+
+
 
 
         // Specify that tabs should be displayed in the action bar.
