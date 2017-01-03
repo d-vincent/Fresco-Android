@@ -1,0 +1,70 @@
+{
+  "project_info": {
+    "project_number": "131233411160",
+    "firebase_url": "https://fresco-f3f74.firebaseio.com",
+    "project_id": "fresco-f3f74",
+    "storage_bucket": "fresco-f3f74.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:131233411160:android:d2afebf7eeeb9235",
+        "android_client_info": {
+          "package_name": "biome.fresco"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "131233411160-ed5kgsojdg29tit8418mm5njal2cm7mv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "biome.fresco",
+            "certificate_hash": "C607A238126EDBFC0E6057C1579DBC86D1DCB8BF"
+          }
+        },
+        {
+          "client_id": "131233411160-klrkrvqdv2g0antivlq2rii37d3uoj4b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "biome.fresco",
+            "certificate_hash": "EE09BBB705593420D49E4C4FC132D4E08A4DCE4D"
+          }
+        },
+        {
+          "client_id": "131233411160-k0cq567kc0b3icgq69285b7naef36k4b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwqdbuGw0g2wdRpcmZ9RxcrbadygR7Uhc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "131233411160-kr9kn50nti4r75roa9mb9gr7i87ahenr.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.adrianeves.Fresco-login"
+              }
+            },
+            {
+              "client_id": "131233411160-k0cq567kc0b3icgq69285b7naef36k4b.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
