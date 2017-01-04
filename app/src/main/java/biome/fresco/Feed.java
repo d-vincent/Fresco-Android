@@ -4,6 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -246,7 +247,7 @@ public class Feed extends Fragment {
         }
 
         @Override
-        public void onBindViewHolder(dmHolder holder,  int position) {
+        public void onBindViewHolder(dmHolder holder, final int position) {
             holder.bindName(mNames.get(position));
             Picasso.with(getContext())
                     .load(directUserImages.get(position))
@@ -264,6 +265,14 @@ public class Feed extends Fragment {
 
                         }
                     });
+
+            holder.contactName.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                   FragmentManager fm = getActivity().getSupportFragmentManager();
+                    fm.beginTransaction().replace(R.id.container, DirectMessage.newInstance(directChatIds.get(position), directUserImages.get(position))).addToBackStack("").commit();
+                }
+            });
         }
 
         @Override
