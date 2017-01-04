@@ -51,7 +51,9 @@ public class Feed extends Fragment {
     private String mParam2;
     private List<String> userChatNames;
     private List<String> directChatIds;
-    private List<String> directUserIds;
+    private List<String> directUserNames;
+    private List<String> userIds;
+
     private List<String> directUserImages;
     private HashMap<String,String> directMessages;
     private OnFragmentInteractionListener mListener;
@@ -90,7 +92,9 @@ public class Feed extends Fragment {
         }
       //  userChatNames = new ArrayList<>();
         directChatIds = new ArrayList<>();
-        directUserIds = new ArrayList<>();
+        directUserNames = new ArrayList<>();
+        userIds = new ArrayList<>();
+
         directMessages = new HashMap<>();
         directUserImages = new ArrayList<>();
 
@@ -120,18 +124,19 @@ public class Feed extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 directChatIds.clear();
-                directUserIds.clear();
+                directUserNames.clear();
                 for (DataSnapshot snap : dataSnapshot.getChildren()){
                     final String chatId = (String)snap.child("id").getValue();
 
                     directChatIds.add((String)snap.child("id").getValue());
+                    userIds.add(snap.getKey());
                     //Toast.makeText(getContext(), (String)snap.child("id").getValue(), Toast.LENGTH_SHORT).show();
                     DatabaseReference name = mDatabase.child("users").child(snap.getKey()).child("name");
                     name.addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
 
-                            directUserIds.add((String)dataSnapshot.getValue());
+                            directUserNames.add((String)dataSnapshot.getValue());
                           //  mAdapter.notifyDataSetChanged();
                         }
 
@@ -179,7 +184,7 @@ public class Feed extends Fragment {
 
         dmRecycler = (RecyclerView)view.findViewById(R.id.feed_recycler);
         dmRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        mAdapter = new nameAdapter(directUserIds);
+        mAdapter = new nameAdapter(directUserNames);
 
         dmRecycler.setAdapter(mAdapter);
 
@@ -270,7 +275,7 @@ public class Feed extends Fragment {
                 @Override
                 public void onClick(View v) {
                    FragmentManager fm = getActivity().getSupportFragmentManager();
-                    fm.beginTransaction().replace(R.id.container, DirectMessage.newInstance(directChatIds.get(position), directUserImages.get(position))).addToBackStack("").commit();
+                    fm.beginTransaction().replace(R.id.container, DirectMessage.newInstance(directChatIds.get(position), directUserImages.get(position), userIds.get(position))).addToBackStack("").commit();
                 }
             });
         }

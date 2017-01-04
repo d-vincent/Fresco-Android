@@ -9,6 +9,14 @@ public class MessageObject {
     private String author;
     private long type;
     private String timeStamp;
+    private boolean isMe;
+
+    public boolean isMe() {
+        return isMe;
+    }
+    public void setIsMe(boolean isMe){
+        this.isMe = isMe;
+    }
 
     public String getMessage() {
         return message;
@@ -42,10 +50,11 @@ public class MessageObject {
         this.timeStamp = timeStamp;
     }
 
-    public MessageObject(String message, String author, long type, String timeStamp){
+    public MessageObject(String message, String author, long type, String timeStamp, boolean isMe){
         this.author = author;
         this.timeStamp = timeStamp;
         this.type = type;
         this.message = message;
+        this.isMe = isMe;
     }
 }

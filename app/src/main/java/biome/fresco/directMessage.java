@@ -9,8 +9,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -22,10 +25,13 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.Map;
 
+import static biome.fresco.MainActivity.mAuth;
 import static biome.fresco.MainActivity.mDatabase;
 
 
@@ -46,12 +52,18 @@ public class DirectMessage extends Fragment {
     // TODO: Rename and change types of parameters
     private String mChatId;
     private String mImageUrl;
+    private String userId;
     private List<MessageObject> messages;
+
+    private EditText messageInput;
+    private ImageView sendButton;
+
 
 
     private OnFragmentInteractionListener mListener;
     private RecyclerView messageRecycler;
     private nameAdapter mAdapter;
+    private LinearLayoutManager mLayoutManager;
 
     public DirectMessage() {
         // Required empty public constructor
@@ -64,11 +76,12 @@ public class DirectMessage extends Fragment {
      * @return A new instance of fragment DirectMessage.
      */
     // TODO: Rename and change types and number of parameters
-    public static DirectMessage newInstance(String chatId, String imageUrl) {
+    public static DirectMessage newInstance(String chatId, String imageUrl, String userId) {
         DirectMessage fragment = new DirectMessage();
         //Bundle args = new Bundle();
         fragment.mChatId = chatId;
         fragment.mImageUrl = imageUrl;
+        fragment.userId = userId;
        // args.putString(ARG_PARAM1, chatId);
 
         //fragment.setArguments(args);
@@ -82,6 +95,7 @@ public class DirectMessage extends Fragment {
 //            mParam1 = getArguments().getString(ARG_PARAM1);
 //            mParam2 = getArguments().getString(ARG_PARAM2);
         }
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         messages = new ArrayList<>();
 
@@ -101,11 +115,18 @@ public class DirectMessage extends Fragment {
 
                     String message = (String)dataSnapshot.child("content").getValue();
                     String author = (String)dataSnapshot.child("author").getValue();
-                    String timeStamp = (String)dataSnapshot.child("timeStamp").getValue();
+                    String timeStamp = (String)dataSnapshot.child("timestamp").getValue().toString();
 //                    long type = (long)snap.child("type").getValue();
 
-                    messages.add(new MessageObject(message,author,0,timeStamp));
+                if (author.equals(userId)) {
+                    messages.add(new MessageObject(message, author, 0, timeStamp,false));
+                }
+                else {
+                    messages.add(new MessageObject(message,author,0,timeStamp,true));
+                }
                     mAdapter.notifyDataSetChanged();
+                mLayoutManager.scrollToPositionWithOffset(messages.size()-1,0);
+
 
 
             }
@@ -134,10 +155,43 @@ public class DirectMessage extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_direct_message, container, false);
 
         messageRecycler = (RecyclerView)view.findViewById(R.id.dm_recycler);
-        messageRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
+        mLayoutManager = new LinearLayoutManager(getContext());
+        messageRecycler.setLayoutManager(mLayoutManager);
+        messageRecycler.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
+                mLayoutManager.scrollToPositionWithOffset(messages.size()-1,0);
+            }
+        });
 
         mAdapter = new nameAdapter(messages);
         messageRecycler.setAdapter(mAdapter);
+
+        messageInput = (EditText)view.findViewById(R.id.message_input);
+        sendButton = (ImageView) view.findViewById(R.id.send_message);
+        sendButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String message = messageInput.getText().toString();
+                if (!message.equals("")){
+                    messageInput.setText("");
+                    Map<String, Object> updates = new HashMap<String, Object>();
+                    updates.put("author", mAuth.getCurrentUser().getUid());
+                    updates.put("content", message);
+                    updates.put("timestamp",System.currentTimeMillis());
+                    updates.put("type", 0);
+                    mDatabase.child("directMessages").child(mChatId).child("messages").push().setValue(updates);
+
+
+                }
+            }
+        });
+//        messageInput.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Toast.makeText(getContext(), "What", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
         return view;
     }
@@ -205,20 +259,37 @@ public class DirectMessage extends Fragment {
         @Override
         public void onBindViewHolder(MessageHolder holder, int position) {
             holder.bindMessage(messages.get(position));
-            Picasso.with(getContext())
-                    .load(mImageUrl)
+            if (!messages.get(position).isMe()) {
+                Picasso.with(getContext())
+                        .load(mImageUrl)
 //                    .placeholder(R.mipmap.contact)
-                    .into(holder.contactImage, new Callback() {
-                        @Override
-                        public void onSuccess() {
+                        .into(holder.contactImage, new Callback() {
+                            @Override
+                            public void onSuccess() {
 
-                        }
+                            }
 
-                        @Override
-                        public void onError() {
+                            @Override
+                            public void onError() {
 
-                        }
-                    });
+                            }
+                        });
+            }else {
+                Picasso.with(getContext())
+                        .load(mAuth.getCurrentUser().getPhotoUrl())
+//                    .placeholder(R.mipmap.contact)
+                        .into(holder.contactImage, new Callback() {
+                            @Override
+                            public void onSuccess() {
+
+                            }
+
+                            @Override
+                            public void onError() {
+
+                            }
+                        });
+            }
         }
 
         @Override
