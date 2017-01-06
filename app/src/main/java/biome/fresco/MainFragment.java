@@ -100,6 +100,9 @@ public class MainFragment extends Fragment {
         ((AppCompatActivity)getActivity()).getSupportActionBar().show();
         ViewPager mainViewPager = (ViewPager)view.findViewById(R.id.pager);
         mainViewPager.setAdapter(new PagerAdapter(getChildFragmentManager(),4));
+        final TabLayout tabs = (TabLayout)view.findViewById(R.id.sliding_tabs);
+        tabs.setSelectedTabIndicatorColor(getResources().getColor(R.color.white));
+        tabs.setupWithViewPager(mainViewPager);
         mainViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -108,6 +111,8 @@ public class MainFragment extends Fragment {
 
             @Override
             public void onPageSelected(int position) {
+                tabs.getTabAt(position).select();
+
 
             }
 
@@ -118,9 +123,7 @@ public class MainFragment extends Fragment {
         });
 
 
-        TabLayout tabs = (TabLayout)view.findViewById(R.id.sliding_tabs);
-        tabs.setSelectedTabIndicatorColor(getResources().getColor(R.color.white));
-        tabs.setupWithViewPager(mainViewPager);
+
 
 
 

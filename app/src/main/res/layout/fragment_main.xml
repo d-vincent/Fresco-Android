@@ -9,6 +9,7 @@
         android:id="@+id/sliding_tabs"
         android:background="@color/colorPrimary"
         android:layout_width="match_parent"
+        style="@style/AppTheme.TabStyle"
         android:layout_height="56dp"/>
 
 
