@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -8,9 +8,30 @@
     <!-- TODO: Update blank fragment layout -->
 
     <android.support.v7.widget.RecyclerView
+        android:layout_above="@+id/new_conversation"
         android:id="@+id/feed_recycler"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 
 
-</FrameLayout>
+    <RelativeLayout
+        android:background="@color/colorPrimary"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/new_conversation"
+        android:layout_width="match_parent"
+        android:layout_height="56dp">
+
+        <biome.fresco.CustomTextViewLogo
+            android:textColor="@color/white"
+            android:text="New Conversation"
+            android:textSize="22sp"
+            android:layout_centerInParent="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

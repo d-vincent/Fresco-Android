@@ -54,6 +54,8 @@ public class Feed extends Fragment {
     private List<String> directUserNames;
     private List<String> userIds;
 
+    View newConvo;
+
     private List<String> directUserImages;
     private HashMap<String,String> directMessages;
     private OnFragmentInteractionListener mListener;
@@ -187,6 +189,15 @@ public class Feed extends Fragment {
         mAdapter = new nameAdapter(directUserNames);
 
         dmRecycler.setAdapter(mAdapter);
+
+        newConvo = view.findViewById(R.id.new_conversation);
+        newConvo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                fm.beginTransaction().replace(R.id.container, SelectUser.newInstance("","")).addToBackStack("").commit();
+            }
+        });
 
         return view;
     }
