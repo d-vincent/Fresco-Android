@@ -182,7 +182,6 @@ public class DirectMessage extends Fragment {
                     updates.put("type", 0);
                     mDatabase.child("directMessages").child(mChatId).child("messages").push().setValue(updates);
 
-
                 }
             }
         });
