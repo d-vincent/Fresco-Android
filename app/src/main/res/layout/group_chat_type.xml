@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:layout_marginTop="8dp"
+        android:id="@+id/from_group"
+        android:textSize="22sp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="Create from group"
+        android:layout_width="250dp"
+        android:layout_height="40dp" />
+
+    <TextView
+        android:layout_margin="8dp"
+        android:textSize="22sp"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:layout_below="@+id/from_group"
+        android:id="@+id/from_project"
+        android:text="Create from Project"
+        android:layout_width="250dp"
+        android:layout_height="40dp" />
+
+    <TextView
+        android:textSize="22sp"
+        android:gravity="center"
+        android:text="Create from scratch"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/from_project"
+        android:id="@+id/from_scratch"
+        android:layout_width="250dp"
+        android:layout_height="40dp" />
+
+</RelativeLayout>

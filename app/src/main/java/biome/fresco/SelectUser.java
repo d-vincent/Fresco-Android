@@ -220,25 +220,76 @@ public class SelectUser extends Fragment {
             holder.contactName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    HashMap<String, String> members = new HashMap<String, String>();
-                    members.put(mAuth.getCurrentUser().getUid(),"true");
-                    members.put(mUsers.get(position).getId(), "true");
-                    HashMap<String, Object> main = new HashMap<String, Object>();
-                    main.put("created", System.currentTimeMillis());
-                    main.put("members",members);
+
+                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("directMessages").child(mUsers.get(position).getId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                String id = (String)dataSnapshot.child("id").getValue();
+                            if (id != null) {
+                                FragmentManager fm = getActivity().getSupportFragmentManager();
+                                fm.beginTransaction().replace(R.id.container, DirectMessage.newInstance(id, mUsers.get(position).getPhotoUrl(), mUsers.get(position).getId())).addToBackStack("").commit();
+                            }
+                            else {
 
 
-                    DatabaseReference newChat = mDatabase.child("directMessages").push();
-                    String chatId = newChat.getKey();
-                    newChat.setValue(main);
+                                HashMap<String, String> members = new HashMap<String, String>();
+                                members.put(mAuth.getCurrentUser().getUid(), "true");
+                                members.put(mUsers.get(position).getId(), "true");
+                                HashMap<String, Object> main = new HashMap<String, Object>();
+                                main.put("created", System.currentTimeMillis());
+                                main.put("members", members);
 
-                    HashMap<String, String> thing = new HashMap<String, String>();
-                    thing.put("id",chatId);
-                    thing.put("notified", "true");
-                    thing.put("unread","false");
-                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("directMessages").child(mUsers.get(position).getId()).setValue(thing);
-                    FragmentManager fm = getActivity().getSupportFragmentManager();
-                    fm.beginTransaction().replace(R.id.container, DirectMessage.newInstance(chatId, mUsers.get(position).getPhotoUrl(), mUsers.get(position).getId())).addToBackStack("").commit();
+
+                                DatabaseReference newChat = mDatabase.child("directMessages").push();
+                                String chatId = newChat.getKey();
+                                newChat.setValue(main);
+
+                                HashMap<String, Object> thing = new HashMap<String, Object>();
+                                thing.put("id", chatId);
+                                thing.put("notified", true);
+                                thing.put("unread", false);
+
+
+                                HashMap<String, Object> otherThing = new HashMap<String, Object>();
+                                otherThing.put("id", chatId);
+                                otherThing.put("notified", false);
+                                otherThing.put("unread", true);
+
+                                String currentUserId = mAuth.getCurrentUser().getUid();
+                                mDatabase.child("users").child(mUsers.get(position).getId()).child("directMessages").child(currentUserId).setValue(otherThing);
+                                mDatabase.child("users").child(currentUserId).child("directMessages").child(mUsers.get(position).getId()).setValue(thing);
+                                FragmentManager fm = getActivity().getSupportFragmentManager();
+                                fm.beginTransaction().replace(R.id.container, DirectMessage.newInstance(chatId, mUsers.get(position).getPhotoUrl(), mUsers.get(position).getId())).addToBackStack("").commit();
+
+                            }
+                            }
+
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+//                    HashMap<String, String> members = new HashMap<String, String>();
+//                    members.put(mAuth.getCurrentUser().getUid(),"true");
+//                    members.put(mUsers.get(position).getId(), "true");
+//                    HashMap<String, Object> main = new HashMap<String, Object>();
+//                    main.put("created", System.currentTimeMillis());
+//                    main.put("members",members);
+//
+//
+//                    DatabaseReference newChat = mDatabase.child("directMessages").push();
+//                    String chatId = newChat.getKey();
+//                    newChat.setValue(main);
+//
+//                    HashMap<String, String> thing = new HashMap<String, String>();
+//                    thing.put("id",chatId);
+//                    thing.put("notified", "true");
+//                    thing.put("unread","false");
+//                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("directMessages").child(mUsers.get(position).getId()).setValue(thing);
+//                    FragmentManager fm = getActivity().getSupportFragmentManager();
+//                    fm.beginTransaction().replace(R.id.container, DirectMessage.newInstance(chatId, mUsers.get(position).getPhotoUrl(), mUsers.get(position).getId())).addToBackStack("").commit();
                 }
             });
         }

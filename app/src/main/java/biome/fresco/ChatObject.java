@@ -13,23 +13,13 @@ public class ChatObject {
     private boolean notified;
     private boolean unread;
 
-    public ChatObject(String roomId, String toUserId, String notified, String unread){
+    public ChatObject(String roomId, String toUserId, boolean notified, boolean unread){
 
         this.roomId = roomId;
         this.toUserName = toUserName;
         this.toUserId = toUserId;
-        if(notified.equals("true")){
-            this.notified = true;
-        }else{
-            this.notified = false;
-        }
-        if(unread.equals("true")){
-            this.unread = true;
-        }
-        else {
-            this.unread = false;
-        }
-
+        this.notified = notified;
+        this.unread = unread;
     }
 
     public String getRoomId() {

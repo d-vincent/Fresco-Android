@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -48,12 +51,10 @@ public class Feed extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-    private List<String> userChatNames;
-    private List<String> directChatIds;
-    private List<String> directUserNames;
-    private List<String> userIds;
+
+    private FloatingActionMenu mFab;
+    com.github.clans.fab.FloatingActionButton fabDirectMessage;
+    com.github.clans.fab.FloatingActionButton fabGroupChat;
     private List<ChatObject> chatObjects;
 
     View newConvo;
@@ -91,13 +92,10 @@ public class Feed extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
       //  userChatNames = new ArrayList<>();
-        directChatIds = new ArrayList<>();
-        directUserNames = new ArrayList<>();
-        userIds = new ArrayList<>();
+
 
         directMessages = new HashMap<>();
         directUserImages = new ArrayList<>();
@@ -131,8 +129,8 @@ public class Feed extends Fragment {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String toUserId = dataSnapshot.getKey();
                 String roomId = (String)dataSnapshot.child("id").getValue();
-                String notified = (String)dataSnapshot.child("notified").getValue();
-                String unread = (String)dataSnapshot.child("unread").getValue();
+                boolean notified = (boolean)dataSnapshot.child("notified").getValue();
+                boolean unread = (boolean)dataSnapshot.child("unread").getValue();
 
                 final ChatObject chat = new ChatObject(roomId, toUserId, notified, unread);
 
@@ -196,14 +194,15 @@ public class Feed extends Fragment {
 
         dmRecycler.setAdapter(mAdapter);
 
-        newConvo = view.findViewById(R.id.new_conversation);
-        newConvo.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentManager fm = getActivity().getSupportFragmentManager();
-                fm.beginTransaction().replace(R.id.container, SelectUser.newInstance("","")).addToBackStack("").commit();
-            }
-        });
+        setUpFabMenu(view);
+//        newConvo = view.findViewById(R.id.new_conversation);
+//        newConvo.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                FragmentManager fm = getActivity().getSupportFragmentManager();
+//                fm.beginTransaction().replace(R.id.container, SelectUser.newInstance("","")).addToBackStack("").commit();
+//            }
+//        });
 
         return view;
     }
@@ -310,5 +309,19 @@ public class Feed extends Fragment {
             View view = layoutInflater.inflate(R.layout.list_item_direct_message, parent, false);
             return new dmHolder(view);
         }
+    }
+
+
+    private void setUpFabMenu(View view){
+
+        mFab = (FloatingActionMenu) view.findViewById(R.id.chat_fab);
+        fabDirectMessage = (FloatingActionButton)mFab.findViewById(R.id.fabDirectMessage);
+        fabDirectMessage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                fm.beginTransaction().replace(R.id.container, SelectUser.newInstance("","")).addToBackStack("").commit();
+            }
+        });
     }
 }
