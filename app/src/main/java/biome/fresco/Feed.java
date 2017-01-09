@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -53,6 +54,7 @@ public class Feed extends Fragment {
     private List<String> directChatIds;
     private List<String> directUserNames;
     private List<String> userIds;
+    private List<ChatObject> chatObjects;
 
     View newConvo;
 
@@ -100,6 +102,8 @@ public class Feed extends Fragment {
         directMessages = new HashMap<>();
         directUserImages = new ArrayList<>();
 
+        chatObjects = new ArrayList<>();
+
         String mUID = mAuth.getCurrentUser().getUid();
 
 //       final DatabaseReference chatNames =  mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("chats");
@@ -122,53 +126,55 @@ public class Feed extends Fragment {
 //        });
 
         final DatabaseReference directChats = mDatabase.child("users").child(mUID).child("directMessages");
-        directChats.addValueEventListener(new ValueEventListener() {
+        directChats.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                directChatIds.clear();
-                directUserNames.clear();
-                for (DataSnapshot snap : dataSnapshot.getChildren()){
-                    final String chatId = (String)snap.child("id").getValue();
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                String toUserId = dataSnapshot.getKey();
+                String roomId = (String)dataSnapshot.child("id").getValue();
+                String notified = (String)dataSnapshot.child("notified").getValue();
+                String unread = (String)dataSnapshot.child("unread").getValue();
 
-                    directChatIds.add((String)snap.child("id").getValue());
-                    userIds.add(snap.getKey());
-                    //Toast.makeText(getContext(), (String)snap.child("id").getValue(), Toast.LENGTH_SHORT).show();
-                    DatabaseReference name = mDatabase.child("users").child(snap.getKey()).child("name");
-                    name.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
+                final ChatObject chat = new ChatObject(roomId, toUserId, notified, unread);
 
-                            directUserNames.add((String)dataSnapshot.getValue());
-                          //  mAdapter.notifyDataSetChanged();
-                        }
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
+                mDatabase.child("users").child(chat.getToUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
 
-                        }
-                    });
+                        chat.setToUserName((String)dataSnapshot.child("name").getValue());
+                        chat.setToUserImageUrl((String)dataSnapshot.child("photoUrl").getValue());
+                        chatObjects.add(chat);
+                        mAdapter.notifyDataSetChanged();
 
-                    DatabaseReference image = mDatabase.child("users").child(snap.getKey()).child("photoUrl");
-                    image.addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(DataSnapshot dataSnapshot) {
+                    }
 
-                            directUserImages.add((String)dataSnapshot.getValue());
-                            mAdapter.notifyDataSetChanged();
-                        }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
-                        @Override
-                        public void onCancelled(DatabaseError databaseError) {
+                    }
+                });
+            }
 
-                        }
-                    });
-                   // directUserIds.add((String)snap.getKey());
-                //    Toast.makeText(getContext(), (String)snap.getKey(), Toast.LENGTH_SHORT).show();
-                }
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
+
+
 
             }
         });
@@ -186,7 +192,7 @@ public class Feed extends Fragment {
 
         dmRecycler = (RecyclerView)view.findViewById(R.id.feed_recycler);
         dmRecycler.setLayoutManager(new LinearLayoutManager(getContext()));
-        mAdapter = new nameAdapter(directUserNames);
+        mAdapter = new nameAdapter(chatObjects);
 
         dmRecycler.setAdapter(mAdapter);
 
@@ -249,24 +255,26 @@ public class Feed extends Fragment {
 
         }
 
-        public void bindName(String string){
-            contactName.setText(string);
+        public void bindName(ChatObject chatObject){
+            String name;
+
+            contactName.setText(chatObject.getToUserName());
 
         }
     }
 
     private class nameAdapter extends RecyclerView.Adapter<dmHolder>{
 
-        public List<String> mNames;
-        public nameAdapter(List<String> names){
-            mNames = names;
+        public List<ChatObject> mChats;
+        public nameAdapter(List<ChatObject> chats){
+            mChats = chats;
         }
 
         @Override
         public void onBindViewHolder(dmHolder holder, final int position) {
-            holder.bindName(mNames.get(position));
+            holder.bindName(mChats.get(position));
             Picasso.with(getContext())
-                    .load(directUserImages.get(position))
+                    .load(mChats.get(position).getToUserImageUrl())
                     .transform(new CircleTransformation()).fit()
                     .centerCrop()
 //                    .placeholder(R.mipmap.contact)
@@ -286,14 +294,14 @@ public class Feed extends Fragment {
                 @Override
                 public void onClick(View v) {
                    FragmentManager fm = getActivity().getSupportFragmentManager();
-                    fm.beginTransaction().replace(R.id.container, DirectMessage.newInstance(directChatIds.get(position), directUserImages.get(position), userIds.get(position))).addToBackStack("").commit();
+                    fm.beginTransaction().replace(R.id.container, DirectMessage.newInstance(mChats.get(position).getRoomId(), mChats.get(position).getToUserImageUrl(), mChats.get(position).getToUserId())).addToBackStack("").commit();
                 }
             });
         }
 
         @Override
         public int getItemCount() {
-            return mNames.size();
+            return mChats.size();
         }
 
         @Override

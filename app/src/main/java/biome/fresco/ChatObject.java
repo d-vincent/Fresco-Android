@@ -6,6 +6,8 @@ package biome.fresco;
 
 public class ChatObject {
 
+    private String toUserImageUrl;
+    private String toUserName;
     private String roomId;
     private String toUserId;
     private boolean notified;
@@ -14,6 +16,7 @@ public class ChatObject {
     public ChatObject(String roomId, String toUserId, String notified, String unread){
 
         this.roomId = roomId;
+        this.toUserName = toUserName;
         this.toUserId = toUserId;
         if(notified.equals("true")){
             this.notified = true;
@@ -27,7 +30,53 @@ public class ChatObject {
             this.unread = false;
         }
 
-
     }
 
+    public String getRoomId() {
+        return roomId;
+    }
+
+    public void setRoomId(String roomId) {
+        this.roomId = roomId;
+    }
+
+    public String getToUserId() {
+        return toUserId;
+    }
+
+    public void setToUserId(String toUserId) {
+        this.toUserId = toUserId;
+    }
+
+    public boolean isNotified() {
+        return notified;
+    }
+
+    public void setNotified(boolean notified) {
+        this.notified = notified;
+    }
+
+    public boolean isUnread() {
+        return unread;
+    }
+
+    public void setUnread(boolean unread) {
+        this.unread = unread;
+    }
+
+    public String getToUserName() {
+        return toUserName;
+    }
+
+    public void setToUserName(String toUserName) {
+        this.toUserName = toUserName;
+    }
+
+    public String getToUserImageUrl() {
+        return toUserImageUrl;
+    }
+
+    public void setToUserImageUrl(String toUserImageUrl) {
+        this.toUserImageUrl = toUserImageUrl;
+    }
 }
