@@ -146,7 +146,7 @@ public class SelectGroupDialog extends DialogFragment {
                 @Override
                 public void onClick(View v) {
 
-                    DatabaseReference groupChat =  mDatabase.child("groups").child("chats").child(mGroups.get(position)).push();
+                    DatabaseReference groupChat =  mDatabase.child("groups").child(mGroups.get(position)).child("chats").push();
                     final String groupChatId = groupChat.getKey();
                     groupChat.setValue(true);
 
@@ -161,15 +161,16 @@ public class SelectGroupDialog extends DialogFragment {
 
                             for(DataSnapshot snap:dataSnapshot.getChildren()){
                                 groupUserIds.add(snap.getKey());
-                                HashMap<String, Long> role = new HashMap<String, Long>();
-                                if (snap.getKey().equals(uid)){
-                                    role.put("role", 1L);
-                                }else {
-                                    role.put("role", 0L);
-                                }
-                                members.put(snap.getKey(), role);
+//                                HashMap<String, Long> role = new HashMap<String, Long>();
+//                                if (snap.getKey().equals(uid)){
+//                                    role.put("role", 1L);
+//                                }else {
+//                                    role.put("role", 0L);
+//                                }
+                                members.put(snap.getKey(), true);
                             }
                             chat.put("members", members);
+                            chat.put("name",groupChatId);
                             mDatabase.child("chats").child(groupChatId).setValue(chat);
 
                             for (String user:groupUserIds){
@@ -179,7 +180,7 @@ public class SelectGroupDialog extends DialogFragment {
                                 mDatabase.child("users").child(user).child("chats").child(groupChatId).setValue(chatThing);
                             }
 
-
+                            //TODO chat has been created, head over to chat window
                         }
 
                         @Override
