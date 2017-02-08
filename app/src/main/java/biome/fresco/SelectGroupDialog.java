@@ -98,6 +98,7 @@ public class SelectGroupDialog extends DialogFragment {
         mLinearLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mAdapter = new GroupAdapter(mGroupNames);
+        mRecyclerView.setAdapter(mAdapter);
 
         return view;
     }
@@ -158,6 +159,7 @@ public class SelectGroupDialog extends DialogFragment {
                 public void onClick(View v) {
 
 
+                    final HashMap<String,SimpleUser> userHashMap = new HashMap<String, SimpleUser>();
                     AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                     builder.setTitle("What should we call this chat?");
 
@@ -199,7 +201,7 @@ public class SelectGroupDialog extends DialogFragment {
                             chat.put("name",chatName);
                             mDatabase.child("chats").child(groupChatId).setValue(chat);
 
-                            final HashMap<String,SimpleUser> userHashMap = new HashMap<String, SimpleUser>();
+
 
                             for ( final String user:groupUserIds){
                                 HashMap<String, Boolean> chatThing = new HashMap<String, Boolean>();
@@ -231,8 +233,8 @@ public class SelectGroupDialog extends DialogFragment {
 
                         }
                     });
-//                    FragmentManager fm = getActivity().getSupportFragmentManager();
-//                    fm.beginTransaction().replace(R.id.container, DirectMessage.newInstance(mChats.get(position).getRoomId(), mChats.get(position).getToUserImageUrl(), mChats.get(position).getToUserId())).addToBackStack("").commit();
+                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                    fm.beginTransaction().replace(R.id.container, GroupMessageFragment.newInstance(groupChatId,userHashMap)).addToBackStack("").commit();
 
 
 
