@@ -322,5 +322,13 @@ public class Feed extends Fragment {
                 fm.beginTransaction().replace(R.id.container, SelectUser.newInstance("","")).addToBackStack("").commit();
             }
         });
+        fabGroupChat = (FloatingActionButton)mFab.findViewById(R.id.fabGroupChat);
+        fabGroupChat.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fm = getActivity().getSupportFragmentManager();
+                fm.beginTransaction().replace(R.id.container, SelectGroupDialog.newInstance()).addToBackStack("").commit();
+            }
+        });
     }
 }

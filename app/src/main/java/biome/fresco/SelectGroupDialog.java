@@ -1,14 +1,18 @@
 package biome.fresco;
 
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -40,6 +44,13 @@ public class SelectGroupDialog extends DialogFragment {
     private List<String> mGroupNames;
 
     public String uid;
+
+    public static SelectGroupDialog newInstance(){
+
+        SelectGroupDialog fragment = new SelectGroupDialog();
+
+        return fragment;
+    }
 
 
     @Override
@@ -81,12 +92,13 @@ public class SelectGroupDialog extends DialogFragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.select_group_dialog, container);
+        View view = inflater.inflate(R.layout.select_group_dialog, container, false);
 
         mRecyclerView = (RecyclerView) view.findViewById(R.id.group_recycler);
         mLinearLayoutManager = new LinearLayoutManager(getContext());
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mAdapter = new GroupAdapter(mGroupNames);
+        mRecyclerView.setAdapter(mAdapter);
 
         return view;
     }
@@ -146,7 +158,23 @@ public class SelectGroupDialog extends DialogFragment {
                 @Override
                 public void onClick(View v) {
 
-                    DatabaseReference groupChat =  mDatabase.child("groups").child(mGroups.get(position)).child("chats").push();
+
+                    final HashMap<String,SimpleUser> userHashMap = new HashMap<String, SimpleUser>();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
+                    builder.setTitle("What should we call this chat?");
+
+                    final EditText input = new EditText(getContext());
+
+                    input.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+                    builder.setView(input);
+
+                    builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+
+                            final String chatName = input.getText().toString();
+
+                                                DatabaseReference groupChat =  mDatabase.child("groups").child(mGroups.get(position)).child("chats").push();
                     final String groupChatId = groupChat.getKey();
                     groupChat.setValue(true);
 
@@ -170,27 +198,59 @@ public class SelectGroupDialog extends DialogFragment {
                                 members.put(snap.getKey(), true);
                             }
                             chat.put("members", members);
-                            chat.put("name",groupChatId);
+                            chat.put("name",chatName);
                             mDatabase.child("chats").child(groupChatId).setValue(chat);
 
-                            for (String user:groupUserIds){
+
+
+                            for ( final String user:groupUserIds){
                                 HashMap<String, Boolean> chatThing = new HashMap<String, Boolean>();
                                 chatThing.put("notified", false);
                                 chatThing.put("unread",false);
                                 mDatabase.child("users").child(user).child("chats").child(groupChatId).setValue(chatThing);
+
+                                mDatabase.child("users").child(user).addListenerForSingleValueEvent(new ValueEventListener() {
+                                    @Override
+                                    public void onDataChange(DataSnapshot dataSnapshot) {
+                                        String userName = (String)dataSnapshot.child("name").getValue();
+                                        String photoUrl = (String)dataSnapshot.child("photoUrl").getValue();
+                                        SimpleUser userObject = new SimpleUser(user,userName,photoUrl);
+                                        userHashMap.put(user,userObject);
+                                    }
+
+                                    @Override
+                                    public void onCancelled(DatabaseError databaseError) {
+
+                                    }
+                                });
                             }
 
                             //TODO chat has been created, head over to chat window
-                        }
 
+                        }
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
 
                         }
                     });
+                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                    fm.beginTransaction().replace(R.id.container, GroupMessageFragment.newInstance(groupChatId,userHashMap)).addToBackStack("").commit();
 
-//                    FragmentManager fm = getActivity().getSupportFragmentManager();
-//                    fm.beginTransaction().replace(R.id.container, DirectMessage.newInstance(mChats.get(position).getRoomId(), mChats.get(position).getToUserImageUrl(), mChats.get(position).getToUserId())).addToBackStack("").commit();
+
+
+                        }
+                    });
+                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+
+                    builder.show();
+
+
+
                 }
             });
         }
