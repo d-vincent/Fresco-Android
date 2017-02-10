@@ -96,7 +96,6 @@ public class Feed extends Fragment {
         }
       //  userChatNames = new ArrayList<>();
 
-
         directMessages = new HashMap<>();
         directUserImages = new ArrayList<>();
 
