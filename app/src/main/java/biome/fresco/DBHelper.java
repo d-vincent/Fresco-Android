@@ -12,6 +12,4 @@ public class DBHelper {
 
     FirebaseUser user = mAuth.getCurrentUser();
 
-
-
 }

@@ -59,7 +59,7 @@ public class SelectGroupDialog extends DialogFragment {
         uid = mAuth.getCurrentUser().getUid();
         mGroupNames = new ArrayList<>();
 
-        mDatabase.child("users").child(uid).child("groups").addChildEventListener(new ChildEventListener() {
+        mDatabase.child("users").child(uid).child("projects").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 mGroupNames.add(dataSnapshot.getKey());
@@ -137,22 +137,6 @@ public class SelectGroupDialog extends DialogFragment {
         @Override
         public void onBindViewHolder(GroupHolder holder, final int position) {
             holder.bindName(mGroups.get(position));
-//            Picasso.with(getContext())
-//                    .load(mChats.get(position).getToUserImageUrl())
-//                    .transform(new CircleTransformation()).fit()
-//                    .centerCrop()
-////                    .placeholder(R.mipmap.contact)
-//                    .into(holder.contactImage, new Callback() {
-//                        @Override
-//                        public void onSuccess() {
-//
-//                        }
-//
-//                        @Override
-//                        public void onError() {
-//
-//                        }
-//                    });
 
             holder.contactName.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -179,7 +163,7 @@ public class SelectGroupDialog extends DialogFragment {
                     groupChat.setValue(true);
 
                     final List<String> groupUserIds = new ArrayList<String>();
-                    mDatabase.child("groups").child(mGroups.get(position)).child("members").addListenerForSingleValueEvent(new ValueEventListener() {
+                    mDatabase.child("projects").child(mGroups.get(position)).child("members").addListenerForSingleValueEvent(new ValueEventListener() {
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
                             HashMap<String, Object> chat = new HashMap<String, Object>();
@@ -189,19 +173,11 @@ public class SelectGroupDialog extends DialogFragment {
 
                             for(DataSnapshot snap:dataSnapshot.getChildren()){
                                 groupUserIds.add(snap.getKey());
-//                                HashMap<String, Long> role = new HashMap<String, Long>();
-//                                if (snap.getKey().equals(uid)){
-//                                    role.put("role", 1L);
-//                                }else {
-//                                    role.put("role", 0L);
-//                                }
                                 members.put(snap.getKey(), true);
                             }
                             chat.put("members", members);
                             chat.put("name",chatName);
                             mDatabase.child("chats").child(groupChatId).setValue(chat);
-
-
 
                             for ( final String user:groupUserIds){
                                 HashMap<String, Boolean> chatThing = new HashMap<String, Boolean>();
@@ -224,9 +200,7 @@ public class SelectGroupDialog extends DialogFragment {
                                     }
                                 });
                             }
-
                             //TODO chat has been created, head over to chat window
-
                         }
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
@@ -235,8 +209,6 @@ public class SelectGroupDialog extends DialogFragment {
                     });
                     FragmentManager fm = getActivity().getSupportFragmentManager();
                     fm.beginTransaction().replace(R.id.container, GroupMessageFragment.newInstance(groupChatId,userHashMap)).addToBackStack("").commit();
-
-
 
                         }
                     });

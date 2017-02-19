@@ -133,7 +133,6 @@ public class Feed extends Fragment {
 
                 final ChatObject chat = new ChatObject(roomId, toUserId, notified, unread);
 
-
                 mDatabase.child("users").child(chat.getToUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -142,7 +141,6 @@ public class Feed extends Fragment {
                         chat.setToUserImageUrl((String)dataSnapshot.child("photoUrl").getValue());
                         chatObjects.add(chat);
                         mAdapter.notifyDataSetChanged();
-
                     }
 
                     @Override
@@ -157,7 +155,6 @@ public class Feed extends Fragment {
 
 
             }
-
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
 
@@ -176,7 +173,51 @@ public class Feed extends Fragment {
             }
         });
 
+        mDatabase.child("users").child(mUID).child("chats").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
+                String toUserId = dataSnapshot.getKey();
+                String roomId = (String)dataSnapshot.child("id").getValue();
+                boolean notified = (boolean)dataSnapshot.child("notified").getValue();
+                boolean unread = (boolean)dataSnapshot.child("unread").getValue();
+
+                final ChatObject chat = new ChatObject(roomId, toUserId, notified, unread);
+
+                mDatabase.child("users").child(chat.getToUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        chat.setToUserName((String)dataSnapshot.child("name").getValue());
+                        chat.setToUserImageUrl((String)dataSnapshot.child("photoUrl").getValue());
+                        chatObjects.add(chat);
+                        mAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+            }
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
 
     }
