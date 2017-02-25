@@ -117,7 +117,7 @@ public class GroupMessageFragment extends Fragment {
 
                 String message = (String)dataSnapshot.child("content").getValue();
                 String author = (String)dataSnapshot.child("author").getValue();
-                String timeStamp = (String)dataSnapshot.child("timestamp").getValue().toString();
+                long timeStamp = (long)dataSnapshot.child("timestamp").getValue();
 //                    long type = (long)snap.child("type").getValue();
 
                 if (author.equals(userId)) {

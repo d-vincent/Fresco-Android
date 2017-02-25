@@ -159,6 +159,13 @@ public class LoginFrag extends Fragment {
     }
 
     @Override
+    public void onPause() {
+        super.onPause();
+        mGoogleApiClient.stopAutoManage(getActivity());
+        mGoogleApiClient.disconnect();
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         mGoogleApiClient.stopAutoManage(getActivity());
@@ -223,6 +230,7 @@ public class LoginFrag extends Fragment {
     }
     private void handleSignInResult(GoogleSignInResult result){
 
+        boolean hella = result.isSuccess();
         if(result.isSuccess()){
             GoogleSignInAccount acct = result.getSignInAccount();
             AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
@@ -230,11 +238,12 @@ public class LoginFrag extends Fragment {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
 
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    Toast.makeText(getContext(), user.getEmail(), Toast.LENGTH_SHORT).show();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, MainFragment.newInstance()).commit();
                 }
             });
-           // FirebaseUser user = mAuth.getCurrentUser();
-           // Toast.makeText(getContext(), user.getEmail(), Toast.LENGTH_SHORT).show();
-            // getSupportFragmentManager().beginTransaction().replace(R.id.container, MainFragment.newInstance()).commit();
+
         }
     }
 

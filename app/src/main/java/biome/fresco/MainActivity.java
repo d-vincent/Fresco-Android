@@ -70,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         toolbar = (Toolbar)findViewById(R.id.my_toolbar);
+        toolbar.setBackground(getResources().getDrawable(R.drawable.actionbar_top));
         setSupportActionBar(toolbar);
 
     }

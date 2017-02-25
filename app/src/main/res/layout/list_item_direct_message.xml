@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/entire_chat_layout"
     android:orientation="horizontal" android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
@@ -9,8 +10,8 @@
         android:layout_marginLeft="12dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="8dp"
-        android:layout_toRightOf="@+id/contact_image"
-        android:layout_toEndOf="@+id/contact_image"
+        android:layout_toRightOf="@+id/contact_image_layout"
+        android:layout_toEndOf="@+id/contact_image_layout"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="20dp"
@@ -48,28 +49,36 @@
 
     <TextView
         android:layout_marginTop="4dp"
-        android:id="@+id/mesage_content"
+        android:id="@+id/message_content"
         android:layout_marginStart="12dp"
         android:layout_marginLeft="12dp"
         android:text="Hey, this is one of those MESSAGES, lets see what happens when she wraps"
         android:layout_below="@id/who_when_layout"
-        android:layout_toRightOf="@+id/contact_image"
+        android:layout_toRightOf="@+id/contact_image_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
 
-
-    <ImageView
-        android:layout_marginTop="8dp"
-        android:layout_marginLeft="16dp"
+    <FrameLayout
         android:layout_marginStart="16dp"
-        android:src="@drawable/arrow_icon"
-        android:id="@+id/contact_image"
+        android:layout_marginLeft="16dp"
+        android:id="@+id/contact_image_layout"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_alignTop="@+id/linearLayout"
+        android:layout_centerVertical="true"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true">
+
+        <ImageView
+
+            android:background="@drawable/rounded_corner_image"
+            android:padding="2dp"
+            android:id="@+id/contact_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/arrow_icon"/>
+
+    </FrameLayout>
 
 
 </RelativeLayout>

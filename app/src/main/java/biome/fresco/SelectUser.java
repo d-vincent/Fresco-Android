@@ -228,7 +228,7 @@ public class SelectUser extends Fragment {
                                 String id = (String)dataSnapshot.child("id").getValue();
                             if (id != null) {
                                 FragmentManager fm = getActivity().getSupportFragmentManager();
-                                fm.beginTransaction().replace(R.id.container, DirectMessage.newInstance(id, mUsers.get(position).getPhotoUrl(), mUsers.get(position).getId())).addToBackStack("").commit();
+                                fm.beginTransaction().replace(R.id.container, DirectMessage.newInstance(id, mUsers.get(position).getPhotoUrl(), mUsers.get(position).getId(), mUsers.get(position).getUsername())).addToBackStack("").commit();
                             }
                             else {
 
@@ -260,7 +260,7 @@ public class SelectUser extends Fragment {
                                 mDatabase.child("users").child(mUsers.get(position).getId()).child("directMessages").child(currentUserId).setValue(otherThing);
                                 mDatabase.child("users").child(currentUserId).child("directMessages").child(mUsers.get(position).getId()).setValue(thing);
                                 FragmentManager fm = getActivity().getSupportFragmentManager();
-                                fm.beginTransaction().replace(R.id.container, DirectMessage.newInstance(chatId, mUsers.get(position).getPhotoUrl(), mUsers.get(position).getId())).addToBackStack("").commit();
+                                fm.beginTransaction().replace(R.id.container, DirectMessage.newInstance(chatId, mUsers.get(position).getPhotoUrl(), mUsers.get(position).getId(), mUsers.get(position).getUsername())).addToBackStack("").commit();
 
                             }
                             }

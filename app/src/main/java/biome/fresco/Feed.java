@@ -283,8 +283,8 @@ public class Feed extends Fragment {
         private ImageView contactImage;
         public dmHolder(View itemView){
             super(itemView);
-            contactName = (TextView)itemView.findViewById(R.id.dm_name);
-            contactImage = (ImageView)itemView.findViewById(R.id.contact_image);
+            contactName = (TextView)itemView.findViewById(R.id.chat_name);
+            contactImage = (ImageView)itemView.findViewById(R.id.chat_icon);
 
 
         }
@@ -333,7 +333,7 @@ public class Feed extends Fragment {
                 @Override
                 public void onClick(View v) {
                    FragmentManager fm = getActivity().getSupportFragmentManager();
-                    fm.beginTransaction().replace(R.id.container, DirectMessage.newInstance(mChats.get(position).getRoomId(), mChats.get(position).getToUserImageUrl(), mChats.get(position).getToUserId())).addToBackStack("").commit();
+                    fm.beginTransaction().replace(R.id.container, DirectMessage.newInstance(mChats.get(position).getRoomId(), mChats.get(position).getToUserImageUrl(), mChats.get(position).getToUserId(), mChats.get(position).getToUserName())).addToBackStack("").commit();
                 }
             });
         }
@@ -346,7 +346,7 @@ public class Feed extends Fragment {
         @Override
         public dmHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-            View view = layoutInflater.inflate(R.layout.list_item_direct_message, parent, false);
+            View view = layoutInflater.inflate(R.layout.list_item_chat_head, parent, false);
             return new dmHolder(view);
         }
     }

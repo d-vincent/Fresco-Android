@@ -8,7 +8,7 @@ public class MessageObject {
     private String message;
     private String author;
     private long type;
-    private String timeStamp;
+    private long timeStamp;
     private boolean isMe;
 
     public boolean isMe() {
@@ -42,15 +42,15 @@ public class MessageObject {
         this.type = type;
     }
 
-    public String getTimeStamp() {
+    public long getTimeStamp() {
         return timeStamp;
     }
 
-    public void setTimeStamp(String timeStamp) {
+    public void setTimeStamp(long timeStamp) {
         this.timeStamp = timeStamp;
     }
 
-    public MessageObject(String message, String author, long type, String timeStamp, boolean isMe){
+    public MessageObject(String message, String author, long type, long timeStamp, boolean isMe){
         this.author = author;
         this.timeStamp = timeStamp;
         this.type = type;

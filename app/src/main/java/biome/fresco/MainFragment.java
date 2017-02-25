@@ -99,7 +99,7 @@ public class MainFragment extends Fragment {
         toolbar = (Toolbar)view.findViewById(R.id.my_toolbar);
         ((AppCompatActivity)getActivity()).getSupportActionBar().show();
         ViewPager mainViewPager = (ViewPager)view.findViewById(R.id.pager);
-        mainViewPager.setAdapter(new PagerAdapter(getChildFragmentManager(),4));
+        mainViewPager.setAdapter(new PagerAdapter(getChildFragmentManager(),3));
         final TabLayout tabs = (TabLayout)view.findViewById(R.id.sliding_tabs);
         tabs.setSelectedTabIndicatorColor(getResources().getColor(R.color.white));
         tabs.setupWithViewPager(mainViewPager);
@@ -180,17 +180,15 @@ public class MainFragment extends Fragment {
 
             switch (position) {
                 case 0:
-                    Feed tab1 = Feed.newInstance("","");
+                    DiscoverFragment tab1 = DiscoverFragment.newInstance("","");
                     return tab1;
                 case 1:
-                    ProjectFragment tab2 = ProjectFragment.newInstance("","");
+                    ProjectFragment tab2 = ProjectFragment.newInstance();
                     return tab2;
                 case 2:
-                    DiscoverFragment tab3 = DiscoverFragment.newInstance("","");
+                    Feed tab3 = Feed.newInstance("","");
+
                     return tab3;
-                case 3:
-                    GroupFragment tab4 = GroupFragment.newInstance("","");
-                    return tab4;
                 default:
                     return null;
             }
@@ -205,9 +203,8 @@ public class MainFragment extends Fragment {
                 case 1:
                     return "Projects";
                 case 2:
-                    return "Discover";
-                case 3:
-                    return "Groups";
+                    return "Chats";
+
             }
             return null;
         }
