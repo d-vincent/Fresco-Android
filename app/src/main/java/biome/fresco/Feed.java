@@ -179,8 +179,18 @@ public class Feed extends Fragment {
 
                 String toUserId = dataSnapshot.getKey();
                 String roomId = (String)dataSnapshot.child("id").getValue();
-                boolean notified = (boolean)dataSnapshot.child("notified").getValue();
-                boolean unread = (boolean)dataSnapshot.child("unread").getValue();
+                boolean notified;
+                try {
+                     notified = (boolean) dataSnapshot.child("notified").getValue();
+                }catch (Exception e){
+                    notified = true;
+                }
+                boolean unread;
+                try {
+                    unread = (boolean) dataSnapshot.child("unread").getValue();
+                }catch(Exception e){
+                    unread = false;
+                }
 
                 final ChatObject chat = new ChatObject(roomId, toUserId, notified, unread);
 

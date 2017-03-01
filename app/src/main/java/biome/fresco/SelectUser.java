@@ -241,7 +241,7 @@ public class SelectUser extends Fragment {
                                 main.put("members", members);
 
 
-                                DatabaseReference newChat = mDatabase.child("directMessages").push();
+                                DatabaseReference newChat = mDatabase.child("chats").push();
                                 String chatId = newChat.getKey();
                                 newChat.setValue(main);
 

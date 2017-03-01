@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="16dp"
+    android:background="#FFFFFF"
+    android:elevation="4dp"
+    android:layout_marginBottom="8dp"
+    android:id="@+id/entire_project_view">
+
+
+    <biome.fresco.CustomTextViewLogo
+        android:textColor="@color/tw__composer_black"
+        android:id="@+id/project_name"
+        android:textSize="22sp"
+        android:text="Project Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <biome.fresco.SourceSansRegularTextView
+        android:id="@+id/project_decsription"
+        android:textSize="18sp"
+        android:layout_marginTop="8dp"
+        android:textColor="#7F7F7F"
+        android:text="Optional Description of Project"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <View
+        android:layout_marginTop="4dp"
+        android:background="#F3F3F3"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+    <biome.fresco.SourceSansProBoldTextView
+
+        android:layout_marginTop="2dp"
+        android:text="8 members"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/project_member_count" />
+
+</LinearLayout>

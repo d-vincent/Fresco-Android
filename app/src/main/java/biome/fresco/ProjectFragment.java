@@ -4,9 +4,27 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static biome.fresco.MainActivity.mAuth;
+import static biome.fresco.MainActivity.mDatabase;
 
 
 /**
@@ -18,16 +36,15 @@ import android.view.ViewGroup;
  * create an instance of this fragment.
  */
 public class ProjectFragment extends Fragment {
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
-    private OnFragmentInteractionListener mListener;
+
+
+    private List<ProjectListObject> projects;
+    RecyclerView projectListRecyclerView;
+    ProjectListAdapter mAdapter;
+
+    private String mId;
 
     public ProjectFragment() {
         // Required empty public constructor
@@ -51,32 +68,83 @@ public class ProjectFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+        projects = new ArrayList<>();
+        mId = mAuth.getCurrentUser().getUid();
+
+        mDatabase.child("users").child(mId).child("projects").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                String projectId = dataSnapshot.getKey();
+                mDatabase.child("projects").child(projectId).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        ProjectListObject project = new ProjectListObject();
+                        project.setName(dataSnapshot.child("name").getValue().toString());
+                        project.setAuthorId(dataSnapshot.child("author").getValue().toString());
+                        try {
+                            project.setDescription(dataSnapshot.child("desc").getValue().toString());
+                        }catch (Exception e){
+                            project.setDescription("");
+                        }
+                        project.setMemberCount(dataSnapshot.child("members").getChildrenCount());
+
+                        projects.add(project);
+                        mAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_project, container, false);
+        View view =  inflater.inflate(R.layout.fragment_project, container, false);
+
+        projectListRecyclerView = (RecyclerView)view.findViewById(R.id.project_list_recycler);
+        projectListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        mAdapter = new ProjectListAdapter(projects);
+        projectListRecyclerView.setAdapter(mAdapter);
+
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
+
 
 
 
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
     }
 
     /**
@@ -93,4 +161,72 @@ public class ProjectFragment extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+    private class ProjectHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+        private CustomTextViewLogo projectName;
+        private SourceSansRegularTextView projectDescription;
+        private SourceSansProBoldTextView projectMemberCount;
+        private View entireProjectListView;
+
+
+        public ProjectHolder(View itemView){
+            super(itemView);
+            projectName = (CustomTextViewLogo)itemView.findViewById(R.id.project_name);
+            projectDescription = (SourceSansRegularTextView) itemView.findViewById(R.id.project_decsription);
+            projectMemberCount = (SourceSansProBoldTextView)itemView.findViewById(R.id.project_member_count);
+            entireProjectListView = itemView.findViewById(R.id.entire_project_view);
+
+
+
+        }
+
+        @Override
+        public void onClick(View view) {
+
+        }
+
+        public void bindProject(ProjectListObject project){
+
+
+            projectName.setText(project.getName());
+            projectMemberCount.setText(project.getMemberCount().toString() + " Members");
+            projectDescription.setText(project.getDescription());
+
+        }
+    }
+
+    private class ProjectListAdapter extends RecyclerView.Adapter<ProjectHolder>{
+
+        public List<ProjectListObject> mProjects;
+        public ProjectListAdapter(List<ProjectListObject> projects){
+            mProjects = projects;
+        }
+
+        @Override
+        public void onBindViewHolder(ProjectHolder holder, final int position) {
+            holder.bindProject(mProjects.get(position));
+
+            holder.entireProjectListView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+        }
+
+        @Override
+        public int getItemCount() {
+            return mProjects.size();
+        }
+
+        @Override
+        public ProjectHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+            View view = layoutInflater.inflate(R.layout.list_item_project, parent, false);
+            return new ProjectHolder(view);
+        }
+    }
+
+
 }

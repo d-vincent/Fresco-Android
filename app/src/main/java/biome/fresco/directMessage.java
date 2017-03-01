@@ -23,14 +23,18 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.lang.reflect.Array;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
+import static android.content.Context.TELECOM_SERVICE;
 import static biome.fresco.MainActivity.mAuth;
 import static biome.fresco.MainActivity.mDatabase;
 
@@ -53,17 +57,21 @@ public class DirectMessage extends Fragment {
     private String mChatId;
     private String mImageUrl;
     private String userId;
+    private String toUserName;
     private List<MessageObject> messages;
 
     private EditText messageInput;
     private ImageView sendButton;
 
 
-
     private OnFragmentInteractionListener mListener;
     private RecyclerView messageRecycler;
     private nameAdapter mAdapter;
     private LinearLayoutManager mLayoutManager;
+
+    SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
+
+    private HashMap<String,String> contactNameMap;
 
     public DirectMessage() {
         // Required empty public constructor
@@ -76,11 +84,12 @@ public class DirectMessage extends Fragment {
      * @return A new instance of fragment DirectMessage.
      */
     // TODO: Rename and change types and number of parameters
-    public static DirectMessage newInstance(String chatId, String imageUrl, String userId) {
+    public static DirectMessage newInstance(String chatId, String imageUrl, String userId, String toUserName) {
         DirectMessage fragment = new DirectMessage();
         //Bundle args = new Bundle();
         fragment.mChatId = chatId;
         fragment.mImageUrl = imageUrl;
+        fragment.toUserName = toUserName;
         fragment.userId = userId;
        // args.putString(ARG_PARAM1, chatId);
 
@@ -95,11 +104,14 @@ public class DirectMessage extends Fragment {
 //            mParam1 = getArguments().getString(ARG_PARAM1);
 //            mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+
+        contactNameMap = new HashMap<>();
         getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         messages = new ArrayList<>();
 
-        DatabaseReference directChat = mDatabase.child("directMessages").child(mChatId).child("messages");
+        DatabaseReference directChat = mDatabase.child("chats").child(mChatId).child("messages");
 
         directChat.orderByKey().addChildEventListener(new ChildEventListener() {
 
@@ -115,17 +127,18 @@ public class DirectMessage extends Fragment {
 
                     String message = (String)dataSnapshot.child("content").getValue();
                     String author = (String)dataSnapshot.child("author").getValue();
-                    String timeStamp = (String)dataSnapshot.child("timestamp").getValue().toString();
+                    long timeStamp = (long)dataSnapshot.child("timestamp").getValue();
 //                    long type = (long)snap.child("type").getValue();
 
                 if (author.equals(userId)) {
                     messages.add(new MessageObject(message, author, 0, timeStamp,false));
                 }
                 else {
-                    messages.add(new MessageObject(message,author,0,timeStamp,true));
+                    messages.add(new MessageObject(message, author, 0, timeStamp, true));
+
                 }
                     mAdapter.notifyDataSetChanged();
-                mLayoutManager.scrollToPositionWithOffset(messages.size()-1,0);
+                    mLayoutManager.scrollToPositionWithOffset(messages.size() - 1, 0);
 
 
 
@@ -180,7 +193,7 @@ public class DirectMessage extends Fragment {
                     updates.put("content", message);
                     updates.put("timestamp",System.currentTimeMillis());
                     updates.put("type", 0);
-                    mDatabase.child("directMessages").child(mChatId).child("messages").push().setValue(updates);
+                    mDatabase.child("chats").child(mChatId).child("messages").push().setValue(updates);
 
                 }
             }
@@ -228,10 +241,18 @@ public class DirectMessage extends Fragment {
 
         private TextView contactName;
         private ImageView contactImage;
+        private TextView messageContent;
+        private View entireChatView;
+        private TextView timeStamp;
+
+
         public MessageHolder(View itemView){
             super(itemView);
             contactName = (TextView)itemView.findViewById(R.id.dm_name);
             contactImage = (ImageView)itemView.findViewById(R.id.contact_image);
+            messageContent = (TextView)itemView.findViewById(R.id.message_content);
+            entireChatView = itemView.findViewById(R.id.entire_chat_layout);
+            timeStamp = (TextView)itemView.findViewById(R.id.message_timestamp);
 
 
         }
@@ -242,7 +263,20 @@ public class DirectMessage extends Fragment {
         }
 
         public void bindMessage(MessageObject messageObject){
-            contactName.setText(messageObject.getMessage());
+            messageContent.setText(messageObject.getMessage());
+            if (!messageObject.getAuthor().equals(mAuth.getCurrentUser().getUid())){
+                contactName.setText(toUserName);
+
+
+            }else{
+                contactName.setText("You");
+            }
+
+            Date hella = new Date(messageObject.getTimeStamp());
+
+            timeStamp.setText(timeFormat.format(hella));
+
+
 
         }
     }
@@ -257,7 +291,17 @@ public class DirectMessage extends Fragment {
 
         @Override
         public void onBindViewHolder(MessageHolder holder, int position) {
+            if (!messages.get(position).getAuthor().equals(mAuth.getCurrentUser().getUid())){
+                holder.entireChatView.setBackgroundColor(getResources().getColor(R.color.light_background));
+            }
+            else{
+                holder.entireChatView.setBackgroundColor(getResources().getColor(R.color.white));
+            }
+
+
             holder.bindMessage(messages.get(position));
+
+
             if (!messages.get(position).isMe()) {
                 Picasso.with(getContext())
                         .load(mImageUrl)
