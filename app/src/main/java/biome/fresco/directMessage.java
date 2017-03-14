@@ -114,8 +114,6 @@ public class DirectMessage extends Fragment {
         DatabaseReference directChat = mDatabase.child("chats").child(mChatId).child("messages");
 
         directChat.orderByKey().addChildEventListener(new ChildEventListener() {
-
-
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
 
@@ -123,8 +121,6 @@ public class DirectMessage extends Fragment {
 
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-
                     String message = (String)dataSnapshot.child("content").getValue();
                     String author = (String)dataSnapshot.child("author").getValue();
                     long timeStamp = (long)dataSnapshot.child("timestamp").getValue();
@@ -139,8 +135,6 @@ public class DirectMessage extends Fragment {
                 }
                     mAdapter.notifyDataSetChanged();
                     mLayoutManager.scrollToPositionWithOffset(messages.size() - 1, 0);
-
-
 
             }
 
