@@ -1,6 +1,8 @@
 package biome.fresco;
 
+import android.animation.Animator;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -8,8 +10,10 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,6 +26,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import io.codetail.animation.ViewAnimationUtils;
 
 import static biome.fresco.MainActivity.mAuth;
 import static biome.fresco.MainActivity.mDatabase;
@@ -207,10 +213,25 @@ public class ProjectFragment extends Fragment {
         public void onBindViewHolder(ProjectHolder holder, final int position) {
             holder.bindProject(mProjects.get(position));
 
-            holder.entireProjectListView.setOnClickListener(new View.OnClickListener() {
+            holder.entireProjectListView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
-                public void onClick(View v) {
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    float x = motionEvent.getX();
+                    float y = motionEvent.getY();
 
+                    y += view.getHeight();
+
+                    for (int i = 0; i < position; i++){
+                        y+= view.getHeight();
+                    }
+
+
+
+                    Intent intent = new Intent(getContext(), ProjectDetailActivity.class);
+                    intent.putExtra("xcoord", x);
+                    intent.putExtra("ycoord",y);
+                    startActivity(intent);
+                    return false;
                 }
             });
         }
