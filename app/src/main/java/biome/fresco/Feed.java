@@ -177,8 +177,8 @@ public class Feed extends Fragment {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                String toUserId = dataSnapshot.getKey();
-                String roomId = (String)dataSnapshot.child("id").getValue();
+                String roomId = dataSnapshot.getKey();
+               // String roomId = (String)dataSnapshot.child("id").getValue();
                 boolean notified;
                 try {
                      notified = (boolean) dataSnapshot.child("notified").getValue();
@@ -192,14 +192,14 @@ public class Feed extends Fragment {
                     unread = false;
                 }
 
-                final ChatObject chat = new ChatObject(roomId, toUserId, notified, unread);
+                final ChatObject chat = new ChatObject(roomId);
 
-                mDatabase.child("users").child(chat.getToUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                mDatabase.child("chats").child(chat.getRoomId()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
 
                         chat.setToUserName((String)dataSnapshot.child("name").getValue());
-                        chat.setToUserImageUrl((String)dataSnapshot.child("photoUrl").getValue());
+                       // chat.setToUserImageUrl((String)dataSnapshot.child("photoUrl").getValue());
                         chatObjects.add(chat);
                         mAdapter.notifyDataSetChanged();
                     }
@@ -342,8 +342,15 @@ public class Feed extends Fragment {
             holder.contactName.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                   FragmentManager fm = getActivity().getSupportFragmentManager();
-                    fm.beginTransaction().replace(R.id.container, DirectMessage.newInstance(mChats.get(position).getRoomId(), mChats.get(position).getToUserImageUrl(), mChats.get(position).getToUserId(), mChats.get(position).getToUserName())).addToBackStack("").commit();
+
+                    FragmentManager fm = getActivity().getSupportFragmentManager();
+                    if(mChats.get(position).isGroupChat()){
+
+                    }else{
+
+                        fm.beginTransaction().replace(R.id.container, DirectMessage.newInstance(mChats.get(position).getRoomId(), mChats.get(position).getToUserImageUrl(), mChats.get(position).getToUserId(), mChats.get(position).getToUserName())).addToBackStack("").commit();
+                    }
+
                 }
             });
         }

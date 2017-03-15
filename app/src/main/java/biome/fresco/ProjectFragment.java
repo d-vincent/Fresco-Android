@@ -216,23 +216,28 @@ public class ProjectFragment extends Fragment {
             holder.entireProjectListView.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
-                    float x = motionEvent.getX();
-                    float y = motionEvent.getY();
 
-                    y += view.getHeight();
+                    if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+                        float x = motionEvent.getX();
+                        float y = motionEvent.getY();
 
-                    for (int i = 0; i < position; i++){
-                        y+= view.getHeight();
+                        y += view.getHeight();
+
+                        for (int i = 0; i < position; i++) {
+                            y += view.getHeight();
+                        }
+
+
+                        Intent intent = new Intent(getContext(), ProjectDetailActivity.class);
+                        intent.putExtra("xcoord", x);
+                        intent.putExtra("ycoord", y);
+                        startActivity(intent);
+                        return false;
                     }
-
-
-
-                    Intent intent = new Intent(getContext(), ProjectDetailActivity.class);
-                    intent.putExtra("xcoord", x);
-                    intent.putExtra("ycoord",y);
-                    startActivity(intent);
-                    return false;
+                    return true;
                 }
+
+
             });
         }
 

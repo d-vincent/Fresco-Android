@@ -12,6 +12,7 @@ public class ChatObject {
     private String toUserId;
     private boolean notified;
     private boolean unread;
+    private boolean isGroupChat;
 
     public ChatObject(String roomId, String toUserId, boolean notified, boolean unread){
 
@@ -20,6 +21,11 @@ public class ChatObject {
         this.toUserId = toUserId;
         this.notified = notified;
         this.unread = unread;
+        this.isGroupChat = false;
+    }
+    public ChatObject(String roomId){
+        this.roomId = roomId;
+        this.isGroupChat = true;
     }
 
     public String getRoomId() {
@@ -68,5 +74,13 @@ public class ChatObject {
 
     public void setToUserImageUrl(String toUserImageUrl) {
         this.toUserImageUrl = toUserImageUrl;
+    }
+
+    public boolean isGroupChat() {
+        return isGroupChat;
+    }
+
+    public void setGroupChat(boolean groupChat) {
+        isGroupChat = groupChat;
     }
 }
