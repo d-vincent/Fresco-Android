@@ -18,6 +18,19 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
 
+    <!--<RevealLayout-->
+        <!--android:id="@+id/reveal_layout"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent"-->
+        <!--android:visibility="invisible">-->
+
+        <!--<View-->
+            <!--android:id="@+id/reveal_view"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:visibility="invisible"/>-->
+
+    <!--</RevealLayout>-->
 
 
     <FrameLayout

@@ -6,6 +6,8 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
 import static android.content.ContentValues.TAG;
+import static biome.fresco.MainActivity.mAuth;
+import static biome.fresco.MainActivity.mDatabase;
 
 
 /**
@@ -20,7 +22,8 @@ public class FirebaseInstanceHelper extends FirebaseInstanceIdService{
         String refreshedToken = FirebaseInstanceId.getInstance().getToken();
         Log.d(TAG, "Refreshed token: " + refreshedToken);
 
-        // TODO: Implement this method to send any registration to your app's servers.
+
+      MainActivity.token = refreshedToken;
        // sendRegistrationToServer(refreshedToken);
     }
 

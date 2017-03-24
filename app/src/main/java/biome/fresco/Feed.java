@@ -34,6 +34,7 @@ import java.util.List;
 
 import static biome.fresco.MainActivity.mAuth;
 import static biome.fresco.MainActivity.mDatabase;
+import static biome.fresco.MainActivity.token;
 
 
 /**
@@ -93,6 +94,10 @@ public class Feed extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
 
+        }
+
+        if (MainActivity.token != null){
+            mDatabase.child("users").child(MainActivity.uid).child("tokens").child("android").child(token).setValue("true");
         }
       //  userChatNames = new ArrayList<>();
 
@@ -173,61 +178,61 @@ public class Feed extends Fragment {
             }
         });
 
-        mDatabase.child("users").child(mUID).child("chats").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-
-                String roomId = dataSnapshot.getKey();
-               // String roomId = (String)dataSnapshot.child("id").getValue();
-                boolean notified;
-                try {
-                     notified = (boolean) dataSnapshot.child("notified").getValue();
-                }catch (Exception e){
-                    notified = true;
-                }
-                boolean unread;
-                try {
-                    unread = (boolean) dataSnapshot.child("unread").getValue();
-                }catch(Exception e){
-                    unread = false;
-                }
-
-                final ChatObject chat = new ChatObject(roomId);
-
-                mDatabase.child("chats").child(chat.getRoomId()).addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-
-                        chat.setToUserName((String)dataSnapshot.child("name").getValue());
-                       // chat.setToUserImageUrl((String)dataSnapshot.child("photoUrl").getValue());
-                        chatObjects.add(chat);
-                        mAdapter.notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-
-                    }
-                });
-
-            }
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+//        mDatabase.child("users").child(mUID).child("chats").addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//
+//                String roomId = dataSnapshot.getKey();
+//               // String roomId = (String)dataSnapshot.child("id").getValue();
+//                boolean notified;
+//                try {
+//                     notified = (boolean) dataSnapshot.child("notified").getValue();
+//                }catch (Exception e){
+//                    notified = true;
+//                }
+//                boolean unread;
+//                try {
+//                    unread = (boolean) dataSnapshot.child("unread").getValue();
+//                }catch(Exception e){
+//                    unread = false;
+//                }
+//
+//                final ChatObject chat = new ChatObject(roomId);
+//
+//                mDatabase.child("chats").child(chat.getRoomId()).addListenerForSingleValueEvent(new ValueEventListener() {
+//                    @Override
+//                    public void onDataChange(DataSnapshot dataSnapshot) {
+//
+//                        chat.setToUserName((String)dataSnapshot.child("name").getValue());
+//                       // chat.setToUserImageUrl((String)dataSnapshot.child("photoUrl").getValue());
+//                        chatObjects.add(chat);
+//                        mAdapter.notifyDataSetChanged();
+//                    }
+//
+//                    @Override
+//                    public void onCancelled(DatabaseError databaseError) {
+//
+//                    }
+//                });
+//
+//            }
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//            }
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
 
 
     }
@@ -346,6 +351,7 @@ public class Feed extends Fragment {
                     FragmentManager fm = getActivity().getSupportFragmentManager();
                     if(mChats.get(position).isGroupChat()){
 
+                        fm.beginTransaction().replace(R.id.container, GroupMessage.newInstance(mChats.get(position).getRoomId())).addToBackStack("").commit();
                     }else{
 
                         fm.beginTransaction().replace(R.id.container, DirectMessage.newInstance(mChats.get(position).getRoomId(), mChats.get(position).getToUserImageUrl(), mChats.get(position).getToUserId(), mChats.get(position).getToUserName())).addToBackStack("").commit();

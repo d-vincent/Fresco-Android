@@ -26,6 +26,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import static com.google.android.gms.internal.zzs.TAG;
 
@@ -36,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     public static FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
     public static DatabaseReference mDatabase;
+    public static String uid;
+    public static String token;
 
     public static int RC_GOOGLE_SIGN_IN = 0;
 
@@ -47,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -54,7 +58,12 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
                     // User is signed in
+                    uid = user.getUid();
+                    if (token != null) {
+                        mDatabase.child("users").child(uid).child("tokens").child("android").child(token);
+                    }
                     getSupportFragmentManager().beginTransaction().add(R.id.container, MainFragment.newInstance()).commit();
+
                     Log.d("Firebase", "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
                     // User is signed out
@@ -68,12 +77,16 @@ public class MainActivity extends AppCompatActivity {
 
 
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+
+
         toolbar = (Toolbar)findViewById(R.id.my_toolbar);
         toolbar.setBackground(getResources().getDrawable(R.drawable.actionbar_top));
         setSupportActionBar(toolbar);
 
     }
+
+
 
 
     @Override

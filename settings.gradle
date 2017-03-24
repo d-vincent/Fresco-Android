@@ -1,1 +1,1 @@
-include ':app', 'RevealAnimation:library'
+include ':app', 'RevealLayout'
