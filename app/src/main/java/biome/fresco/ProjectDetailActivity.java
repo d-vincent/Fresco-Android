@@ -22,6 +22,9 @@ import io.codetail.animation.ViewAnimationUtils;
 
 public class ProjectDetailActivity extends AppCompatActivity {
 
+
+    public static ProjectObject mProject;
+
     float x;
     float y;
     Toolbar toolbar;
