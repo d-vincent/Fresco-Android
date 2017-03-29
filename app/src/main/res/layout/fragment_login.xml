@@ -33,7 +33,7 @@
             android:textColor="@color/white"
             android:layout_gravity="center_horizontal"
             android:textSize="28sp"
-            android:text="Talk Less. Do More."
+            android:text="Work better, together."
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
