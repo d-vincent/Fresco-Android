@@ -10,18 +10,19 @@ public class ProjectObject {
 
     private String projectId;
     private String authorId;
-    private ArrayList<String> chatIds;
-    private String projectDescription;
-    private ArrayList<String> fileIds;
-    private ArrayList<LabelObject> labels;
-    private ArrayList<String> memberIds;
-    private String name;
-    private ArrayList<UserNoteList> userNotes;
-    private UserNoteList allNotes;
-    //TODO create project note user object thing
-    //TODO for public notes as well
     private String rootChatId;
     private String rootFolderId;
     private String searchName;
+    private String projectDescription;
+    private String name;
+
+    private ArrayList<String> chatIds;
+    private ArrayList<String> fileIds;
+    private ArrayList<String> memberIds;
+
+    private ArrayList<LabelObject> labels;
+    private ArrayList<UserNoteList> userNotes;
+
+    private UserNoteList allNotes;
 
 }

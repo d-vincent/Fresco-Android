@@ -16,17 +16,23 @@ import android.view.MenuItem;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-import com.google.android.gms.auth.api.Auth;
+
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.iid.FirebaseInstanceId;
+
+import io.fabric.sdk.android.Fabric;
 
 import static com.google.android.gms.internal.zzs.TAG;
 
@@ -39,6 +45,7 @@ public class MainActivity extends AppCompatActivity {
     public static DatabaseReference mDatabase;
     public static String uid;
     public static String token;
+    String toUserPhotoUrl;
 
     public static int RC_GOOGLE_SIGN_IN = 0;
 
@@ -47,6 +54,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        //FirebaseApp.initializeApp(this);
+        //Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
@@ -75,8 +84,54 @@ public class MainActivity extends AppCompatActivity {
         };
 
 
+        Bundle extras = getIntent().getExtras();
+        if (extras != null){
+
+            String chatType = extras.getString("type");
+            final String chatId = extras.getString("key");
+            //boolean isDirectMessage = extras.getBoolean("directMessages");
+            final String toUserId = extras.getString("userid");
+            final String toUserName = extras.getString("name");
 
 
+
+            mDatabase.child("users").child(toUserId).child("photoUrl").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    toUserPhotoUrl = (String)dataSnapshot.getValue();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+            mDatabase.child("users").child(chatId).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+
+                    ChatObject chatObject = new ChatObject(chatId);
+                    chatObject.setToUserId(toUserId);
+                    chatObject.setToUserImageUrl(toUserPhotoUrl);
+                    chatObject.setToUserName(toUserName);
+
+                    FragmentManager fm = getSupportFragmentManager();
+                    fm.beginTransaction().replace(R.id.container, DirectMessage.newInstance(chatId, toUserPhotoUrl, toUserId, toUserName)).addToBackStack("").commit();
+
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+
+
+//            Toast.makeText(this, chatType.length(), Toast.LENGTH_LONG).show();
+        }
 
 
 
