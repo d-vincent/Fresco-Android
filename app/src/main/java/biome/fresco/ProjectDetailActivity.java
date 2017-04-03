@@ -97,9 +97,6 @@ public class ProjectDetailActivity extends AppCompatActivity {
 
             }
         });
-
-
-
     }
 
     private void circularRevealActivity() {

@@ -87,48 +87,49 @@ public class MainActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null){
 
-            String chatType = extras.getString("type");
-            final String chatId = extras.getString("key");
-            //boolean isDirectMessage = extras.getBoolean("directMessages");
-            final String toUserId = extras.getString("userid");
-            final String toUserName = extras.getString("name");
+            if (extras.getString("userid").length() > 0) {
+                String chatType = extras.getString("type");
+                final String chatId = extras.getString("key");
+                //boolean isDirectMessage = extras.getBoolean("directMessages");
+                final String toUserId = extras.getString("userid");
+                final String toUserName = extras.getString("name");
 
 
+                mDatabase.child("users").child(toUserId).child("photoUrl").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        toUserPhotoUrl = (String) dataSnapshot.getValue();
+                    }
 
-            mDatabase.child("users").child(toUserId).child("photoUrl").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    toUserPhotoUrl = (String)dataSnapshot.getValue();
-                }
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
-
-
-            mDatabase.child("users").child(chatId).addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-
-                    ChatObject chatObject = new ChatObject(chatId);
-                    chatObject.setToUserId(toUserId);
-                    chatObject.setToUserImageUrl(toUserPhotoUrl);
-                    chatObject.setToUserName(toUserName);
-
-                    FragmentManager fm = getSupportFragmentManager();
-                    fm.beginTransaction().replace(R.id.container, DirectMessage.newInstance(chatId, toUserPhotoUrl, toUserId, toUserName)).addToBackStack("").commit();
-
-                }
-
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
-
-                }
-            });
+                    }
+                });
 
 
+                mDatabase.child("users").child(chatId).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+
+                        ChatObject chatObject = new ChatObject(chatId);
+                        chatObject.setToUserId(toUserId);
+                        chatObject.setToUserImageUrl(toUserPhotoUrl);
+                        chatObject.setToUserName(toUserName);
+
+                        FragmentManager fm = getSupportFragmentManager();
+                        fm.beginTransaction().replace(R.id.container, DirectMessage.newInstance(chatId, toUserPhotoUrl, toUserId, toUserName)).addToBackStack("").commit();
+
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
+
+            }
 
 //            Toast.makeText(this, chatType.length(), Toast.LENGTH_LONG).show();
         }
