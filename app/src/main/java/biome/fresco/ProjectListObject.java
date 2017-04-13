@@ -6,13 +6,11 @@ package biome.fresco;
 
 public class ProjectListObject {
 
-
     private String projectId;
     private String authorId;
     private String name;
     private String description;
     private Long memberCount;
-
 
     public String getProjectId() {
         return projectId;

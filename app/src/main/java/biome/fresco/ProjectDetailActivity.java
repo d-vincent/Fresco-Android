@@ -16,9 +16,18 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import io.codetail.animation.ViewAnimationUtils;
+
+import static biome.fresco.MainActivity.mDatabase;
 
 public class ProjectDetailActivity extends AppCompatActivity {
 
@@ -27,6 +36,8 @@ public class ProjectDetailActivity extends AppCompatActivity {
 
     float x;
     float y;
+
+    String projectId;
     Toolbar toolbar;
 
     ViewPager mainViewPager;
@@ -39,7 +50,34 @@ public class ProjectDetailActivity extends AppCompatActivity {
         x = intent.getExtras().getFloat("xcoord");
         y = intent.getExtras().getFloat("ycoord");
 
+        projectId = intent.getExtras().getString("projectId");
 
+        mProject = new ProjectObject();
+        mDatabase.child("projects").child(projectId).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                mProject.setAuthorId((String)dataSnapshot.child("author").getValue());
+                mProject.setProjectId(projectId);
+                mProject.setName((String)dataSnapshot.child("name").getValue());
+                mProject.setProjectDescription((String)dataSnapshot.child("desc").getValue());
+                //DataSnapshot chatIds = dataSnapshot.child("chats").getChildren();
+                ArrayList<String> chatIds = new ArrayList<String>();
+                for (DataSnapshot snap: dataSnapshot.child("chats").getChildren()){
+                    chatIds.add((String)snap.getValue());
+                }
+                mProject.setChatIds(chatIds);
+                mProject.setSearchName((String)dataSnapshot.child("searchName").getValue());
+                mProject.setRootChatId((String)dataSnapshot.child("rootChat").getValue());
+                mProject.setRootFolderId((String)dataSnapshot.child("rootFolder").getValue());
+
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
 
         setContentView(R.layout.activity_project_detail);

@@ -231,6 +231,7 @@ public class ProjectFragment extends Fragment {
                         Intent intent = new Intent(getContext(), ProjectDetailActivity.class);
                         intent.putExtra("xcoord", x);
                         intent.putExtra("ycoord", y);
+                        intent.putExtra("projectId", mProjects.get(position).getProjectId());
                         startActivity(intent);
                         return false;
                     }
