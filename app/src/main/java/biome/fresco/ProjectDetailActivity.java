@@ -16,6 +16,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
 
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -60,6 +61,7 @@ public class ProjectDetailActivity extends AppCompatActivity {
                 mProject.setProjectId(projectId);
                 mProject.setName((String)dataSnapshot.child("name").getValue());
                 mProject.setProjectDescription((String)dataSnapshot.child("desc").getValue());
+
                 //DataSnapshot chatIds = dataSnapshot.child("chats").getChildren();
                 ArrayList<String> chatIds = new ArrayList<String>();
                 for (DataSnapshot snap: dataSnapshot.child("chats").getChildren()){
@@ -70,6 +72,32 @@ public class ProjectDetailActivity extends AppCompatActivity {
                 mProject.setRootChatId((String)dataSnapshot.child("rootChat").getValue());
                 mProject.setRootFolderId((String)dataSnapshot.child("rootFolder").getValue());
 
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        mDatabase.child("projects").child(projectId).child("chats").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                mProject.getChatIds().add((String)dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                mProject.getChatIds().remove((String)dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
             }
 
@@ -78,6 +106,35 @@ public class ProjectDetailActivity extends AppCompatActivity {
 
             }
         });
+
+        mDatabase.child(projectId).child("publicNotes").child("allNotes").addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                mProject.getAllNotes().getAllNotes().add(dataSnapshot.getKey());
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+        //mDatabase.child("projects").child();
 
 
         setContentView(R.layout.activity_project_detail);

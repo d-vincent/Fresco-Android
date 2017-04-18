@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         if (extras != null){
 
-            if (extras.getString("userid").length() > 0) {
+            if (extras.getString("userid") != null) {
                 String chatType = extras.getString("type");
                 final String chatId = extras.getString("key");
                 //boolean isDirectMessage = extras.getBoolean("directMessages");
