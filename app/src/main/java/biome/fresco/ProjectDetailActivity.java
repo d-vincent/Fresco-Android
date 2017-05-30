@@ -19,7 +19,6 @@ import android.view.animation.AlphaAnimation;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -65,39 +64,14 @@ public class ProjectDetailActivity extends AppCompatActivity {
                 //DataSnapshot chatIds = dataSnapshot.child("chats").getChildren();
                 ArrayList<String> chatIds = new ArrayList<String>();
                 for (DataSnapshot snap: dataSnapshot.child("chats").getChildren()){
-                    chatIds.add((String)snap.getValue());
+                    chatIds.add((String)snap.getKey());
                 }
                 mProject.setChatIds(chatIds);
                 mProject.setSearchName((String)dataSnapshot.child("searchName").getValue());
                 mProject.setRootChatId((String)dataSnapshot.child("rootChat").getValue());
                 mProject.setRootFolderId((String)dataSnapshot.child("rootFolder").getValue());
 
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
-
-        mDatabase.child("projects").child(projectId).child("chats").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                mProject.getChatIds().add((String)dataSnapshot.getKey());
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-                mProject.getChatIds().remove((String)dataSnapshot.getKey());
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                toolbar.setTitle(mProject.getName());
 
             }
 
@@ -107,32 +81,59 @@ public class ProjectDetailActivity extends AppCompatActivity {
             }
         });
 
-        mDatabase.child(projectId).child("publicNotes").child("allNotes").addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                mProject.getAllNotes().getAllNotes().add(dataSnapshot.getKey());
-            }
-
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-
-            }
-        });
+//        mDatabase.child("projects").child(projectId).child("chats").addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                mProject.getChatIds().add((String)dataSnapshot.getKey());
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//                mProject.getChatIds().remove((String)dataSnapshot.getKey());
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
+//
+//        mDatabase.child(projectId).child("publicNotes").child("allNotes").addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+//                mProject.getAllNotes().getAllNotes().add(dataSnapshot.getKey());
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot dataSnapshot) {
+//
+//            }
+//
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
 
         //mDatabase.child("projects").child();
 

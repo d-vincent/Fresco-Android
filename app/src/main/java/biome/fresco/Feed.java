@@ -301,7 +301,6 @@ public class Feed extends Fragment {
             contactName = (TextView)itemView.findViewById(R.id.chat_name);
             contactImage = (ImageView)itemView.findViewById(R.id.chat_icon);
 
-
         }
 
         @Override

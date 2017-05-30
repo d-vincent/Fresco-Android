@@ -261,7 +261,6 @@ public class DirectMessage extends Fragment {
             if (!messageObject.getAuthor().equals(mAuth.getCurrentUser().getUid())){
                 contactName.setText(toUserName);
 
-
             }else{
                 contactName.setText("You");
             }
@@ -269,8 +268,6 @@ public class DirectMessage extends Fragment {
             Date hella = new Date(messageObject.getTimeStamp());
 
             timeStamp.setText(timeFormat.format(hella));
-
-
 
         }
     }

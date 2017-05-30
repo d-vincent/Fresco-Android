@@ -81,7 +81,7 @@ public class ProjectFragment extends Fragment {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                String projectId = dataSnapshot.getKey();
+                final String projectId = dataSnapshot.getKey();
                 mDatabase.child("projects").child(projectId).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
@@ -93,6 +93,7 @@ public class ProjectFragment extends Fragment {
                         }catch (Exception e){
                             project.setDescription("");
                         }
+                        project.setProjectId(projectId);
                         project.setMemberCount(dataSnapshot.child("members").getChildrenCount());
 
                         projects.add(project);

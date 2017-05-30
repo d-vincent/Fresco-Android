@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="286dp"
+    android:id="@+id/entire_note_layout"
+    android:background="#FFFFFF"
+    android:padding="16dp">
+
+
+    <ImageView
+        android:id="@+id/author_profile_image"
+        android:layout_width="56dp"
+        android:layout_height="56dp" />
+
+    <TextView
+        android:textColor="@color/tw__composer_black"
+        android:textSize="20sp"
+        android:text="Sameple Name"
+        android:layout_marginStart="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_toRightOf="@+id/author_profile_image"
+        android:id="@+id/author_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/note_timestamp"
+        android:textSize="19sp"
+        android:text="Apr 06 at 9:00 PM"
+        android:layout_alignLeft="@+id/author_name"
+        android:layout_alignStart="@+id/author_name"
+        android:layout_below="@+id/author_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <biome.fresco.CustomTextViewLogo
+        android:textColor="@color/tw__composer_black"
+        android:layout_marginTop="8dp"
+        android:textSize="22sp"
+        android:text="Sample Title"
+        android:layout_below="@+id/author_profile_image"
+        android:id="@+id/note_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <TextView
+        android:id="@+id/note_content"
+        android:layout_below="@+id/note_title"
+        android:layout_width="match_parent"
+        android:layout_height="130dp"
+        android:ellipsize="end"/>
+
+    <ImageView
+        android:id="@+id/response_image"
+        android:src="@drawable/arrow_icon"
+        android:layout_below="@+id/note_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:text="2"
+        android:id="@+id/response_count"
+        android:layout_alignBottom="@+id/response_image"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        android:textSize="20sp"
+        android:layout_toRightOf="@+id/response_image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+</RelativeLayout>
