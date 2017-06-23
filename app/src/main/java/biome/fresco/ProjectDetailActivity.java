@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
 
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
@@ -25,6 +24,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import biome.fresco.Fragments.ProjectFilesFragment;
+import biome.fresco.Fragments.ProjectNotes;
+import biome.fresco.Objects.ProjectObject;
+import biome.fresco.Fragments.UserNotes;
 import io.codetail.animation.ViewAnimationUtils;
 
 import static biome.fresco.MainActivity.mDatabase;
@@ -43,8 +46,33 @@ public class ProjectDetailActivity extends AppCompatActivity {
     ViewPager mainViewPager;
     TabLayout tabs;
     View rootLayout;
+
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onBackPressed() {
+
+
+        boolean wentBack = false;
+        List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
+        if (fragmentList != null) {
+            //TODO: Perform your logic to pass back press here
+            for(Fragment fragment : fragmentList){
+                if(fragment instanceof ProjectFilesFragment){
+                   if ( ((ProjectFilesFragment)fragment).navigateUp()){
+                       wentBack = true;
+                   }
+
+                }
+            }
+        }
+        if(!wentBack){
+            super.onBackPressed();
+        }
+
+    }
+
+    @Override
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Intent intent = getIntent();
         x = intent.getExtras().getFloat("xcoord");
@@ -71,7 +99,67 @@ public class ProjectDetailActivity extends AppCompatActivity {
                 mProject.setRootChatId((String)dataSnapshot.child("rootChat").getValue());
                 mProject.setRootFolderId((String)dataSnapshot.child("rootFolder").getValue());
 
+
+
+
+
+                setContentView(R.layout.activity_project_detail);
+                rootLayout = findViewById(R.id.root_layout);
+
+                tabs = (TabLayout) findViewById(R.id.sliding_tabs);
+                toolbar = (Toolbar)findViewById(R.id.my_toolbar);
+                toolbar.setBackground(getResources().getDrawable(R.drawable.actionbar_top));
+                setSupportActionBar(toolbar);
                 toolbar.setTitle(mProject.getName());
+
+                if (savedInstanceState == null) {
+                    rootLayout.setVisibility(View.INVISIBLE);
+
+                    ViewTreeObserver viewTreeObserver = rootLayout.getViewTreeObserver();
+                    if (viewTreeObserver.isAlive()) {
+                        viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                            @Override
+                            public void onGlobalLayout() {
+                                circularRevealActivity();
+                                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                                    rootLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                                } else {
+                                    rootLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                                }
+                            }
+                        });
+                    }
+                }
+
+
+                mainViewPager = (ViewPager)findViewById(R.id.pager);
+                mainViewPager.setAdapter(new PagerAdapter(getSupportFragmentManager(),4));
+                tabs = (TabLayout)findViewById(R.id.sliding_tabs);
+                tabs.setSelectedTabIndicatorColor(getResources().getColor(R.color.white));
+                tabs.setupWithViewPager(mainViewPager);
+                tabs.setTabGravity(TabLayout.GRAVITY_FILL);
+                tabs.setTabMode(TabLayout.MODE_FIXED);
+                tabs.setMinimumWidth(400);
+                mainViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                    @Override
+                    public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                    }
+
+                    @Override
+                    public void onPageSelected(int position) {
+                        tabs.getTabAt(position).select();
+
+
+                    }
+
+                    @Override
+                    public void onPageScrollStateChanged(int state) {
+
+                    }
+                });
+
+
 
             }
 
@@ -80,6 +168,7 @@ public class ProjectDetailActivity extends AppCompatActivity {
 
             }
         });
+
 
 //        mDatabase.child("projects").child(projectId).child("chats").addChildEventListener(new ChildEventListener() {
 //            @Override
@@ -138,61 +227,6 @@ public class ProjectDetailActivity extends AppCompatActivity {
         //mDatabase.child("projects").child();
 
 
-        setContentView(R.layout.activity_project_detail);
-        rootLayout = findViewById(R.id.root_layout);
-
-        tabs = (TabLayout) findViewById(R.id.sliding_tabs);
-        toolbar = (Toolbar)findViewById(R.id.my_toolbar);
-        toolbar.setBackground(getResources().getDrawable(R.drawable.actionbar_top));
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Project Name");
-
-        if (savedInstanceState == null) {
-            rootLayout.setVisibility(View.INVISIBLE);
-
-            ViewTreeObserver viewTreeObserver = rootLayout.getViewTreeObserver();
-            if (viewTreeObserver.isAlive()) {
-                viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        circularRevealActivity();
-                        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                            rootLayout.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                        } else {
-                            rootLayout.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                        }
-                    }
-                });
-            }
-        }
-
-
-        mainViewPager = (ViewPager)findViewById(R.id.pager);
-        mainViewPager.setAdapter(new PagerAdapter(getSupportFragmentManager(),4));
-        tabs = (TabLayout)findViewById(R.id.sliding_tabs);
-        tabs.setSelectedTabIndicatorColor(getResources().getColor(R.color.white));
-        tabs.setupWithViewPager(mainViewPager);
-        tabs.setTabGravity(TabLayout.GRAVITY_FILL);
-        tabs.setTabMode(TabLayout.MODE_FIXED);
-        tabs.setMinimumWidth(400);
-        mainViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                tabs.getTabAt(position).select();
-
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
     }
 
     private void circularRevealActivity() {
@@ -243,13 +277,13 @@ public class ProjectDetailActivity extends AppCompatActivity {
                     ProjectNotes tab1 = ProjectNotes.newInstance();
                     return tab1;
                 case 1:
-                    ProjectNotes tab2 = ProjectNotes.newInstance();
+                    UserNotes tab2 = UserNotes.newInstance();
                     return tab2;
                 case 2:
                     ProjectNotes tab3 = ProjectNotes.newInstance();
                     return tab3;
                 case 3:
-                    ProjectNotes tab4 = ProjectNotes.newInstance();
+                    ProjectFilesFragment tab4 = ProjectFilesFragment.newInstance();
                     return tab4;
 
                 default:
@@ -272,6 +306,7 @@ public class ProjectDetailActivity extends AppCompatActivity {
             }
             return null;
         }
+
 
 
         @Override

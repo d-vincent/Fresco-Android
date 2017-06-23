@@ -1,33 +1,30 @@
-package biome.fresco;
+package biome.fresco.Fragments;
 
-import android.animation.Animator;
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.ImageView;
-import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import io.codetail.animation.ViewAnimationUtils;
+import biome.fresco.CustomTextViewLogo;
+import biome.fresco.ProjectDetailActivity;
+import biome.fresco.Objects.ProjectListObject;
+import biome.fresco.R;
+import biome.fresco.SourceSansProBoldTextView;
+import biome.fresco.SourceSansRegularTextView;
 
 import static biome.fresco.MainActivity.mAuth;
 import static biome.fresco.MainActivity.mDatabase;

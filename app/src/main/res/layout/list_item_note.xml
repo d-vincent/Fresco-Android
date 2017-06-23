@@ -4,6 +4,8 @@
     android:layout_height="286dp"
     android:id="@+id/entire_note_layout"
     android:background="#FFFFFF"
+    android:elevation="4dp"
+    android:layout_marginBottom="8dp"
     android:padding="16dp">
 
 

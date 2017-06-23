@@ -1,6 +1,5 @@
-package biome.fresco;
+package biome.fresco.Fragments;
 
-import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,6 +26,10 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import biome.fresco.Objects.MessageObject;
+import biome.fresco.Objects.SimpleUser;
+import biome.fresco.R;
 
 import static biome.fresco.MainActivity.mAuth;
 import static biome.fresco.MainActivity.mDatabase;

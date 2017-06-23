@@ -1,19 +1,14 @@
-package biome.fresco;
+package biome.fresco.Fragments;
 
-import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -32,8 +27,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 
+import biome.fresco.R;
+
 import static biome.fresco.MainActivity.mAuth;
-import static com.google.android.gms.internal.zzs.TAG;
 
 
 /**

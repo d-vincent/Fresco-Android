@@ -1,4 +1,4 @@
-package biome.fresco;
+package biome.fresco.Objects;
 
 import java.util.List;
 
@@ -8,6 +8,8 @@ import java.util.List;
 
 public class NoteObject {
     private String authorId;
+    private String authorName;
+    private String authorPhotoUrl;
     private String chatId;
     private String content;
     private long lastEdited;
@@ -96,5 +98,21 @@ public class NoteObject {
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public String getAuthorName() {
+        return authorName;
+    }
+
+    public void setAuthorName(String authorName) {
+        this.authorName = authorName;
+    }
+
+    public String getAuthorPhotoUrl() {
+        return authorPhotoUrl;
+    }
+
+    public void setAuthorPhotoUrl(String authorPhotoUrl) {
+        this.authorPhotoUrl = authorPhotoUrl;
     }
 }

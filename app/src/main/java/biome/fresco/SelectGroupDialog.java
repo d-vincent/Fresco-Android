@@ -21,12 +21,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
+import biome.fresco.Fragments.GroupMessageFragment;
+import biome.fresco.Objects.SimpleUser;
 
 import static biome.fresco.MainActivity.mAuth;
 import static biome.fresco.MainActivity.mDatabase;

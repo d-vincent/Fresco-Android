@@ -1,6 +1,9 @@
-package biome.fresco;
+package biome.fresco.Objects;
 
 import java.util.ArrayList;
+
+import biome.fresco.Objects.LabelObject;
+import biome.fresco.Objects.UserNoteList;
 
 /**
  * Created by Drew McDonald on 3/29/2017.

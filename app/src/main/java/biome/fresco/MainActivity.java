@@ -2,18 +2,13 @@ package biome.fresco;
 
 import android.content.Intent;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
 import android.widget.Toast;
 
 
@@ -21,7 +16,6 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,9 +24,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.iid.FirebaseInstanceId;
 
-import io.fabric.sdk.android.Fabric;
+import biome.fresco.Fragments.Feed;
+import biome.fresco.Fragments.LoginFrag;
+import biome.fresco.Fragments.MainFragment;
+import biome.fresco.Objects.ChatObject;
+import biome.fresco.Objects.DirectMessage;
 
 import static com.google.android.gms.internal.zzs.TAG;
 

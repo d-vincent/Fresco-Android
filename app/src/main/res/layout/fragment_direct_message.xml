@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
 
     android:layout_height="match_parent"
-    tools:context="biome.fresco.DirectMessage">
+    tools:context="biome.fresco.Objects.DirectMessage">
 
     <!-- TODO: Update blank fragment layout -->
 
