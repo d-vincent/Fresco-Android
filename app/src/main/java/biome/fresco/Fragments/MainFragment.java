@@ -177,7 +177,7 @@ public class MainFragment extends Fragment {
                     ProjectFragment tab1 = ProjectFragment.newInstance();
                     return tab1;
                 case 1:
-                    Feed tab2 = Feed.newInstance("","");
+                    Feed tab2 = Feed.newInstance();
                     return tab2;
 
                 default:

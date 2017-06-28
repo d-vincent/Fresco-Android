@@ -76,16 +76,12 @@ public class Feed extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment Feed.
      */
     // TODO: Rename and change types and number of parameters
-    public static Feed newInstance(String param1, String param2) {
+    public static Feed newInstance() {
         Feed fragment = new Feed();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -377,22 +373,22 @@ public class Feed extends Fragment {
 
     private void setUpFabMenu(View view){
 
-        mFab = (FloatingActionMenu) view.findViewById(R.id.chat_fab);
-        fabDirectMessage = (FloatingActionButton)mFab.findViewById(R.id.fabDirectMessage);
-        fabDirectMessage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentManager fm = getActivity().getSupportFragmentManager();
-                fm.beginTransaction().replace(R.id.container, SelectUser.newInstance("","")).addToBackStack("").commit();
-            }
-        });
-        fabGroupChat = (FloatingActionButton)mFab.findViewById(R.id.fabGroupChat);
-        fabGroupChat.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentManager fm = getActivity().getSupportFragmentManager();
-                fm.beginTransaction().replace(R.id.container, SelectGroupDialog.newInstance()).addToBackStack("").commit();
-            }
-        });
+//        mFab = (FloatingActionMenu) view.findViewById(R.id.chat_fab);
+//        fabDirectMessage = (FloatingActionButton)mFab.findViewById(R.id.fabDirectMessage);
+//        fabDirectMessage.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                FragmentManager fm = getActivity().getSupportFragmentManager();
+//                fm.beginTransaction().replace(R.id.container, SelectUser.newInstance("","")).addToBackStack("").commit();
+//            }
+//        });
+//        fabGroupChat = (FloatingActionButton)mFab.findViewById(R.id.fabGroupChat);
+//        fabGroupChat.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                FragmentManager fm = getActivity().getSupportFragmentManager();
+//                fm.beginTransaction().replace(R.id.container, SelectGroupDialog.newInstance()).addToBackStack("").commit();
+//            }
+//        });
     }
 }

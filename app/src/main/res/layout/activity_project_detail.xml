@@ -7,6 +7,7 @@
     tools:context="biome.fresco.ProjectDetailActivity">
 
     <RelativeLayout
+        android:clipChildren="false"
         android:id="@+id/root_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -14,14 +15,16 @@
         >
         <!-- Insert your actual layout here -->
 
+        <RelativeLayout
+            android:id="@+id/top_bar_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
         <android.support.v7.widget.Toolbar
             android:id="@+id/my_toolbar"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            android:background="#24b3a7"
-            android:elevation="0dp"
             android:visibility="invisible"
-            app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
             app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
 
@@ -30,15 +33,19 @@
             android:visibility="invisible"
             android:layout_below="@+id/my_toolbar"
             android:id="@+id/sliding_tabs"
-            android:background="@drawable/actionbar_bottom"
+            android:background="@color/white"
+            app:tabMode="scrollable"
             android:layout_width="match_parent"
             style="@style/AppTheme.TabStyle"
-            android:layout_height="56dp"/>
+            android:layout_height="60dp"
+            android:paddingBottom="4dp"/>
+
+        </RelativeLayout>
 
 
         <android.support.v4.view.ViewPager
             android:visibility="invisible"
-            android:layout_below="@+id/sliding_tabs"
+            android:layout_below="@+id/top_bar_layout"
             android:id="@+id/pager"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
@@ -47,7 +54,7 @@
 
 
 
-
     </RelativeLayout>
+
 
 </io.codetail.widget.RevealFrameLayout>

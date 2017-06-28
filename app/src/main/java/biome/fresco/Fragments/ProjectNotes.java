@@ -1,5 +1,6 @@
 package biome.fresco.Fragments;
 
+import android.animation.ObjectAnimator;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -27,11 +28,13 @@ import java.util.Date;
 import java.util.List;
 
 import biome.fresco.CustomTextViewLogo;
+import biome.fresco.MainActivity;
 import biome.fresco.NoteListAdapter;
 import biome.fresco.Objects.NoteObject;
 import biome.fresco.ProjectDetailActivity;
 import biome.fresco.R;
 
+import static android.widget.AbsListView.OnScrollListener.SCROLL_STATE_IDLE;
 import static biome.fresco.MainActivity.mDatabase;
 
 
@@ -203,6 +206,23 @@ public class ProjectNotes extends Fragment {
 
         mAdapter = new NoteListAdapter(mNotes, getContext());
         mRecyclerView.setAdapter(mAdapter);
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState== SCROLL_STATE_IDLE){
+                    ObjectAnimator anim = ObjectAnimator.ofFloat(  ((ProjectDetailActivity)getActivity()).topBarView,"elevation",0);
+                    anim.setDuration(250);
+                    anim.start();
+
+                }
+                else{
+                    ObjectAnimator anim = ObjectAnimator.ofFloat(  ((ProjectDetailActivity)getActivity()).topBarView,"elevation",80f);
+                    anim.setDuration(250);
+                    anim.start();
+                }
+            }
+        });
 
         return view;
     }

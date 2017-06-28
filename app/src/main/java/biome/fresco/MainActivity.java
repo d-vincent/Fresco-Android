@@ -1,14 +1,19 @@
 package biome.fresco;
 
 import android.content.Intent;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Toast;
 
 
@@ -24,10 +29,14 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.roughike.bottombar.BottomBar;
+import com.roughike.bottombar.OnTabSelectListener;
 
 import biome.fresco.Fragments.Feed;
 import biome.fresco.Fragments.LoginFrag;
 import biome.fresco.Fragments.MainFragment;
+import biome.fresco.Fragments.ProjectFragment;
+import biome.fresco.Fragments.TeamFragment;
 import biome.fresco.Objects.ChatObject;
 import biome.fresco.Objects.DirectMessage;
 
@@ -44,9 +53,12 @@ public class MainActivity extends AppCompatActivity {
     public static String token;
     String toUserPhotoUrl;
 
+    Fragment mFragment;
+
     public static int RC_GOOGLE_SIGN_IN = 0;
 
     Toolbar toolbar;
+    BottomBar bottomBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +80,9 @@ public class MainActivity extends AppCompatActivity {
                     if (token != null) {
                         mDatabase.child("users").child(uid).child("tokens").child("android").child(token);
                     }
-                    getSupportFragmentManager().beginTransaction().add(R.id.container, MainFragment.newInstance()).commit();
+                    mFragment = ProjectFragment.newInstance();
+                    getSupportFragmentManager().beginTransaction().add(R.id.container, mFragment).commit();
+                    findViewById(R.id.bottomBar).setVisibility(View.VISIBLE);
 
                     Log.d("Firebase", "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
@@ -124,22 +138,68 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 });
-
-
             }
-
 //            Toast.makeText(this, chatType.length(), Toast.LENGTH_LONG).show();
         }
 
+        bottomBar = (BottomBar)findViewById(R.id.bottomBar);
+        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
+            @Override
+            public void onTabSelected(@IdRes int tabId) {
+                switch (tabId){
+                    case R.id.tab_home:
+                        if (!(mFragment instanceof ProjectFragment)){
+                            mFragment = ProjectFragment.newInstance();
+                            getSupportFragmentManager().beginTransaction().replace(R.id.container, mFragment).commit();
+                        }
+                        break;
+                    case R.id.tab_projects:
 
+                        if (!(mFragment instanceof ProjectFragment)){
+                            mFragment = ProjectFragment.newInstance();
+                            getSupportFragmentManager().beginTransaction().replace(R.id.container, mFragment).commit();
+                        }
+                        break;
+                    case R.id.tab_teams:
+
+                        if (!(mFragment instanceof TeamFragment)){
+                            mFragment = TeamFragment.newInstance();
+                            getSupportFragmentManager().beginTransaction().replace(R.id.container, mFragment).commit();
+                        }
+                        break;
+                    case R.id.tab_messages:
+
+                        if (!(mFragment instanceof Feed)){
+                            mFragment = Feed.newInstance();
+                            getSupportFragmentManager().beginTransaction().replace(R.id.container, mFragment).commit();
+                        }
+                        break;
+                    case R.id.tab_search:
+                        if (!(mFragment instanceof ProjectFragment)){
+                            mFragment = ProjectFragment.newInstance();
+                            getSupportFragmentManager().beginTransaction().replace(R.id.container, mFragment).commit();
+                        }
+                        break;
+                }
+            }
+        });
 
         toolbar = (Toolbar)findViewById(R.id.my_toolbar);
-        toolbar.setBackground(getResources().getDrawable(R.drawable.actionbar_top));
+       // toolbar.setBackground(getResources().getDrawable(R.drawable.actionbar_top));
         setSupportActionBar(toolbar);
 
+        DrawerLayout mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle mDrawerToggle = new ActionBarDrawerToggle(
+                this,  mDrawerLayout, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close
+        );
+        mDrawerLayout.addDrawerListener(mDrawerToggle);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setHomeButtonEnabled(true);
+
+        mDrawerToggle.syncState();
+
     }
-
-
 
 
     @Override
@@ -153,9 +213,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch(item.getItemId()){
-            case R.id.messages:
-                FragmentManager fm = getSupportFragmentManager();
-                fm.beginTransaction().replace(R.id.container, Feed.newInstance("","")).addToBackStack("").commit();
+            case R.id.toolbar_search:
+                Toast.makeText(this, "Some search results", Toast.LENGTH_SHORT).show();
 
         }
         return super.onOptionsItemSelected(item);

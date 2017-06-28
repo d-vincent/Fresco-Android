@@ -1,0 +1,25 @@
+<tabs>
+    <tab
+        id="@+id/tab_home"
+        icon="@drawable/ic_home_grey600_24dp"
+        title="Home" />
+    <tab
+        id="@+id/tab_projects"
+        icon="@drawable/ic_briefcase_grey600_24dp"
+
+        title="Projects" />
+    <tab
+        id="@+id/tab_teams"
+        icon="@drawable/ic_google_circles_communities_grey600_24dp"
+        title="Teams" />
+
+    <tab
+        id="@+id/tab_messages"
+        icon="@drawable/ic_message_text_grey600_24dp"
+        title="Messages" />
+
+    <tab
+        id="@+id/tab_search"
+        icon="@drawable/ic_magnify_grey600_24dp"
+        title="Search" />
+</tabs>

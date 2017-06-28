@@ -1,5 +1,6 @@
 package biome.fresco.Fragments;
 
+import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -20,12 +21,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import biome.fresco.CustomTextViewLogo;
+import biome.fresco.MainActivity;
 import biome.fresco.ProjectDetailActivity;
 import biome.fresco.Objects.ProjectListObject;
 import biome.fresco.R;
 import biome.fresco.SourceSansProBoldTextView;
 import biome.fresco.SourceSansRegularTextView;
 
+import static android.widget.AbsListView.OnScrollListener.SCROLL_STATE_IDLE;
 import static biome.fresco.MainActivity.mAuth;
 import static biome.fresco.MainActivity.mDatabase;
 
@@ -46,6 +49,8 @@ public class ProjectFragment extends Fragment {
     private List<ProjectListObject> projects;
     RecyclerView projectListRecyclerView;
     ProjectListAdapter mAdapter;
+
+    private static final int SCROLL_DIRECTION_UP = -1;
 
     private String mId;
 
@@ -136,6 +141,27 @@ public class ProjectFragment extends Fragment {
         projectListRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         mAdapter = new ProjectListAdapter(projects);
         projectListRecyclerView.setAdapter(mAdapter);
+        projectListRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState== SCROLL_STATE_IDLE){
+                    ObjectAnimator anim = ObjectAnimator.ofFloat(  ((MainActivity)getActivity()).getSupportActionBar(),"elevation",0);
+                    anim.setDuration(250);
+                    anim.start();
+
+                }
+                else{
+                    ObjectAnimator anim = ObjectAnimator.ofFloat(  ((MainActivity)getActivity()).getSupportActionBar(),"elevation",8f);
+                    anim.setDuration(250);
+                    anim.start();
+                }
+            }
+        });
+
+// ...
+// Put this into your RecyclerView.OnScrollListener > onScrolled() method
+
 
 
         return view;

@@ -7,10 +7,10 @@
 
     <item
 
-        android:id="@+id/messages"
+        android:id="@+id/toolbar_search"
         android:orderInCategory="300"
-        android:title="User"
-        android:icon="@drawable/arrow_icon"
+        android:title="Search"
+        android:icon="@drawable/ic_magnify_grey600_24dp"
         app:showAsAction="ifRoom"/>
 
 </menu>

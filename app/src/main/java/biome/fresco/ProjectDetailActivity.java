@@ -12,6 +12,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
@@ -43,6 +44,8 @@ public class ProjectDetailActivity extends AppCompatActivity {
     String projectId;
     Toolbar toolbar;
 
+    public View topBarView;
+
     ViewPager mainViewPager;
     TabLayout tabs;
     View rootLayout;
@@ -70,6 +73,15 @@ public class ProjectDetailActivity extends AppCompatActivity {
         }
 
     }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
@@ -77,6 +89,12 @@ public class ProjectDetailActivity extends AppCompatActivity {
         Intent intent = getIntent();
         x = intent.getExtras().getFloat("xcoord");
         y = intent.getExtras().getFloat("ycoord");
+
+
+
+
+
+
 
         projectId = intent.getExtras().getString("projectId");
 
@@ -99,17 +117,19 @@ public class ProjectDetailActivity extends AppCompatActivity {
                 mProject.setRootChatId((String)dataSnapshot.child("rootChat").getValue());
                 mProject.setRootFolderId((String)dataSnapshot.child("rootFolder").getValue());
 
-
-
-
-
                 setContentView(R.layout.activity_project_detail);
                 rootLayout = findViewById(R.id.root_layout);
 
+                topBarView = findViewById(R.id.top_bar_layout);
+
+
                 tabs = (TabLayout) findViewById(R.id.sliding_tabs);
                 toolbar = (Toolbar)findViewById(R.id.my_toolbar);
-                toolbar.setBackground(getResources().getDrawable(R.drawable.actionbar_top));
                 setSupportActionBar(toolbar);
+
+                getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+                getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_close_black_48dp);
+
                 toolbar.setTitle(mProject.getName());
 
                 if (savedInstanceState == null) {
@@ -135,7 +155,7 @@ public class ProjectDetailActivity extends AppCompatActivity {
                 mainViewPager = (ViewPager)findViewById(R.id.pager);
                 mainViewPager.setAdapter(new PagerAdapter(getSupportFragmentManager(),4));
                 tabs = (TabLayout)findViewById(R.id.sliding_tabs);
-                tabs.setSelectedTabIndicatorColor(getResources().getColor(R.color.white));
+                tabs.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorPrimary));
                 tabs.setupWithViewPager(mainViewPager);
                 tabs.setTabGravity(TabLayout.GRAVITY_FILL);
                 tabs.setTabMode(TabLayout.MODE_FIXED);
@@ -159,8 +179,6 @@ public class ProjectDetailActivity extends AppCompatActivity {
                     }
                 });
 
-
-
             }
 
             @Override
@@ -169,62 +187,6 @@ public class ProjectDetailActivity extends AppCompatActivity {
             }
         });
 
-
-//        mDatabase.child("projects").child(projectId).child("chats").addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                mProject.getChatIds().add((String)dataSnapshot.getKey());
-//            }
-//
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//                mProject.getChatIds().remove((String)dataSnapshot.getKey());
-//            }
-//
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-//
-//        mDatabase.child(projectId).child("publicNotes").child("allNotes").addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-//                mProject.getAllNotes().getAllNotes().add(dataSnapshot.getKey());
-//            }
-//
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(DataSnapshot dataSnapshot) {
-//
-//            }
-//
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-
-        //mDatabase.child("projects").child();
 
 
     }
@@ -277,10 +239,10 @@ public class ProjectDetailActivity extends AppCompatActivity {
                     ProjectNotes tab1 = ProjectNotes.newInstance();
                     return tab1;
                 case 1:
-                    UserNotes tab2 = UserNotes.newInstance();
+                    ProjectNotes tab2 = ProjectNotes.newInstance();
                     return tab2;
                 case 2:
-                    ProjectNotes tab3 = ProjectNotes.newInstance();
+                    UserNotes tab3 = UserNotes.newInstance();
                     return tab3;
                 case 3:
                     ProjectFilesFragment tab4 = ProjectFilesFragment.newInstance();
@@ -296,11 +258,11 @@ public class ProjectDetailActivity extends AppCompatActivity {
             Locale l = Locale.getDefault();
             switch (position) {
                 case 0:
-                    return "Notes";
+                    return "Agenda";
                 case 1:
-                    return "Your Notes";
+                    return "Project Notes";
                 case 2:
-                    return "Chats";
+                    return "Personal Notes";
                 case 3:
                     return "Files";
             }

@@ -32,36 +32,36 @@
 
     <!--</RelativeLayout>-->
 
-    <com.github.clans.fab.FloatingActionMenu
-        xmlns:fab="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/chat_fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="20dp"
-        android:elevation="6dp"
-        android:layout_marginBottom="20dp"
-        >
+    <!--<com.github.clans.fab.FloatingActionMenu-->
+        <!--xmlns:fab="http://schemas.android.com/apk/res-auto"-->
+        <!--android:id="@+id/chat_fab"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_marginRight="20dp"-->
+        <!--android:elevation="6dp"-->
+        <!--android:layout_marginBottom="20dp"-->
+        <!--&gt;-->
 
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fabGroupChat"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fab_label="Group Chat"
-            fab:fab_colorNormal="@color/colorAccent"
-            />
+        <!--<com.github.clans.fab.FloatingActionButton-->
+            <!--android:id="@+id/fabGroupChat"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:fab_label="Group Chat"-->
+            <!--fab:fab_colorNormal="@color/colorAccent"-->
+            <!--/>-->
 
-        <com.github.clans.fab.FloatingActionButton
-            android:id="@+id/fabDirectMessage"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fab_label="Direct Message"
-            fab:fab_colorNormal="@color/colorAccent"
-            />
+        <!--<com.github.clans.fab.FloatingActionButton-->
+            <!--android:id="@+id/fabDirectMessage"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--app:fab_label="Direct Message"-->
+            <!--fab:fab_colorNormal="@color/colorAccent"-->
+            <!--/>-->
 
-    </com.github.clans.fab.FloatingActionMenu>
+    <!--</com.github.clans.fab.FloatingActionMenu>-->
 
 
 
