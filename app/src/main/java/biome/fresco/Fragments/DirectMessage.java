@@ -1,4 +1,4 @@
-package biome.fresco.Objects;
+package biome.fresco.Fragments;
 
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,6 +27,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import biome.fresco.MainActivity;
+import biome.fresco.Objects.MessageObject;
 import biome.fresco.R;
 
 import static biome.fresco.MainActivity.mAuth;
@@ -208,6 +210,18 @@ public class DirectMessage extends Fragment {
     public void onDetach() {
         super.onDetach();
         mListener = null;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity)getActivity()).mFab.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        ((MainActivity)getActivity()).mFab.setVisibility(View.VISIBLE);
     }
 
     /**

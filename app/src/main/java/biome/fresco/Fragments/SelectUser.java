@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 
 import biome.fresco.CircleTransformation;
-import biome.fresco.Objects.DirectMessage;
 import biome.fresco.Objects.SimpleUser;
 import biome.fresco.R;
 

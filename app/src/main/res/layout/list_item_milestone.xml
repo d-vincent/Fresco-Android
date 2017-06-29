@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:id="@+id/entire_milestone"
+    android:padding="16dp">
+
+    <LinearLayout
+        android:weightSum="2"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="80dp">
+
+    <RelativeLayout
+        android:layout_weight="1"
+        android:layout_width="1dp"
+        android:layout_height="match_parent">
+
+        <biome.fresco.SourceSansRegularTextView
+            android:textSize="18sp"
+            android:id="@+id/milestone_title"
+            android:text="DO STUFF AND THINGS and maybe some wrap"
+            android:maxLines="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <biome.fresco.SourceSansRegularTextView
+            android:id="@+id/milestone_description"
+            android:text="The stuff and things, do them and some wrapping"
+            android:layout_below="@+id/milestone_title"
+            android:maxLines="2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_weight="1"
+        android:layout_width="1dp"
+        android:layout_height="match_parent">
+
+        <biome.fresco.SourceSansRegularTextView
+            android:id="@+id/task_count"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:text="0/0"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/task_count_image"
+            android:src="@drawable/ic_menu_black_24dp"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@+id/task_count"
+            android:layout_width="20dp"
+            android:layout_height="20dp" />
+
+        <biome.fresco.SourceSansRegularTextView
+
+            android:id="@+id/days_left"
+            android:textColor="@color/colorPrimary"
+            android:text="5 days left"
+            android:gravity="right"
+            android:layout_marginEnd="4dp"
+            android:layout_marginRight="4dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_toLeftOf="@+id/task_count_image"
+            android:layout_centerVertical="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/task_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"></LinearLayout>
+    
+</LinearLayout>

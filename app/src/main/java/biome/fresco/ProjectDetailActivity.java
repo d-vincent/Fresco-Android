@@ -157,8 +157,7 @@ public class ProjectDetailActivity extends AppCompatActivity {
                 tabs = (TabLayout)findViewById(R.id.sliding_tabs);
                 tabs.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorPrimary));
                 tabs.setupWithViewPager(mainViewPager);
-                tabs.setTabGravity(TabLayout.GRAVITY_FILL);
-                tabs.setTabMode(TabLayout.MODE_FIXED);
+                tabs.setTabMode(TabLayout.MODE_SCROLLABLE);
                 tabs.setMinimumWidth(400);
                 mainViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
                     @Override
@@ -236,7 +235,7 @@ public class ProjectDetailActivity extends AppCompatActivity {
 
             switch (position) {
                 case 0:
-                    ProjectNotes tab1 = ProjectNotes.newInstance();
+                    AgendaFragment tab1 = AgendaFragment.newInstance();
                     return tab1;
                 case 1:
                     ProjectNotes tab2 = ProjectNotes.newInstance();

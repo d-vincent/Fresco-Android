@@ -2,6 +2,7 @@ package biome.fresco.Fragments;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -12,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -22,16 +22,17 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
 import biome.fresco.CircleTransformation;
 import biome.fresco.MainActivity;
 import biome.fresco.Objects.ChatObject;
-import biome.fresco.Objects.DirectMessage;
 import biome.fresco.R;
-import biome.fresco.SelectGroupDialog;
+import biome.fresco.RoundedCornerTransformation;
 
 import static biome.fresco.MainActivity.mAuth;
 import static biome.fresco.MainActivity.mDatabase;
@@ -129,7 +130,7 @@ public class Feed extends Fragment {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 String toUserId = dataSnapshot.getKey();
-                String roomId = (String)dataSnapshot.child("id").getValue();
+                final String roomId = (String)dataSnapshot.child("id").getValue();
                 boolean notified = (boolean)dataSnapshot.child("notified").getValue();
                 boolean unread = (boolean)dataSnapshot.child("unread").getValue();
 
@@ -141,8 +142,33 @@ public class Feed extends Fragment {
 
                         chat.setToUserName((String)dataSnapshot.child("name").getValue());
                         chat.setToUserImageUrl((String)dataSnapshot.child("photoUrl").getValue());
-                        chatObjects.add(chat);
-                        mAdapter.notifyDataSetChanged();
+
+                        mDatabase.child("chats").child(roomId).child("messages").limitToLast(1).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                                for (DataSnapshot snap: dataSnapshot.getChildren()){
+
+                                    try {
+                                        chat.setLastMessage((String)snap.child("content").getValue());
+                                        chat.setTimestamp((long) snap.child("timestamp").getValue());
+                                    }catch (Exception e){
+
+                                    }
+                                }
+
+
+
+                                chatObjects.add(chat);
+                                mAdapter.notifyDataSetChanged();
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
                     }
 
                     @Override
@@ -293,10 +319,20 @@ public class Feed extends Fragment {
 
         private TextView contactName;
         private ImageView contactImage;
+        private TextView lastMessage;
+        private TextView timestamp;
+        private View entireView;
+
+        SimpleDateFormat timeFormat = new SimpleDateFormat("MMM dd h:mm a");
+
+
         public dmHolder(View itemView){
             super(itemView);
+            timestamp = (TextView)itemView.findViewById(R.id.last_message_timestamp);
+            lastMessage = (TextView)itemView.findViewById(R.id.last_message);
             contactName = (TextView)itemView.findViewById(R.id.chat_name);
             contactImage = (ImageView)itemView.findViewById(R.id.chat_icon);
+            entireView = itemView.findViewById(R.id.entire_layout);
 
         }
 
@@ -308,7 +344,13 @@ public class Feed extends Fragment {
         public void bindName(ChatObject chatObject){
             String name;
 
+            lastMessage.setText(chatObject.getLastMessage());
             contactName.setText(chatObject.getToUserName());
+            try {
+                timestamp.setText(timeFormat.format(new Date(chatObject.getTimestamp())));
+            }catch (Exception e){
+
+            }
 
         }
     }
@@ -325,7 +367,8 @@ public class Feed extends Fragment {
             holder.bindName(mChats.get(position));
             Picasso.with(getContext())
                     .load(mChats.get(position).getToUserImageUrl())
-                    .transform(new CircleTransformation()).fit()
+                    .transform(new RoundedCornerTransformation())
+                    .fit()
                     .centerCrop()
 //                    .placeholder(R.mipmap.contact)
                     .into(holder.contactImage, new Callback() {
@@ -340,7 +383,7 @@ public class Feed extends Fragment {
                         }
                     });
 
-            holder.contactName.setOnClickListener(new View.OnClickListener() {
+            holder.entireView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 

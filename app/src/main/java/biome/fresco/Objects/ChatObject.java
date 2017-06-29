@@ -13,6 +13,8 @@ public class ChatObject {
     private boolean notified;
     private boolean unread;
     private boolean isGroupChat;
+    private String lastMessage;
+    private long timestamp;
 
     public ChatObject(String roomId, String toUserId, boolean notified, boolean unread){
 
@@ -26,6 +28,22 @@ public class ChatObject {
     public ChatObject(String roomId){
         this.roomId = roomId;
         this.isGroupChat = true;
+    }
+
+    public void setLastMessage(String lastMessage) {
+        this.lastMessage = lastMessage;
+    }
+
+    public String getLastMessage() {
+        return lastMessage;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
     }
 
     public String getRoomId() {

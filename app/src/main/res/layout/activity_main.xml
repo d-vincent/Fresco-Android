@@ -11,6 +11,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <FrameLayout
+            android:id="@+id/top_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/my_toolbar"
@@ -23,6 +27,16 @@
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
     </android.support.v7.widget.Toolbar>
+        
+        <com.mancj.materialsearchbar.MaterialSearchBar
+            android:visibility="gone"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:mt_hint="Search..."
+            app:mt_speechMode="true"
+            android:id="@+id/search_bar"/>
+
+        </FrameLayout>
 
 
     <!--<RevealLayout-->
@@ -41,7 +55,7 @@
 
 
     <FrameLayout
-        android:layout_below="@+id/my_toolbar"
+        android:layout_below="@+id/top_bar"
         android:id="@+id/container"
         android:layout_above="@+id/bottomBar"
         android:layout_width="match_parent"
@@ -62,7 +76,7 @@
             fab:menu_colorNormal="@color/colorPrimary"
             fab:menu_colorRipple="@color/colorAccent"
             fab:menu_colorPressed="@color/colorAccent"
-            android:id="@+id/chat_fab"
+            android:id="@+id/main_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"

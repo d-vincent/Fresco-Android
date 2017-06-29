@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="56dp">
+
+    <CheckBox
+        android:id="@+id/task_checkbox"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <biome.fresco.SourceSansRegularTextView
+        android:textSize="18sp"
+        android:text="Sample Task"
+        android:layout_toRightOf="@+id/task_checkbox"
+        android:id="@+id/task_title"
+        android:layout_centerVertical="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</RelativeLayout>
