@@ -64,6 +64,8 @@ dependencies {
     compile 'com.github.mancj:MaterialSearchBar:0.7'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     compile 'com.thoughtbot:expandablecheckrecyclerview:1.4'
+    compile 'com.prolificinteractive:material-calendarview:1.4.3'
+    compile 'com.github.stfalcon:chatkit:0.2.1'
     androidTestCompile 'junit:junit:4.12'
 }
 

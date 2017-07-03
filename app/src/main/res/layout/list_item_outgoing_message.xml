@@ -4,10 +4,8 @@
     android:orientation="horizontal" android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-
     <RelativeLayout
         android:visibility="gone"
-
         android:layout_marginTop="8dp"
         android:id="@+id/day_header"
         android:layout_width="match_parent"
@@ -35,11 +33,12 @@
     <LinearLayout
 
         android:layout_below="@+id/day_header"
+        android:gravity="right"
         android:layout_marginLeft="12dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="8dp"
-        android:layout_toRightOf="@+id/contact_image_layout"
-        android:layout_toEndOf="@+id/contact_image_layout"
+        android:layout_toLeftOf="@+id/contact_image_layout"
+        android:layout_toStartOf="@+id/contact_image_layout"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="20dp"
@@ -59,7 +58,7 @@
         <TextView
             android:layout_gravity="bottom"
             android:layout_marginStart="12dp"
-           android:layout_marginLeft="12dp"
+            android:layout_marginLeft="12dp"
             android:text="at"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -76,13 +75,14 @@
     </LinearLayout>
 
     <TextView
+        android:gravity="right"
         android:layout_marginTop="4dp"
         android:id="@+id/message_content"
         android:layout_marginStart="12dp"
         android:layout_marginLeft="12dp"
         android:text="Hey, this is one of those MESSAGES, lets see what happens when she wraps"
         android:layout_below="@id/who_when_layout"
-        android:layout_toRightOf="@+id/contact_image_layout"
+        android:layout_toLeftOf="@+id/contact_image_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -96,8 +96,8 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_centerVertical="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true">
 
         <ImageView
 

@@ -17,8 +17,11 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
+import com.stfalcon.chatkit.messages.MessagesList;
+import com.stfalcon.chatkit.messages.MessagesListAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -29,7 +32,10 @@ import java.util.Map;
 
 import biome.fresco.MainActivity;
 import biome.fresco.Objects.MessageObject;
+import biome.fresco.Objects.SimpleUser;
 import biome.fresco.R;
+import biome.fresco.RoundedCornerTransformation;
+import biome.fresco.SourceSansRegularTextView;
 
 import static biome.fresco.MainActivity.mAuth;
 import static biome.fresco.MainActivity.mDatabase;
@@ -60,10 +66,9 @@ public class DirectMessage extends Fragment {
     private ImageView sendButton;
 
 
-    private OnFragmentInteractionListener mListener;
+    private LinearLayoutManager mLayoutManager;
     private RecyclerView messageRecycler;
     private nameAdapter mAdapter;
-    private LinearLayoutManager mLayoutManager;
 
     SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm a");
 
@@ -123,14 +128,19 @@ public class DirectMessage extends Fragment {
 //                    long type = (long)snap.child("type").getValue();
 
                 if (author.equals(userId)) {
-                    messages.add(new MessageObject(message, author, 0, timeStamp,false));
+                    messages.add(new MessageObject(message, author, 0, timeStamp, false));
                 }
                 else {
                     messages.add(new MessageObject(message, author, 0, timeStamp, true));
 
                 }
-                    mAdapter.notifyDataSetChanged();
+                try {
                     mLayoutManager.scrollToPositionWithOffset(messages.size() - 1, 0);
+                }catch (Exception e){
+
+                }
+                mAdapter.notifyDataSetChanged();
+
 
             }
 
@@ -170,6 +180,8 @@ public class DirectMessage extends Fragment {
         mAdapter = new nameAdapter(messages);
         messageRecycler.setAdapter(mAdapter);
 
+
+
         messageInput = (EditText)view.findViewById(R.id.message_input);
         sendButton = (ImageView) view.findViewById(R.id.send_message);
         sendButton.setOnClickListener(new View.OnClickListener() {
@@ -199,29 +211,23 @@ public class DirectMessage extends Fragment {
     }
 
     // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
+
+
 
     @Override
     public void onResume() {
         super.onResume();
         ((MainActivity)getActivity()).mFab.setVisibility(View.GONE);
+        ((MainActivity)getActivity()).bottomBar.setVisibility(View.GONE);
     }
 
     @Override
     public void onPause() {
         super.onPause();
         ((MainActivity)getActivity()).mFab.setVisibility(View.VISIBLE);
+        ((MainActivity)getActivity()).bottomBar.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -241,11 +247,15 @@ public class DirectMessage extends Fragment {
 
     private class MessageHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
-        private TextView contactName;
-        private ImageView contactImage;
+        public TextView contactName;
+        public ImageView contactImage;
         private TextView messageContent;
         private View entireChatView;
-        private TextView timeStamp;
+        public TextView timeStamp;
+        public View whoWhenLayout;
+        public View dayHeader;
+        public SourceSansRegularTextView dayHeaderText;
+
 
 
         public MessageHolder(View itemView){
@@ -255,6 +265,9 @@ public class DirectMessage extends Fragment {
             messageContent = (TextView)itemView.findViewById(R.id.message_content);
             entireChatView = itemView.findViewById(R.id.entire_chat_layout);
             timeStamp = (TextView)itemView.findViewById(R.id.message_timestamp);
+            whoWhenLayout = itemView.findViewById(R.id.who_when_layout);
+            dayHeader = itemView.findViewById(R.id.day_header);
+            dayHeaderText = (SourceSansRegularTextView)itemView.findViewById(R.id.day_header_text);
 
 
         }
@@ -283,6 +296,7 @@ public class DirectMessage extends Fragment {
     private class nameAdapter extends RecyclerView.Adapter<MessageHolder>{
 
         public List<MessageObject> mMessages;
+        SimpleDateFormat headerFormat = new SimpleDateFormat("MMM d");
         public nameAdapter(List<MessageObject> messages){
 
             mMessages = messages;
@@ -290,20 +304,50 @@ public class DirectMessage extends Fragment {
 
         @Override
         public void onBindViewHolder(MessageHolder holder, int position) {
-            if (!messages.get(position).getAuthor().equals(mAuth.getCurrentUser().getUid())){
-                holder.entireChatView.setBackgroundColor(getResources().getColor(R.color.light_background));
+
+
+            holder.dayHeader.setVisibility(View.GONE);
+            holder.contactImage.setVisibility(View.VISIBLE);
+            holder.whoWhenLayout.setVisibility(View.VISIBLE);
+
+            try {
+                CalendarDay lastDay = CalendarDay.from(new Date(mMessages.get(position - 1).getTimeStamp()));
+                CalendarDay thisDay = CalendarDay.from(new Date(mMessages.get(position).getTimeStamp()));
+                CalendarDay today = CalendarDay.today();
+
+
+            if (lastDay.isBefore(thisDay)){
+                holder.dayHeader.setVisibility(View.VISIBLE);
+                if (thisDay.equals(today)){
+                    holder.dayHeaderText.setText("Today");
+                }else {
+                    holder.dayHeaderText.setText(headerFormat.format(thisDay.getDate()));
+                }
             }
-            else{
-                holder.entireChatView.setBackgroundColor(getResources().getColor(R.color.white));
+            }catch (Exception e){
+
             }
-
-
-            holder.bindMessage(messages.get(position));
-
 
             if (!messages.get(position).isMe()) {
+
+                try {
+                    if (!messages.get(position-1).isMe() ){
+                        MessageObject previousMessage = messages.get(position-1);
+                        MessageObject thisMessage = messages.get(position);
+
+
+                        if (thisMessage.getTimeStamp() - previousMessage.getTimeStamp() < 1800000){
+                            holder.contactImage.setVisibility(View.GONE);
+                            holder.whoWhenLayout.setVisibility(View.GONE);
+                        }
+
+                    }
+                }catch (Exception e){
+
+                }
                 Picasso.with(getContext())
                         .load(mImageUrl)
+                        .transform(new RoundedCornerTransformation())
 //                    .placeholder(R.mipmap.contact)
                         .into(holder.contactImage, new Callback() {
                             @Override
@@ -317,8 +361,25 @@ public class DirectMessage extends Fragment {
                             }
                         });
             }else {
+
+                try {
+                    if (messages.get(position-1).isMe() ){
+                        MessageObject previousMessage = messages.get(position-1);
+                        MessageObject thisMessage = messages.get(position);
+
+
+
+                        if (thisMessage.getTimeStamp() - previousMessage.getTimeStamp() < 1800000){
+                            holder.contactImage.setVisibility(View.GONE);
+                            holder.whoWhenLayout.setVisibility(View.GONE);
+                        }
+                    }
+                }catch (Exception e){
+
+                }
                 Picasso.with(getContext())
                         .load(mAuth.getCurrentUser().getPhotoUrl())
+                        .transform(new RoundedCornerTransformation())
 //                    .placeholder(R.mipmap.contact)
                         .into(holder.contactImage, new Callback() {
                             @Override
@@ -332,6 +393,8 @@ public class DirectMessage extends Fragment {
                             }
                         });
             }
+
+            holder.bindMessage(messages.get(position));
         }
 
         @Override
@@ -342,8 +405,32 @@ public class DirectMessage extends Fragment {
         @Override
         public MessageHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             LayoutInflater layoutInflater = LayoutInflater.from(getContext());
-            View view = layoutInflater.inflate(R.layout.list_item_direct_message, parent, false);
-            return new MessageHolder(view);
+            View view;
+            switch (viewType){
+
+                case 0:
+                     view = layoutInflater.inflate(R.layout.list_item_direct_message, parent, false);
+                    return new MessageHolder(view);
+
+                case 1:
+                    view = layoutInflater.inflate(R.layout.list_item_outgoing_message, parent, false);
+                    return new MessageHolder(view);
+
+                default:
+                    view = layoutInflater.inflate(R.layout.list_item_direct_message, parent, false);
+                    return new MessageHolder(view);
+            }
+
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+
+            if (mMessages.get(position).getAuthor().equals(userId)){
+                return 0;
+            }else{
+                return 1;
+            }
         }
     }
 

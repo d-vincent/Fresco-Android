@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CalendarView;
 import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -25,6 +26,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
+import com.prolificinteractive.materialcalendarview.CalendarDay;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -33,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import biome.fresco.Fragments.ProjectNotes;
 import biome.fresco.Objects.MilestoneObject;
@@ -58,6 +61,9 @@ public class AgendaFragment extends Fragment {
     String mId;
     List<MilestoneObject> mileStones;
     private OnFragmentInteractionListener mListener;
+
+    long totalTasks;
+    long totalMileStones;
 
     MilestoneListADapter mAdapter;
     RecyclerView mRecyclerview;
@@ -91,7 +97,12 @@ public class AgendaFragment extends Fragment {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
 
+                totalTasks = 0;
+                totalMileStones = 0;
+                mileStones.clear();
+
                 for (final DataSnapshot milestoneSnap : dataSnapshot.child("milestones").getChildren()) {
+                    totalMileStones ++;
                     MilestoneObject milestone = new MilestoneObject();
                     milestone.setAuthor((String)milestoneSnap.child("author").getValue());
                     milestone.setDescription((String)milestoneSnap.child("desc").getValue());
@@ -100,27 +111,40 @@ public class AgendaFragment extends Fragment {
                     milestone.setCreatedTimestamp((Long)milestoneSnap.child("created").getValue());
                     milestone.setLastEditedTimestamp((Long)milestoneSnap.child("editedTime").getValue());
                     List<TaskObject> taskObjects = new ArrayList<TaskObject>();
+                    List<String> taskKeys = new ArrayList<String>();
+                    for (DataSnapshot keySnap : milestoneSnap.child("tasks").getChildren()){
+                        taskKeys.add(keySnap.getKey());
+                    }
                     long childCount = milestoneSnap.child("tasks").getChildrenCount();
                     long counter = 0;
-                    for (DataSnapshot taskSnap: dataSnapshot.child("tasks").getChildren()){
+
+                    for (String string: taskKeys ){
+                        totalTasks++;
+                        DataSnapshot taskSnap = dataSnapshot.child("tasks").child(string);
+
                         TaskObject task = new TaskObject();
                         task.setMilestoneId(milestoneSnap.getKey());
                         task.setAuthor((String)taskSnap.child("author").getValue());
                         task.setId(taskSnap.getKey());
                         task.setName((String)taskSnap.child("name").getValue());
                         task.setCompleted((boolean)taskSnap.child("completed").getValue());
-                        task.setCompletedTimestamp((long)taskSnap.child("completedChangedTimestamp").getValue());
+                        try {
+                            task.setCompletedTimestamp((long) taskSnap.child("completedChangedTimestamp").getValue());
+                        }catch (Exception e){
+                            task.setCreatedTimestamp(new Date().getTime());
+                        }
                         task.setCreatedTimestamp((long)taskSnap.child("created").getValue());
                         taskObjects.add(task);
 
-                        counter ++;
-                        if (counter == childCount){
-                            milestone.setTasks(taskObjects);
-                            mileStones.add(milestone);
-                            mAdapter.notifyDataSetChanged();
-                        }
-                    }
+//                        counter ++;
+//                        if (counter == childCount){
+//
+//                        }
 
+                    }
+                    milestone.setTasks(taskObjects);
+                    mileStones.add(milestone);
+                    mAdapter.notifyDataSetChanged();
                 }
             }
 
@@ -141,7 +165,6 @@ public class AgendaFragment extends Fragment {
         mRecyclerview = (RecyclerView) view.findViewById(R.id.milestone_recycler);
         mRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
         mRecyclerview.setAdapter(mAdapter);
-
 
         return view;
     }
@@ -222,27 +245,21 @@ public class AgendaFragment extends Fragment {
         public void onBindViewHolder(final MilestoneHolder holder, final int position) {
 
 
-            holder.entireNoteLayout.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View view, MotionEvent motionEvent) {
+            holder.bindProject(mMilestones.get(position), getContext());
 
-                    if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
-
-                    }
-                    return true;
-                }
-            });
-            LayoutInflater inflater = LayoutInflater.from(getContext());
+            int completed = 0;
+            int total = mMilestones.get(position).getTasks().size();
 
 
             for (TaskObject task: mMilestones.get(position).getTasks()){
-
-                View taskView = inflater.inflate(R.layout.list_item_task, holder.taskLayout, false);
-                ((CheckBox)taskView.findViewById(R.id.task_checkbox)).setChecked(task.isCompleted());
-                ((SourceSansRegularTextView)taskView.findViewById(R.id.task_title)).setText(task.getName());
+                if (task.isCompleted()){
+                    completed ++;
+                }
             }
 
-            holder.bindProject(mMilestones.get(position));
+            if (total == completed){
+                holder.entireNoteLayout.setBackgroundColor(getResources().getColor(R.color.completed));
+            }
 
 //            Picasso.with(mContext)
 //                    .load(mMilestones.get(position).getAuthorPhotoUrl())
@@ -291,7 +308,7 @@ public class AgendaFragment extends Fragment {
         LinearLayout taskLayout;
         public View entireNoteLayout;
         boolean isExpanded;
-
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 
         public MilestoneHolder(View itemView){
@@ -303,6 +320,7 @@ public class AgendaFragment extends Fragment {
             daysLeftText =(SourceSansRegularTextView) itemView.findViewById(R.id.days_left);
             entireNoteLayout = itemView.findViewById(R.id.entire_milestone);
             taskLayout = (LinearLayout) itemView.findViewById(R.id.task_list);
+
         }
 
         @Override
@@ -310,10 +328,51 @@ public class AgendaFragment extends Fragment {
 
         }
 
-        public void bindProject(MilestoneObject milestoneObject){
+        public void bindProject(final MilestoneObject milestoneObject, final Context context){
 
             milestoneTitle.setText(milestoneObject.getName());
             milestoneDescription.setText(milestoneObject.getDescription());
+
+
+            CalendarDay today = CalendarDay.from(new Date());
+            Date dueDate;
+            try {
+                dueDate = dateFormat.parse(milestoneObject.getDueDate());
+            }catch (Exception e){
+                dueDate = new Date();
+            }
+            CalendarDay dueDay = CalendarDay.from(dueDate);
+
+            long msDiff = today.getDate().getTime() - dueDay.getDate().getTime();
+            long daysDiff = TimeUnit.MILLISECONDS.toDays(msDiff);
+
+
+
+
+            int completed = 0;
+            int total = milestoneObject.getTasks().size();
+
+
+            for (TaskObject task: milestoneObject.getTasks()){
+                if (task.isCompleted()){
+                    completed ++;
+                }
+            }
+
+            if (total == completed){
+                daysLeftText.setText("Completed");
+            }else if (today.isAfter(dueDay)) {
+                daysLeftText.setText(Long.toString(daysDiff) + " days left");
+            }else if((today.equals(dueDay))) {
+                daysLeftText.setText("Due today");
+            }
+            else {
+                daysLeftText.setTextColor(context.getResources().getColor(R.color.errorColor));
+                daysLeftText.setText("Overdue");
+            }
+
+
+            taskCount.setText(completed + "/" + total);
 
             final long height = taskLayout.getHeight();
             taskLayout.getLayoutParams().height = 0;
@@ -321,45 +380,8 @@ public class AgendaFragment extends Fragment {
             entireNoteLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if (!isExpanded){
 
-                        ValueAnimator va = ValueAnimator.ofFloat(0f, height);
 
-                        va.setDuration(200);
-                        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                            public void onAnimationUpdate(ValueAnimator animation) {
-                                Float value = (Float) animation.getAnimatedValue();
-                                taskLayout.getLayoutParams().width = value.intValue();
-                                taskLayout.requestLayout();
-
-//                                if(animation.getCurrentPlayTime() > 199){
-//                                    taskLayout.setVisibility(View.VISIBLE);
-//                                }
-                            }
-                        });
-                        va.start();
-                        isExpanded = true;
-
-                    }else{
-
-                        ValueAnimator va = ValueAnimator.ofFloat(height, 0f);
-
-                        va.setDuration(200);
-                        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                            public void onAnimationUpdate(ValueAnimator animation) {
-                                Float value = (Float) animation.getAnimatedValue();
-                                taskLayout.getLayoutParams().width = value.intValue();
-                                taskLayout.requestLayout();
-
-//                                if(animation.getCurrentPlayTime() > 199){
-//                                    taskLayout.setVisibility(View.VISIBLE);
-//                                }
-                            }
-                        });
-                        va.start();
-                        isExpanded = false;
-
-                    }
                 }
             });
 //            noteName.setText(note.getTitle());

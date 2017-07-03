@@ -24,6 +24,7 @@ import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -157,9 +158,8 @@ public class Feed extends Fragment {
                                     }
                                 }
 
-
-
                                 chatObjects.add(chat);
+                                Collections.sort(chatObjects);
                                 mAdapter.notifyDataSetChanged();
                             }
 

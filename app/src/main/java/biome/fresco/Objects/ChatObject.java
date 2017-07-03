@@ -1,10 +1,18 @@
 package biome.fresco.Objects;
 
+import android.support.annotation.NonNull;
+
+import com.stfalcon.chatkit.commons.models.IDialog;
+
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by Drew on 1/7/2017.
  */
 
-public class ChatObject {
+public class ChatObject implements Comparable<ChatObject>{
 
     private String toUserImageUrl;
     private String toUserName;
@@ -14,6 +22,7 @@ public class ChatObject {
     private boolean unread;
     private boolean isGroupChat;
     private String lastMessage;
+    private ArrayList<SimpleUser> users;
     private long timestamp;
 
     public ChatObject(String roomId, String toUserId, boolean notified, boolean unread){
@@ -34,9 +43,9 @@ public class ChatObject {
         this.lastMessage = lastMessage;
     }
 
-    public String getLastMessage() {
-        return lastMessage;
-    }
+//    public String getLastMessage() {
+//        return lastMessage;
+//    }
 
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
@@ -44,6 +53,10 @@ public class ChatObject {
 
     public long getTimestamp() {
         return timestamp;
+    }
+
+    public String getLastMessage() {
+        return lastMessage;
     }
 
     public String getRoomId() {
@@ -100,5 +113,14 @@ public class ChatObject {
 
     public void setGroupChat(boolean groupChat) {
         isGroupChat = groupChat;
+    }
+
+
+    @Override
+    public int compareTo(@NonNull ChatObject chatObject) {
+        if (timestamp < chatObject.timestamp){
+            return 1;
+        }
+        else return -1;
     }
 }

@@ -1,12 +1,19 @@
 package biome.fresco.Objects;
 
+import com.stfalcon.chatkit.commons.models.IMessage;
+import com.stfalcon.chatkit.commons.models.IUser;
+
+import java.util.Date;
+
 /**
  * Created by Drew on 1/3/2017.
  */
 
-public class MessageObject {
+public class MessageObject implements IMessage{
+    private String id;
     private String message;
     private String author;
+    private SimpleUser user;
     private long type;
     private long timeStamp;
     private boolean isMe;
@@ -56,5 +63,29 @@ public class MessageObject {
         this.type = type;
         this.message = message;
         this.isMe = isMe;
+    }
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    @Override
+    public Date getCreatedAt() {
+        return new Date(timeStamp);
+    }
+
+    @Override
+    public String getText() {
+        return message;
+    }
+
+    @Override
+    public IUser getUser() {
+        return user;
     }
 }

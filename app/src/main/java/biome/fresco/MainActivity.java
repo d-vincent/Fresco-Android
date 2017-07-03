@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
     Toolbar toolbar;
     MaterialSearchBar searchBar;
-    BottomBar bottomBar;
+    public BottomBar bottomBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

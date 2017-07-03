@@ -1,21 +1,36 @@
 package biome.fresco.Objects;
 
+import com.stfalcon.chatkit.commons.models.IUser;
+
 /**
  * Created by Drew McDonald on 1/6/2017.
  */
 
-public class SimpleUser {
+public class SimpleUser implements IUser {
     String id;
     String username;
     String photoUrl;
+
+
+    @Override
+    public String getId() {
+        return id;
+    }
+
+    @Override
+    public String getName() {
+        return username;
+    }
+
+    @Override
+    public String getAvatar() {
+        return photoUrl;
+    }
 
     public void setId(String id) {
         this.id = id;
     }
 
-    public String getId() {
-        return id;
-    }
 
     public String getUsername() {
         return username;
