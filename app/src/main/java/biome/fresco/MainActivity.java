@@ -91,7 +91,52 @@ public class MainActivity extends AppCompatActivity {
                     }
                     mFragment = ProjectFragment.newInstance();
                     getSupportFragmentManager().beginTransaction().add(R.id.container, mFragment).commit();
-                    findViewById(R.id.bottomBar).setVisibility(View.VISIBLE);
+
+
+                    bottomBar = (BottomBar)findViewById(R.id.bottomBar);
+                    bottomBar.setVisibility(View.VISIBLE);
+                    bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
+                        @Override
+                        public void onTabSelected(@IdRes int tabId) {
+                            switch (tabId){
+                                case R.id.tab_home:
+                                    if (!(mFragment instanceof ProjectFragment)){
+                                        mFragment = ProjectFragment.newInstance();
+                                        getSupportFragmentManager().beginTransaction().replace(R.id.container, mFragment).commit();
+                                    }
+                                    break;
+                                case R.id.tab_projects:
+
+                                    if (!(mFragment instanceof ProjectFragment)){
+                                        mFragment = ProjectFragment.newInstance();
+                                        getSupportFragmentManager().beginTransaction().replace(R.id.container, mFragment).commit();
+                                    }
+                                    break;
+                                case R.id.tab_teams:
+
+                                    if (!(mFragment instanceof TeamFragment)){
+                                        mFragment = TeamFragment.newInstance();
+                                        getSupportFragmentManager().beginTransaction().replace(R.id.container, mFragment).commit();
+                                    }
+                                    break;
+                                case R.id.tab_messages:
+
+                                    if (!(mFragment instanceof Feed)){
+                                        mFragment = Feed.newInstance();
+                                        getSupportFragmentManager().beginTransaction().replace(R.id.container, mFragment).commit();
+                                    }
+                                    break;
+                                case R.id.tab_search:
+                                    if (!(mFragment instanceof SearchFragment)){
+                                        mFragment = SearchFragment.newInstance();
+                                        getSupportFragmentManager().beginTransaction().replace(R.id.container, mFragment).commit();
+                                    }
+                                    break;
+                            }
+                        }
+                    });
+
+
 
                     Log.d("Firebase", "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
@@ -151,47 +196,7 @@ public class MainActivity extends AppCompatActivity {
 //            Toast.makeText(this, chatType.length(), Toast.LENGTH_LONG).show();
         }
 
-        bottomBar = (BottomBar)findViewById(R.id.bottomBar);
-        bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
-            @Override
-            public void onTabSelected(@IdRes int tabId) {
-                switch (tabId){
-                    case R.id.tab_home:
-                        if (!(mFragment instanceof ProjectFragment)){
-                            mFragment = ProjectFragment.newInstance();
-                            getSupportFragmentManager().beginTransaction().replace(R.id.container, mFragment).commit();
-                        }
-                        break;
-                    case R.id.tab_projects:
 
-                        if (!(mFragment instanceof ProjectFragment)){
-                            mFragment = ProjectFragment.newInstance();
-                            getSupportFragmentManager().beginTransaction().replace(R.id.container, mFragment).commit();
-                        }
-                        break;
-                    case R.id.tab_teams:
-
-                        if (!(mFragment instanceof TeamFragment)){
-                            mFragment = TeamFragment.newInstance();
-                            getSupportFragmentManager().beginTransaction().replace(R.id.container, mFragment).commit();
-                        }
-                        break;
-                    case R.id.tab_messages:
-
-                        if (!(mFragment instanceof Feed)){
-                            mFragment = Feed.newInstance();
-                            getSupportFragmentManager().beginTransaction().replace(R.id.container, mFragment).commit();
-                        }
-                        break;
-                    case R.id.tab_search:
-                        if (!(mFragment instanceof SearchFragment)){
-                            mFragment = SearchFragment.newInstance();
-                            getSupportFragmentManager().beginTransaction().replace(R.id.container, mFragment).commit();
-                        }
-                        break;
-                }
-            }
-        });
 
         toolbar = (Toolbar)findViewById(R.id.my_toolbar);
        // toolbar.setBackground(getResources().getDrawable(R.drawable.actionbar_top));
@@ -262,34 +267,34 @@ public class MainActivity extends AppCompatActivity {
 //        }
     }
 
-    public void login(String email, String password){
-
-
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
-
-                        // If sign in fails, display a message to the user. If sign in succeeds
-                        // the auth state listener will be notified and logic to handle the
-                        // signed in user can be handled in the listener.
-                        if (!task.isSuccessful()) {
-                            Log.w(TAG, "signInWithEmail", task.getException());
-                            Toast.makeText(MainActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-
-                            getSupportFragmentManager().beginTransaction().replace(R.id.container, MainFragment.newInstance()).commit();
-
-                        }
-
-                        // ...
-                    }
-                });
-
-    }
+//    public void login(String email, String password){
+//
+//
+//        mAuth.signInWithEmailAndPassword(email, password)
+//                .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
+//                    @Override
+//                    public void onComplete(@NonNull Task<AuthResult> task) {
+//                        Log.d(TAG, "signInWithEmail:onComplete:" + task.isSuccessful());
+//
+//                        // If sign in fails, display a message to the user. If sign in succeeds
+//                        // the auth state listener will be notified and logic to handle the
+//                        // signed in user can be handled in the listener.
+//                        if (!task.isSuccessful()) {
+//                            Log.w(TAG, "signInWithEmail", task.getException());
+//                            Toast.makeText(MainActivity.this, "Authentication failed.",
+//                                    Toast.LENGTH_SHORT).show();
+//                        }
+//                        else {
+//
+//                            getSupportFragmentManager().beginTransaction().replace(R.id.container, MainFragment.newInstance()).commit();
+//
+//                        }
+//
+//                        // ...
+//                    }
+//                });
+//
+//    }
 
 
     @Override

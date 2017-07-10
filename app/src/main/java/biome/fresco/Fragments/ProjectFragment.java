@@ -33,14 +33,6 @@ import static biome.fresco.MainActivity.mAuth;
 import static biome.fresco.MainActivity.mDatabase;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link ProjectFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link ProjectFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class ProjectFragment extends Fragment {
 
 
@@ -97,6 +89,7 @@ public class ProjectFragment extends Fragment {
                         }
                         project.setProjectId(projectId);
                         project.setMemberCount(dataSnapshot.child("members").getChildrenCount());
+                        project.setProjectId(projectId);
 
                         projects.add(project);
                         mAdapter.notifyDataSetChanged();

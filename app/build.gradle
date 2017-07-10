@@ -66,6 +66,7 @@ dependencies {
     compile 'com.thoughtbot:expandablecheckrecyclerview:1.4'
     compile 'com.prolificinteractive:material-calendarview:1.4.3'
     compile 'com.github.stfalcon:chatkit:0.2.1'
+    compile 'jp.wasabeef:richeditor-android:1.2.2'
     androidTestCompile 'junit:junit:4.12'
 }
 

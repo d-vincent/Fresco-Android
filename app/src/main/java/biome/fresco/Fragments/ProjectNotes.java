@@ -293,8 +293,6 @@ public class ProjectNotes extends Fragment {
 
             timeDateStamp.setText(timeFormat.format(new Date(note.getLastEdited())));
 
-
-
         }
     }
 

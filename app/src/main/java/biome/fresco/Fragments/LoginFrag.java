@@ -112,7 +112,7 @@ public class LoginFrag extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_login, container, false);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().hide();
+        //((AppCompatActivity)getActivity()).getSupportActionBar().hide();
 
 
         googleSignIn = (SignInButton) view.findViewById(R.id.google_button);
@@ -234,9 +234,9 @@ public class LoginFrag extends Fragment {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
 
-                    FirebaseUser user = mAuth.getCurrentUser();
-                    Toast.makeText(getContext(), user.getEmail(), Toast.LENGTH_SHORT).show();
-                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, MainFragment.newInstance()).commit();
+//                    FirebaseUser user = mAuth.getCurrentUser();
+//                    Toast.makeText(getContext(), user.getEmail(), Toast.LENGTH_SHORT).show();
+//                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, ProjectFragment.newInstance()).commit();
                 }
             });
 

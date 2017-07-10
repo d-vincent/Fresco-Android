@@ -1,5 +1,7 @@
 package biome.fresco;
 
+import android.app.Activity;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -13,6 +15,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import biome.fresco.Fragments.NoteDetailView;
 import biome.fresco.Fragments.ProjectNotes;
 import biome.fresco.Objects.NoteObject;
 
@@ -74,6 +77,11 @@ public class NoteListAdapter extends UltimateViewAdapter<ProjectNotes.NoteHolder
 
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
 
+                    NoteDetailView fragment = NoteDetailView.newInstance(mNotes.get(position).getContent());
+
+                    android.support.v4.app.FragmentManager fm = ((ProjectDetailActivity)mContext).getSupportFragmentManager();
+                    fm.beginTransaction().replace(R.id.root_layout, fragment ).addToBackStack(null).commit();
+
                 }
                 return true;
             }
@@ -110,6 +118,7 @@ public class NoteListAdapter extends UltimateViewAdapter<ProjectNotes.NoteHolder
     public ProjectNotes.NoteHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(mContext);
         View view = layoutInflater.inflate(R.layout.list_item_note, parent, false);
+
         return new ProjectNotes.NoteHolder(view);
     }
 

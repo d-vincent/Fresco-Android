@@ -20,14 +20,7 @@ import java.util.Locale;
 import biome.fresco.R;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link MainFragment.OnFragmentInteractionListener} interface
- * to handle interaction events.
- * Use the {@link MainFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
+
 public class MainFragment extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -90,32 +83,32 @@ public class MainFragment extends Fragment {
         View view =  inflater.inflate(R.layout.fragment_main, container, false);
 
 
-        toolbar = (Toolbar)view.findViewById(R.id.my_toolbar);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().show();
-        ViewPager mainViewPager = (ViewPager)view.findViewById(R.id.pager);
-        mainViewPager.setAdapter(new PagerAdapter(getChildFragmentManager(),2));
-        final TabLayout tabs = (TabLayout)view.findViewById(R.id.sliding_tabs);
-        tabs.setSelectedTabIndicatorColor(getResources().getColor(R.color.white));
-        tabs.setupWithViewPager(mainViewPager);
-        mainViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
-            }
-
-            @Override
-            public void onPageSelected(int position) {
-                tabs.getTabAt(position).select();
-
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-
+//        toolbar = (Toolbar)view.findViewById(R.id.my_toolbar);
+//        ((AppCompatActivity)getActivity()).getSupportActionBar().show();
+//        ViewPager mainViewPager = (ViewPager)view.findViewById(R.id.pager);
+//        mainViewPager.setAdapter(new PagerAdapter(getChildFragmentManager(),2));
+//        final TabLayout tabs = (TabLayout)view.findViewById(R.id.sliding_tabs);
+//        tabs.setSelectedTabIndicatorColor(getResources().getColor(R.color.white));
+//        tabs.setupWithViewPager(mainViewPager);
+//        mainViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+//            @Override
+//            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//
+//            }
+//
+//            @Override
+//            public void onPageSelected(int position) {
+//                tabs.getTabAt(position).select();
+//
+//
+//            }
+//
+//            @Override
+//            public void onPageScrollStateChanged(int state) {
+//
+//            }
+//        });
+//
 
 
 
@@ -161,50 +154,50 @@ public class MainFragment extends Fragment {
         void onFragmentInteraction(Uri uri);
     }
 
-    public class PagerAdapter extends FragmentPagerAdapter {
-        int mNumOfTabs;
-
-        public PagerAdapter(FragmentManager fm, int NumOfTabs) {
-            super(fm);
-            this.mNumOfTabs = NumOfTabs;
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-
-            switch (position) {
-                case 0:
-                    ProjectFragment tab1 = ProjectFragment.newInstance();
-                    return tab1;
-                case 1:
-                    Feed tab2 = Feed.newInstance();
-                    return tab2;
-
-                default:
-                    return null;
-            }
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            Locale l = Locale.getDefault();
-            switch (position) {
-                case 0:
-                    return "Projects";
-                case 1:
-                    return "Chats";
-
-            }
-            return null;
-        }
-
-
-        @Override
-        public int getCount() {
-            return mNumOfTabs;
-        }
-
-
-    }
+//    public class PagerAdapter extends FragmentPagerAdapter {
+//        int mNumOfTabs;
+//
+//        public PagerAdapter(FragmentManager fm, int NumOfTabs) {
+//            super(fm);
+//            this.mNumOfTabs = NumOfTabs;
+//        }
+//
+//        @Override
+//        public Fragment getItem(int position) {
+//
+//            switch (position) {
+//                case 0:
+//                    ProjectFragment tab1 = ProjectFragment.newInstance();
+//                    return tab1;
+//                case 1:
+//                    Feed tab2 = Feed.newInstance();
+//                    return tab2;
+//
+//                default:
+//                    return null;
+//            }
+//        }
+//
+//        @Override
+//        public CharSequence getPageTitle(int position) {
+//            Locale l = Locale.getDefault();
+//            switch (position) {
+//                case 0:
+//                    return "Projects";
+//                case 1:
+//                    return "Chats";
+//
+//            }
+//            return null;
+//        }
+//
+//
+//        @Override
+//        public int getCount() {
+//            return mNumOfTabs;
+//        }
+//
+//
+//    }
 
 }
