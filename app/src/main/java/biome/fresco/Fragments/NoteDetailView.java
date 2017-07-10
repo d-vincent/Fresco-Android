@@ -1,6 +1,7 @@
 package biome.fresco.Fragments;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -54,6 +55,151 @@ public class NoteDetailView extends Fragment {
 
         noteEditor = (RichEditor)view.findViewById(R.id.note_detail_editor);
         noteEditor.setHtml(content);
+
+        view.findViewById(R.id.action_undo).setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                noteEditor.undo();
+            }
+        });
+
+        view.findViewById(R.id.action_redo).setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                noteEditor.redo();
+            }
+        });
+
+        view.findViewById(R.id.action_bold).setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                noteEditor.setBold();
+            }
+        });
+
+        view.findViewById(R.id.action_italic).setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                noteEditor.setItalic();
+            }
+        });
+
+//        view.findViewById(R.id.action_subscript).setOnClickListener(new View.OnClickListener() {
+//            @Override public void onClick(View v) {
+//                noteEditor.setSubscript();
+//            }
+//        });
+//
+//        view.findViewById(R.id.action_superscript).setOnClickListener(new View.OnClickListener() {
+//            @Override public void onClick(View v) {
+//                noteEditor.setSuperscript();
+//            }
+//        });
+
+        view.findViewById(R.id.action_strikethrough).setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                noteEditor.setStrikeThrough();
+            }
+        });
+
+        view.findViewById(R.id.action_underline).setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                noteEditor.setUnderline();
+            }
+        });
+
+        view.findViewById(R.id.action_heading1).setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                noteEditor.setHeading(1);
+            }
+        });
+
+        view.findViewById(R.id.action_heading2).setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                noteEditor.setHeading(2);
+            }
+        });
+
+        view.findViewById(R.id.action_heading3).setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                noteEditor.setHeading(3);
+            }
+        });
+
+        view.findViewById(R.id.action_heading4).setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                noteEditor.setHeading(4);
+            }
+        });
+
+        view.findViewById(R.id.action_heading5).setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                noteEditor.setHeading(5);
+            }
+        });
+
+        view.findViewById(R.id.action_heading6).setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                noteEditor.setHeading(6);
+            }
+        });
+
+        view.findViewById(R.id.action_txt_color).setOnClickListener(new View.OnClickListener() {
+            private boolean isChanged;
+
+            @Override public void onClick(View v) {
+                noteEditor.setTextColor(isChanged ? Color.BLACK : Color.RED);
+                isChanged = !isChanged;
+            }
+        });
+
+
+        view. findViewById(R.id.action_indent).setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                noteEditor.setIndent();
+            }
+        });
+
+        view.findViewById(R.id.action_outdent).setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                noteEditor.setOutdent();
+            }
+        });
+
+        view.findViewById(R.id.action_align_left).setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                noteEditor.setAlignLeft();
+            }
+        });
+
+        view.findViewById(R.id.action_align_center).setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                noteEditor.setAlignCenter();
+            }
+        });
+
+        view.findViewById(R.id.action_align_right).setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                noteEditor.setAlignRight();
+            }
+        });
+
+        view.findViewById(R.id.action_blockquote).setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                noteEditor.setBlockquote();
+            }
+        });
+
+        view.findViewById(R.id.action_insert_bullets).setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                noteEditor.setBullets();
+            }
+        });
+
+        view.findViewById(R.id.action_insert_numbers).setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                noteEditor.setNumbers();
+            }
+        });
+
+
+
         return view;
     }
 

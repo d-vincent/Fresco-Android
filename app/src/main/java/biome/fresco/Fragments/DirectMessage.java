@@ -268,8 +268,6 @@ public class DirectMessage extends Fragment {
             whoWhenLayout = itemView.findViewById(R.id.who_when_layout);
             dayHeader = itemView.findViewById(R.id.day_header);
             dayHeaderText = (SourceSansRegularTextView)itemView.findViewById(R.id.day_header_text);
-
-
         }
 
         @Override
@@ -287,9 +285,7 @@ public class DirectMessage extends Fragment {
             }
 
             Date hella = new Date(messageObject.getTimeStamp());
-
             timeStamp.setText(timeFormat.format(hella));
-
         }
     }
 
@@ -310,6 +306,8 @@ public class DirectMessage extends Fragment {
             holder.contactImage.setVisibility(View.VISIBLE);
             holder.whoWhenLayout.setVisibility(View.VISIBLE);
 
+            CalendarDay firstMessage = CalendarDay.from(new Date(mMessages.get(position).getTimeStamp()));
+
             try {
                 CalendarDay lastDay = CalendarDay.from(new Date(mMessages.get(position - 1).getTimeStamp()));
                 CalendarDay thisDay = CalendarDay.from(new Date(mMessages.get(position).getTimeStamp()));
@@ -326,6 +324,8 @@ public class DirectMessage extends Fragment {
             }
             }catch (Exception e){
 
+                holder.dayHeader.setVisibility(View.VISIBLE);
+                holder.dayHeaderText.setText(headerFormat.format(firstMessage.getDate()));
             }
 
             if (!messages.get(position).isMe()) {

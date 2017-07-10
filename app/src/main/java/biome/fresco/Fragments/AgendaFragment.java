@@ -1,49 +1,45 @@
-package biome.fresco;
+package biome.fresco.Fragments;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Html;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CalendarView;
-import android.widget.CheckBox;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.database.ChildEventListener;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
-import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import biome.fresco.Fragments.ProjectNotes;
 import biome.fresco.Objects.MilestoneObject;
-import biome.fresco.Objects.NoteObject;
 import biome.fresco.Objects.TaskObject;
+import biome.fresco.ProjectDetailActivity;
+import biome.fresco.R;
+import biome.fresco.SourceSansRegularTextView;
 
 import static biome.fresco.MainActivity.mAuth;
 import static biome.fresco.MainActivity.mDatabase;
+import static biome.fresco.ProjectDetailActivity.mProject;
 
 
 /**
@@ -60,7 +56,11 @@ public class AgendaFragment extends Fragment {
 
     String mId;
     List<MilestoneObject> mileStones;
+    List<Entry> entries;
     private OnFragmentInteractionListener mListener;
+    SimpleDateFormat dateFormat = new SimpleDateFormat("MMM d");
+
+    LineChart lineChart;
 
     long totalTasks;
     long totalMileStones;
@@ -88,6 +88,7 @@ public class AgendaFragment extends Fragment {
         super.onCreate(savedInstanceState);
         mId = mAuth.getCurrentUser().getUid();
         mileStones = new ArrayList<>();
+        entries = new ArrayList<>();
 
         mAdapter = new MilestoneListADapter(mileStones, getContext());
 
@@ -116,7 +117,6 @@ public class AgendaFragment extends Fragment {
                         taskKeys.add(keySnap.getKey());
                     }
                     long childCount = milestoneSnap.child("tasks").getChildrenCount();
-                    long counter = 0;
 
                     for (String string: taskKeys ){
                         totalTasks++;
@@ -144,6 +144,54 @@ public class AgendaFragment extends Fragment {
                     }
                     milestone.setTasks(taskObjects);
                     mileStones.add(milestone);
+
+//                    long projectCreatedEpoch = mProject.getCreatedDate();
+//
+//                    boolean lastDay = false;
+//
+//                    CalendarDay today = CalendarDay.from(new Date());
+//                    CalendarDay createdDay = CalendarDay.from(new Date(projectCreatedEpoch));
+//                    boolean keepGoing = true;
+//                    ArrayList<CalendarDay> daysToPopulate = new ArrayList<CalendarDay>();
+//
+//                    while (keepGoing){
+//                        Calendar cal = createdDay.getCalendar();
+//                        cal.add(Calendar.DAY_OF_YEAR, 1);
+//                        CalendarDay day = CalendarDay.from(cal);
+//                        if (day.isAfter(today)){
+//                            keepGoing = false;
+//                            break;
+//                        }else {
+//
+//                            daysToPopulate.add(day);
+//                        }
+//                    }
+//
+//                    float counter = 0;
+//                    for (CalendarDay calendarDay:daysToPopulate){
+//
+//                        float tasksToday = 0;
+//                        for (MilestoneObject milestoneObject: mileStones){
+//                            for (TaskObject taskObject: milestoneObject.getTasks()){
+//                                if(taskObject.isCompleted()) {
+//                                    CalendarDay taskDay = CalendarDay.from(new Date(taskObject.getCompletedTimestamp()));
+//                                    if (taskDay.equals(calendarDay)){
+//                                        tasksToday ++;
+//                                    }
+//                                }
+//
+//                            }
+//                        }
+//                        Entry entry = new Entry(counter,tasksToday);
+//                        entries.add(entry);
+//                        counter ++;
+//                    }
+//
+//                    LineDataSet dataSet = new LineDataSet(entries, "Tasks Completed");
+//                    LineData data = new LineData(dataSet);
+//
+//                    lineChart.setData(data);
+//                    lineChart.invalidate();
                     mAdapter.notifyDataSetChanged();
                 }
             }
@@ -161,6 +209,22 @@ public class AgendaFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_agenda, container, false);
+
+        //lineChart = (LineChart) view.findViewById(R.id.line_chart);
+        IAxisValueFormatter formatter = new IAxisValueFormatter() {
+
+            @Override
+            public String getFormattedValue(float value, AxisBase axis) {
+                Date date = new Date((long)value);
+                String label =dateFormat.format(date);
+                return label;
+            }
+
+        };
+
+//        XAxis xAxis = lineChart.getXAxis();
+//        xAxis.setGranularity(1f); // minimum axis-step (interval) is 1
+//        xAxis.setValueFormatter(formatter);
 
         mRecyclerview = (RecyclerView) view.findViewById(R.id.milestone_recycler);
         mRecyclerview.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -362,9 +426,13 @@ public class AgendaFragment extends Fragment {
             if (total == completed){
                 daysLeftText.setText("Completed");
             }else if (today.isAfter(dueDay)) {
-                daysLeftText.setText(Long.toString(daysDiff) + " days left");
+                daysLeftText.setTextColor(context.getResources().getColor(R.color.errorColor));
+                daysLeftText.setText(Long.toString(daysDiff) + " days overdue");
             }else if((today.equals(dueDay))) {
                 daysLeftText.setText("Due today");
+            }
+            else if (today.isBefore(dueDay)){
+                daysLeftText.setText(Long.toString(-daysDiff) + " days left");
             }
             else {
                 daysLeftText.setTextColor(context.getResources().getColor(R.color.errorColor));
