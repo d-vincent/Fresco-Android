@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.Toast;
 
 
+import com.crashlytics.android.Crashlytics;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
@@ -42,6 +43,7 @@ import biome.fresco.Fragments.ProjectFragment;
 import biome.fresco.Fragments.TeamFragment;
 import biome.fresco.Objects.ChatObject;
 import biome.fresco.Fragments.DirectMessage;
+import io.fabric.sdk.android.Fabric;
 
 import static com.google.android.gms.internal.zzs.TAG;
 
@@ -70,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         //FirebaseApp.initializeApp(this);
         //Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
