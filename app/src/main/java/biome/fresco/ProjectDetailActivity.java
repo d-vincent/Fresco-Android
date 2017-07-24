@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import biome.fresco.Fragments.AgendaFragment;
 import biome.fresco.Fragments.ProjectFilesFragment;
 import biome.fresco.Fragments.ProjectNotes;
 import biome.fresco.Objects.ProjectObject;
@@ -41,7 +42,7 @@ public class ProjectDetailActivity extends AppCompatActivity {
     float x;
     float y;
 
-    String projectId;
+    public String projectId;
     Toolbar toolbar;
 
     public View topBarView;
@@ -105,6 +106,7 @@ public class ProjectDetailActivity extends AppCompatActivity {
                 mProject.setAuthorId((String)dataSnapshot.child("author").getValue());
                 mProject.setProjectId(projectId);
                 mProject.setName((String)dataSnapshot.child("name").getValue());
+                mProject.setCreatedDate((long)dataSnapshot.child("created").getValue());
                 mProject.setProjectDescription((String)dataSnapshot.child("desc").getValue());
 
                 //DataSnapshot chatIds = dataSnapshot.child("chats").getChildren();

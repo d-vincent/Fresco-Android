@@ -17,6 +17,7 @@ public class ProjectObject {
     private String rootFolderId;
     private String searchName;
     private String projectDescription;
+    private long createdDate;
     private String name;
 
     private ArrayList<String> chatIds;
@@ -34,6 +35,14 @@ public class ProjectObject {
 
     public void setProjectDescription(String projectDescription) {
         this.projectDescription = projectDescription;
+    }
+
+    public long getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(long createdDate) {
+        this.createdDate = createdDate;
     }
 
     public String getProjectId() {
