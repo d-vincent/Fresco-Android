@@ -90,6 +90,7 @@ public class NoteListAdapter extends UltimateViewAdapter<ProjectNotes.NoteHolder
         Picasso.with(mContext)
                 .load(mNotes.get(position).getAuthorPhotoUrl())
 //                    .placeholder(R.mipmap.contact)
+                .transform(new RoundedCornerTransformation())
                 .into(holder.authorImage, new Callback() {
                     @Override
                     public void onSuccess() {

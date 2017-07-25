@@ -61,7 +61,7 @@ public class ProjectNotes extends Fragment {
     List<NoteObject> mFilteredNotes;
 
     NoteListAdapter mAdapter;
-    LabelObject activeLabel;
+    List<LabelObject> activeLabels;
 
     // TODO: Rename and change types of parameters
 
@@ -96,6 +96,8 @@ public class ProjectNotes extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
         }
+
+        activeLabels = new ArrayList<>();
         mNotes = new ArrayList<>();
         mLabels = ProjectDetailActivity.mProject.getLabels();
 
@@ -439,9 +441,43 @@ public class ProjectNotes extends Fragment {
                         if (selectedItems.get(position, false)) {
                             selectedItems.delete(position);
                             holder.entireViewWithBorder.setSelected(false);
+
+                            activeLabels.remove(mLabels.get(position));
+                            if (activeLabels.size() > 0){
+
+                                List<NoteObject> newNoteList = new ArrayList<NoteObject>();
+                                for (NoteObject noteObject: mNotes){
+                                    for (LabelObject labelObject: activeLabels){
+                                        if (labelObject.getIdsForNotesWithThisLabel().contains(noteObject.getId()) && !newNoteList.contains(noteObject)){
+                                            newNoteList.add(noteObject);
+
+                                        }
+                                    }
+                                }
+                                mAdapter.mNotes = newNoteList;
+
+                            }
+                            else {
+                                mAdapter.mNotes = mNotes;
+                            }
+                            mAdapter.notifyDataSetChanged();
+
                         } else {
                             selectedItems.put(position, true);
                             holder.entireViewWithBorder.setSelected(true);
+
+                            activeLabels.add(mLabels.get(position));
+                            List<NoteObject> newNoteList = new ArrayList<NoteObject>();
+                            for (NoteObject noteObject: mNotes){
+                                for (LabelObject labelObject: activeLabels){
+                                    if (labelObject.getIdsForNotesWithThisLabel().contains(noteObject.getId()) && !newNoteList.contains(noteObject)){
+                                        newNoteList.add(noteObject);
+
+                                    }
+                                }
+                            }
+                            mAdapter.mNotes = newNoteList;
+                            mAdapter.notifyDataSetChanged();
                         }
                     }
 

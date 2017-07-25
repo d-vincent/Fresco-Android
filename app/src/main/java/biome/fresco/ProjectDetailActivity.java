@@ -128,6 +128,7 @@ public class ProjectDetailActivity extends AppCompatActivity {
                     for(DataSnapshot noteSnap: labelSnap.child("notes").getChildren()){
                         strArray.add((String)noteSnap.getKey());
                     }
+                    lObject.setIdsForNotesWithThisLabel(strArray);
 
                     labelz.add(lObject);
                 }
