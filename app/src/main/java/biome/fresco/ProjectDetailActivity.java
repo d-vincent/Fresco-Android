@@ -126,7 +126,7 @@ public class ProjectDetailActivity extends AppCompatActivity {
                     lObject.setLabelName((String)labelSnap.child("name").getValue());
                     ArrayList<String> strArray = new ArrayList<String>();
                     for(DataSnapshot noteSnap: labelSnap.child("notes").getChildren()){
-                        strArray.add((String)noteSnap.getValue());
+                        strArray.add((String)noteSnap.getKey());
                     }
 
                     labelz.add(lObject);

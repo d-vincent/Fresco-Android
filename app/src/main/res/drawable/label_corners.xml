@@ -2,20 +2,20 @@
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Color when the row is selected -->
-    <item android:drawable="@color/colorPrimary" android:state_pressed="false" android:state_selected="true">
+    <item  android:state_pressed="false" android:state_selected="true">
 
         <shape xmlns:android="http://schemas.android.com/apk/res/android"
             android:shape="rectangle">
             <stroke
                 android:width="2dp"
-                android:color="#cdcdcd" />
+                android:color="@color/colorPrimary" />
             <corners android:radius="8dip"/>
         </shape>
 
 
     </item>
     <!-- Standard background color -->
-    <item android:drawable="@android:color/white" android:state_selected="false">
+    <item  android:state_selected="false">
         <shape xmlns:android="http://schemas.android.com/apk/res/android"
             android:shape="rectangle">
             <stroke

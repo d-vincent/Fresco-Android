@@ -212,6 +212,13 @@ public class ProjectNotes extends Fragment {
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_project_notes, container, false);
 
+        mLabelRecyclerView = (UltimateRecyclerView)view.findViewById(R.id.label_recycler);
+        mLabelRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false));
+
+        mLabelAdapter = new LabelAdapter(mLabels, getContext());
+        mLabelRecyclerView.setAdapter(mLabelAdapter);
+        mLabelAdapter.notifyDataSetChanged();
+
         mRecyclerView = (UltimateRecyclerView) view.findViewById(R.id.public_note_recycler);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
@@ -223,23 +230,19 @@ public class ProjectNotes extends Fragment {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (newState== SCROLL_STATE_IDLE){
-                    ObjectAnimator anim = ObjectAnimator.ofFloat(  ((ProjectDetailActivity)getActivity()).topBarView,"elevation",0);
+                    ObjectAnimator anim = ObjectAnimator.ofFloat(  mLabelRecyclerView,"elevation",0);
                     anim.setDuration(250);
                     anim.start();
                 }
                 else{
-                    ObjectAnimator anim = ObjectAnimator.ofFloat(  ((ProjectDetailActivity)getActivity()).topBarView,"elevation",80f);
+                    ObjectAnimator anim = ObjectAnimator.ofFloat( mLabelRecyclerView,"elevation",40f);
                     anim.setDuration(250);
                     anim.start();
                 }
             }
         });
 
-        mLabelRecyclerView = (UltimateRecyclerView)view.findViewById(R.id.label_recycler);
-        mLabelRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false));
 
-        mLabelAdapter = new LabelAdapter(mLabels, getContext());
-        mLabelRecyclerView.setAdapter(mLabelAdapter);
 
         return view;
     }
@@ -377,10 +380,12 @@ public class ProjectNotes extends Fragment {
         private SparseBooleanArray selectedItems;
 
 
+
         public List<LabelObject> mLabels;
         Context mContext;
         public LabelAdapter(List<LabelObject> labels, Context context){
             mLabels = labels;
+            selectedItems = new SparseBooleanArray();
             mContext = context;
         }
 
@@ -429,6 +434,16 @@ public class ProjectNotes extends Fragment {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
 
+                    if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
+
+                        if (selectedItems.get(position, false)) {
+                            selectedItems.delete(position);
+                            holder.entireViewWithBorder.setSelected(false);
+                        } else {
+                            selectedItems.put(position, true);
+                            holder.entireViewWithBorder.setSelected(true);
+                        }
+                    }
 
 
                     return true;
@@ -477,14 +492,7 @@ public class ProjectNotes extends Fragment {
             @Override
             public void onClick(View view) {
 
-                if (selectedItems.get(getAdapterPosition(), false)) {
-                    selectedItems.delete(getAdapterPosition());
-                    entireViewWithBorder.setSelected(false);
-                }
-                else {
-                    selectedItems.put(getAdapterPosition(), true);
-                    entireViewWithBorder.setSelected(true);
-                }
+
             }
 
             public void bindLabel(LabelObject label){
