@@ -7,6 +7,7 @@ package biome.fresco;
         import android.content.Intent;
         import android.media.RingtoneManager;
         import android.net.Uri;
+        import android.os.Bundle;
         import android.support.v4.app.NotificationCompat;
         import android.util.Log;
         import android.widget.Toast;
@@ -19,6 +20,7 @@ package biome.fresco;
 public class MyFireBaseMessagingService extends FirebaseMessagingService {
 
     private static final String TAG = "MyFirebaseMsgService";
+    public static final String INTENT_FILTER = "filterThatIntentBoi";
 
     /**
      * Called when message is received.
@@ -41,7 +43,6 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
 
         Log.d(TAG, "From: " + remoteMessage.getFrom());
 
-        // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
             Log.d(TAG, "Message data payload: " + remoteMessage.getData());
         }
@@ -50,7 +51,14 @@ public class MyFireBaseMessagingService extends FirebaseMessagingService {
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
         }
+        Intent intent = new Intent(INTENT_FILTER);
+        Bundle args = new Bundle();
+        args.putString("chatId", remoteMessage.getData().get("chatId"));
+        args.putString("fromUserName", remoteMessage.getData().get("toUserName"));
+        args.putString("body", remoteMessage.getNotification().getBody());
 
+        intent.putExtras(args);
+        sendBroadcast(intent);
 
         //Toast.makeText(this, "BIG POPPAS", Toast.LENGTH_SHORT).show();
         // Also if you intend on generating your own notifications as a result of a received FCM

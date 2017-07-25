@@ -1,6 +1,9 @@
 package biome.fresco;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -63,6 +66,14 @@ public class MainActivity extends AppCompatActivity {
 
     Fragment mFragment;
 
+    private BroadcastReceiver myReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Bundle data = intent.getExtras();
+            displayNotification(data);
+        }
+    };
+
     public static int RC_GOOGLE_SIGN_IN = 0;
 
     Toolbar toolbar;
@@ -76,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
         //FirebaseApp.initializeApp(this);
         //Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
+        registerReceiver(myReceiver, new IntentFilter(MyFireBaseMessagingService.INTENT_FILTER));
 
         mFab = (FloatingActionMenu) findViewById(R.id.main_fab);
 
@@ -90,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
                     // User is signed in
                     uid = user.getUid();
                     if (token != null) {
-                        mDatabase.child("users").child(uid).child("tokens").child("android").child(token);
+                        mDatabase.child("users").child(uid).child("tokens").child("android").child(token).setValue(true);
                     }
                     mFragment = ProjectFragment.newInstance();
                     getSupportFragmentManager().beginTransaction().add(R.id.container, mFragment).commit();
@@ -315,6 +327,21 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    public void displayNotification(Bundle notification){
+
+        String toUserName = (String)notification.get("fromUserName");
+        String chatId = (String)notification.get("chatId");
+        String body = (String)notification.get("body");
+
+//        Sneaker.with(this)
+//                .setTitle("Instant message from " + toUserName)
+//                .setMessage(body)
+//                .setDuration(4000)
+//                .autoHide(true)
+//                .setIcon(R.drawable.os_dialog)
+//                .sneak(R.color.colorPrimary);
+
+    }
 
 
     private void signIn(String email, String password) {

@@ -7,6 +7,7 @@ import java.util.List;
  */
 
 public class NoteObject {
+    private String id;
     private String authorId;
     private String authorName;
     private String authorPhotoUrl;
@@ -19,6 +20,14 @@ public class NoteObject {
     private List<String> sharedWith;
     private long timestamp;
     private String title;
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
 
     public String getTitle() {
         return title;

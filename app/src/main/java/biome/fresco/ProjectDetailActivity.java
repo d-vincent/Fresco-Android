@@ -28,6 +28,7 @@ import java.util.Locale;
 import biome.fresco.Fragments.AgendaFragment;
 import biome.fresco.Fragments.ProjectFilesFragment;
 import biome.fresco.Fragments.ProjectNotes;
+import biome.fresco.Objects.LabelObject;
 import biome.fresco.Objects.ProjectObject;
 import biome.fresco.Fragments.UserNotes;
 import io.codetail.animation.ViewAnimationUtils;
@@ -114,6 +115,25 @@ public class ProjectDetailActivity extends AppCompatActivity {
                 for (DataSnapshot snap: dataSnapshot.child("chats").getChildren()){
                     chatIds.add((String)snap.getKey());
                 }
+
+                ArrayList<LabelObject> labelz = new ArrayList<LabelObject>();
+
+                for (DataSnapshot labelSnap: dataSnapshot.child("labels").getChildren()){
+
+                    LabelObject lObject = new LabelObject();
+                    lObject.setId(labelSnap.getKey());
+                    lObject.setColorhex((String)labelSnap.child("color").getValue());
+                    lObject.setLabelName((String)labelSnap.child("name").getValue());
+                    ArrayList<String> strArray = new ArrayList<String>();
+                    for(DataSnapshot noteSnap: labelSnap.child("notes").getChildren()){
+                        strArray.add((String)noteSnap.getValue());
+                    }
+
+                    labelz.add(lObject);
+                }
+
+                mProject.setLabels(labelz);
+
                 mProject.setChatIds(chatIds);
                 mProject.setSearchName((String)dataSnapshot.child("searchName").getValue());
                 mProject.setRootChatId((String)dataSnapshot.child("rootChat").getValue());

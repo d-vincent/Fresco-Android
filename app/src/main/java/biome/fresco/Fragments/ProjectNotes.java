@@ -1,12 +1,14 @@
 package biome.fresco.Fragments;
 
 import android.animation.ObjectAnimator;
+import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,8 +21,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
+import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,8 +29,8 @@ import java.util.Date;
 import java.util.List;
 
 import biome.fresco.CustomTextViewLogo;
-import biome.fresco.MainActivity;
 import biome.fresco.NoteListAdapter;
+import biome.fresco.Objects.LabelObject;
 import biome.fresco.Objects.NoteObject;
 import biome.fresco.ProjectDetailActivity;
 import biome.fresco.R;
@@ -50,8 +51,17 @@ public class ProjectNotes extends Fragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     UltimateRecyclerView mRecyclerView;
+
+    UltimateRecyclerView mLabelRecyclerView;
+    LabelAdapter mLabelAdapter;
+
+    List<LabelObject> mLabels;
+
     List<NoteObject> mNotes;
+    List<NoteObject> mFilteredNotes;
+
     NoteListAdapter mAdapter;
+    LabelObject activeLabel;
 
     // TODO: Rename and change types of parameters
 
@@ -87,16 +97,19 @@ public class ProjectNotes extends Fragment {
         if (getArguments() != null) {
         }
         mNotes = new ArrayList<>();
+        mLabels = ProjectDetailActivity.mProject.getLabels();
 
         mDatabase.child("projects").child(ProjectDetailActivity.mProject.getProjectId()).child("publicNotes").child("allNotes").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
-                String noteId = dataSnapshot.getKey();
+                final String noteId = dataSnapshot.getKey();
                 mDatabase.child("notes").child(noteId).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         final NoteObject note = new NoteObject();
+
+                        note.setId(noteId);
 
                         final String authorid = (String)dataSnapshot.child("author").getValue();
                         final String noteContent = (String)dataSnapshot.child("content").getValue();
@@ -142,7 +155,6 @@ public class ProjectNotes extends Fragment {
 
                                 String authorPhotoUrl = (String) dataSnapshot.child("photoUrl").getValue();
                                 String authorName = (String)dataSnapshot.child("name").getValue();
-
 
                                 note.setAuthorId(authorid);
                                 note.setContent(noteContent);
@@ -214,7 +226,6 @@ public class ProjectNotes extends Fragment {
                     ObjectAnimator anim = ObjectAnimator.ofFloat(  ((ProjectDetailActivity)getActivity()).topBarView,"elevation",0);
                     anim.setDuration(250);
                     anim.start();
-
                 }
                 else{
                     ObjectAnimator anim = ObjectAnimator.ofFloat(  ((ProjectDetailActivity)getActivity()).topBarView,"elevation",80f);
@@ -223,6 +234,12 @@ public class ProjectNotes extends Fragment {
                 }
             }
         });
+
+        mLabelRecyclerView = (UltimateRecyclerView)view.findViewById(R.id.label_recycler);
+        mLabelRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false));
+
+        mLabelAdapter = new LabelAdapter(mLabels, getContext());
+        mLabelRecyclerView.setAdapter(mLabelAdapter);
 
         return view;
     }
@@ -296,6 +313,8 @@ public class ProjectNotes extends Fragment {
         }
     }
 
+
+
 //    private class NoteListAdapter extends RecyclerView.Adapter<NoteHolder>{
 //
 //        public List<NoteObject> mNotes;
@@ -352,5 +371,130 @@ public class ProjectNotes extends Fragment {
 //            return new NoteHolder(view);
 //        }
 //    }
+
+    public class LabelAdapter extends UltimateViewAdapter<LabelAdapter.LabelHolder> {
+
+        private SparseBooleanArray selectedItems;
+
+
+        public List<LabelObject> mLabels;
+        Context mContext;
+        public LabelAdapter(List<LabelObject> labels, Context context){
+            mLabels = labels;
+            mContext = context;
+        }
+
+        @Override
+        public RecyclerView.ViewHolder onCreateHeaderViewHolder(ViewGroup parent) {
+            return null;
+        }
+
+        @Override
+        public LabelHolder newHeaderHolder(View view) {
+            return null;
+        }
+
+        @Override
+        public void onBindViewHolder(LabelHolder holder, int position, List<Object> payloads) {
+            super.onBindViewHolder(holder, position, payloads);
+        }
+
+        @Override
+        public void onBindHeaderViewHolder(RecyclerView.ViewHolder holder, int position) {
+
+        }
+
+        @Override
+        public long generateHeaderId(int position) {
+            return 0;
+        }
+
+        @Override
+        public LabelHolder newFooterHolder(View view) {
+            return null;
+        }
+
+        @Override
+        public int getAdapterItemCount() {
+            return 0;
+        }
+
+        @Override
+        public void onBindViewHolder(final LabelHolder holder, final int position) {
+            holder.bindLabel(mLabels.get(position));
+
+            holder.entireViewWithBorder.setSelected(selectedItems.get(position, false));
+
+            holder.entireViewWithBorder.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+
+
+
+                    return true;
+                }
+            });
+
+
+            holder.labelName.setText(mLabels.get(position).getLabelName());
+
+
+
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return mLabels.size();
+        }
+
+        @Override
+        public LabelHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            LayoutInflater layoutInflater = LayoutInflater.from(mContext);
+            View view = layoutInflater.inflate(R.layout.list_item_label, parent, false);
+
+            return new LabelHolder(view);
+        }
+
+        @Override
+        public LabelHolder onCreateViewHolder(ViewGroup parent) {
+            return null;
+        }
+
+        public class LabelHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+
+            public CustomTextViewLogo labelName;
+            public View entireViewWithBorder;
+
+
+            public LabelHolder(View itemView){
+                super(itemView);
+                labelName = (CustomTextViewLogo)itemView.findViewById(R.id.label_name);
+                entireViewWithBorder = itemView.findViewById(R.id.entire_label);
+
+            }
+
+            @Override
+            public void onClick(View view) {
+
+                if (selectedItems.get(getAdapterPosition(), false)) {
+                    selectedItems.delete(getAdapterPosition());
+                    entireViewWithBorder.setSelected(false);
+                }
+                else {
+                    selectedItems.put(getAdapterPosition(), true);
+                    entireViewWithBorder.setSelected(true);
+                }
+            }
+
+            public void bindLabel(LabelObject label){
+
+                labelName.setText(label.getLabelName());
+
+            }
+        }
+
+
+    }
 
 }
