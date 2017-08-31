@@ -135,20 +135,18 @@ public class MainActivity extends AppCompatActivity {
 
                     alertObjects = new ArrayList<>();
 
-
-
                     bottomBar = (BottomBar)findViewById(R.id.bottomBar);
                     bottomBar.setVisibility(View.VISIBLE);
                     bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
                         @Override
                         public void onTabSelected(@IdRes int tabId) {
                             switch (tabId){
-                                case R.id.tab_home:
-                                    if (!(mFragment instanceof ProjectFragment)){
-                                        mFragment = ProjectFragment.newInstance();
-                                        getSupportFragmentManager().beginTransaction().replace(R.id.container, mFragment).commit();
-                                    }
-                                    break;
+//                                case R.id.tab_home:
+//                                    if (!(mFragment instanceof ProjectFragment)){
+//                                        mFragment = ProjectFragment.newInstance();
+//                                        getSupportFragmentManager().beginTransaction().replace(R.id.container, mFragment).commit();
+//                                    }
+//                                    break;
                                 case R.id.tab_projects:
 
                                     if (!(mFragment instanceof ProjectFragment)){
@@ -156,13 +154,13 @@ public class MainActivity extends AppCompatActivity {
                                         getSupportFragmentManager().beginTransaction().replace(R.id.container, mFragment).commit();
                                     }
                                     break;
-                                case R.id.tab_teams:
-
-                                    if (!(mFragment instanceof TeamFragment)){
-                                        mFragment = TeamFragment.newInstance();
-                                        getSupportFragmentManager().beginTransaction().replace(R.id.container, mFragment).commit();
-                                    }
-                                    break;
+//                                case R.id.tab_teams:
+//
+//                                    if (!(mFragment instanceof TeamFragment)){
+//                                        mFragment = TeamFragment.newInstance();
+//                                        getSupportFragmentManager().beginTransaction().replace(R.id.container, mFragment).commit();
+//                                    }
+//                                    break;
                                 case R.id.tab_messages:
 
                                     if (!(mFragment instanceof Feed)){

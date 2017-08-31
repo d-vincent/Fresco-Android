@@ -174,9 +174,8 @@ public class ProjectDetailActivity extends AppCompatActivity {
                     }
                 }
 
-
                 mainViewPager = (ViewPager)findViewById(R.id.pager);
-                mainViewPager.setAdapter(new PagerAdapter(getSupportFragmentManager(),4));
+                mainViewPager.setAdapter(new PagerAdapter(getSupportFragmentManager(),5));
                 tabs = (TabLayout)findViewById(R.id.sliding_tabs);
                 tabs.setSelectedTabIndicatorColor(getResources().getColor(R.color.colorPrimary));
                 tabs.setupWithViewPager(mainViewPager);
@@ -269,6 +268,9 @@ public class ProjectDetailActivity extends AppCompatActivity {
                 case 3:
                     ProjectFilesFragment tab4 = ProjectFilesFragment.newInstance();
                     return tab4;
+                case 4:
+                    ProjectFilesFragment tab5 = ProjectFilesFragment.newInstance();
+                    return tab5;
 
                 default:
                     return null;
@@ -280,13 +282,15 @@ public class ProjectDetailActivity extends AppCompatActivity {
             Locale l = Locale.getDefault();
             switch (position) {
                 case 0:
-                    return "Agenda";
+                    return "Milestones";
                 case 1:
                     return "Project Notes";
                 case 2:
                     return "Personal Notes";
                 case 3:
                     return "Files";
+                case 4:
+                    return "Settings";
             }
             return null;
         }

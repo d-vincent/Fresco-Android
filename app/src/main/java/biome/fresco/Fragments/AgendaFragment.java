@@ -4,12 +4,16 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -24,6 +28,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
 import com.prolificinteractive.materialcalendarview.CalendarDay;
 
+import net.cachapa.expandablelayout.ExpandableLayout;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -36,6 +42,7 @@ import biome.fresco.Objects.TaskObject;
 import biome.fresco.ProjectDetailActivity;
 import biome.fresco.R;
 import biome.fresco.SourceSansRegularTextView;
+import io.fabric.sdk.android.services.concurrency.Task;
 
 import static biome.fresco.MainActivity.mAuth;
 import static biome.fresco.MainActivity.mDatabase;
@@ -145,53 +152,6 @@ public class AgendaFragment extends Fragment {
                     milestone.setTasks(taskObjects);
                     mileStones.add(milestone);
 
-//                    long projectCreatedEpoch = mProject.getCreatedDate();
-//
-//                    boolean lastDay = false;
-//
-//                    CalendarDay today = CalendarDay.from(new Date());
-//                    CalendarDay createdDay = CalendarDay.from(new Date(projectCreatedEpoch));
-//                    boolean keepGoing = true;
-//                    ArrayList<CalendarDay> daysToPopulate = new ArrayList<CalendarDay>();
-//
-//                    while (keepGoing){
-//                        Calendar cal = createdDay.getCalendar();
-//                        cal.add(Calendar.DAY_OF_YEAR, 1);
-//                        CalendarDay day = CalendarDay.from(cal);
-//                        if (day.isAfter(today)){
-//                            keepGoing = false;
-//                            break;
-//                        }else {
-//
-//                            daysToPopulate.add(day);
-//                        }
-//                    }
-//
-//                    float counter = 0;
-//                    for (CalendarDay calendarDay:daysToPopulate){
-//
-//                        float tasksToday = 0;
-//                        for (MilestoneObject milestoneObject: mileStones){
-//                            for (TaskObject taskObject: milestoneObject.getTasks()){
-//                                if(taskObject.isCompleted()) {
-//                                    CalendarDay taskDay = CalendarDay.from(new Date(taskObject.getCompletedTimestamp()));
-//                                    if (taskDay.equals(calendarDay)){
-//                                        tasksToday ++;
-//                                    }
-//                                }
-//
-//                            }
-//                        }
-//                        Entry entry = new Entry(counter,tasksToday);
-//                        entries.add(entry);
-//                        counter ++;
-//                    }
-//
-//                    LineDataSet dataSet = new LineDataSet(entries, "Tasks Completed");
-//                    LineData data = new LineData(dataSet);
-//
-//                    lineChart.setData(data);
-//                    lineChart.invalidate();
                     mAdapter.notifyDataSetChanged();
                 }
             }
@@ -308,6 +268,25 @@ public class AgendaFragment extends Fragment {
         @Override
         public void onBindViewHolder(final MilestoneHolder holder, final int position) {
 
+            LayoutInflater layoutInflater = LayoutInflater.from(getContext());
+            holder.taskLayout.removeAllViews();
+            for (final TaskObject issue: mMilestones.get(position).getTasks()){
+
+                View view = layoutInflater.inflate(R.layout.list_item_issue, holder.taskLayout, false);
+                ((TextView)view.findViewById(R.id.issue_title)).setText(issue.getName());
+                ((CheckBox)view.findViewById(R.id.issue_check_box)).setChecked(issue.isCompleted());
+                ((CheckBox)view.findViewById(R.id.issue_check_box)).setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        mDatabase.child("agenda").child(mProject.getProjectId()).child("tasks").child(issue.getId()).child("completed").setValue(isChecked);
+                        mDatabase.child("agenda").child(mProject.getProjectId()).child("tasks").child(issue.getId()).child("completedChangedTimestamp").setValue(System.currentTimeMillis());
+                    }
+                });
+                holder.taskLayout.addView(view);
+            }
+
+            layoutInflater.inflate(R.layout.add_new_issue, holder.taskLayout, true);
+            holder.daysLeftText.setTextColor(getResources().getColor(R.color.colorPrimary));
 
             holder.bindProject(mMilestones.get(position), getContext());
 
@@ -323,7 +302,22 @@ public class AgendaFragment extends Fragment {
 
             if (total == completed){
                 holder.entireNoteLayout.setBackgroundColor(getResources().getColor(R.color.completed));
+            }else {
+                holder.entireNoteLayout.setBackgroundColor(getResources().getColor(R.color.white));
             }
+
+            holder.entireNoteLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    if (holder.expandView.isExpanded()){
+                        holder.expandView.setExpanded(false, true);
+                    }else{
+                        holder.expandView.setExpanded(true, true);
+                    }
+
+                }
+            });
 
 //            Picasso.with(mContext)
 //                    .load(mMilestones.get(position).getAuthorPhotoUrl())
@@ -369,6 +363,7 @@ public class AgendaFragment extends Fragment {
         SourceSansRegularTextView milestoneDescription;
         SourceSansRegularTextView daysLeftText;
         SourceSansRegularTextView taskCount;
+        ExpandableLayout expandView;
         LinearLayout taskLayout;
         public View entireNoteLayout;
         boolean isExpanded;
@@ -383,7 +378,8 @@ public class AgendaFragment extends Fragment {
             taskCount = (SourceSansRegularTextView) itemView.findViewById(R.id.task_count);
             daysLeftText =(SourceSansRegularTextView) itemView.findViewById(R.id.days_left);
             entireNoteLayout = itemView.findViewById(R.id.entire_milestone);
-            taskLayout = (LinearLayout) itemView.findViewById(R.id.task_list);
+            expandView = (ExpandableLayout)itemView.findViewById(R.id.issue_expander);
+            taskLayout = (LinearLayout) itemView.findViewById(R.id.add_tasks_here);
 
         }
 
@@ -397,7 +393,6 @@ public class AgendaFragment extends Fragment {
             milestoneTitle.setText(milestoneObject.getName());
             milestoneDescription.setText(milestoneObject.getDescription());
 
-
             CalendarDay today = CalendarDay.from(new Date());
             Date dueDate;
             try {
@@ -410,12 +405,8 @@ public class AgendaFragment extends Fragment {
             long msDiff = today.getDate().getTime() - dueDay.getDate().getTime();
             long daysDiff = TimeUnit.MILLISECONDS.toDays(msDiff);
 
-
-
-
             int completed = 0;
             int total = milestoneObject.getTasks().size();
-
 
             for (TaskObject task: milestoneObject.getTasks()){
                 if (task.isCompleted()){
@@ -442,16 +433,10 @@ public class AgendaFragment extends Fragment {
 
             taskCount.setText(completed + "/" + total);
 
-            final long height = taskLayout.getHeight();
-            taskLayout.getLayoutParams().height = 0;
-
-            entireNoteLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
 
 
-                }
-            });
+
+
 //            noteName.setText(note.getTitle());
 //            responseCount.setText(Integer.toString(note.getResponses().size()));
 //            noteContent.setText(Html.fromHtml(note.getContent()));

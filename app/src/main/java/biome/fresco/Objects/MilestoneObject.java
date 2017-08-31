@@ -1,7 +1,5 @@
 package biome.fresco.Objects;
 
-import com.thoughtbot.expandablerecyclerview.models.ExpandableGroup;
-
 import java.util.List;
 
 import io.fabric.sdk.android.services.concurrency.Task;

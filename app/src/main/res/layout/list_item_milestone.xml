@@ -9,10 +9,11 @@
     android:padding="16dp">
 
     <LinearLayout
+        android:id="@+id/main_milestone_stuff"
         android:weightSum="2"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="80dp">
+        android:layout_height="wrap_content">
 
     <RelativeLayout
         android:layout_weight="1"
@@ -35,6 +36,7 @@
             android:text="The stuff and things, do them and some wrapping"
             android:layout_below="@+id/milestone_title"
             android:maxLines="2"
+            android:ellipsize="end"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -81,10 +83,18 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:orientation="vertical"
-        android:id="@+id/task_list"
+    <net.cachapa.expandablelayout.ExpandableLayout
+        android:id="@+id/issue_expander"
+        android:layout_below="@+id/main_milestone_stuff"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:id="@+id/add_tasks_here"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"></LinearLayout>
+
+    </net.cachapa.expandablelayout.ExpandableLayout>
     
 </LinearLayout>
