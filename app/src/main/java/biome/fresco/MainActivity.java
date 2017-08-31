@@ -8,6 +8,7 @@ import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 
 
 import com.crashlytics.android.Crashlytics;
+import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInResult;
@@ -30,6 +32,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -39,11 +42,17 @@ import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import biome.fresco.Fragments.AlertFragment;
+import biome.fresco.Fragments.CreateProjectFragment;
 import biome.fresco.Fragments.Feed;
 import biome.fresco.Fragments.LoginFrag;
 import biome.fresco.Fragments.MainFragment;
 import biome.fresco.Fragments.ProjectFragment;
 import biome.fresco.Fragments.TeamFragment;
+import biome.fresco.Objects.AlertObject;
 import biome.fresco.Objects.ChatObject;
 import biome.fresco.Fragments.DirectMessage;
 import io.fabric.sdk.android.Fabric;
@@ -61,6 +70,10 @@ public class MainActivity extends AppCompatActivity {
     public static String token;
     String toUserPhotoUrl;
 
+    FloatingActionButton createProject;
+    FloatingActionButton crateTeam;
+    FloatingActionButton newMessage;
+    public List<AlertObject> alertObjects;
     public FloatingActionMenu mFab;
     DrawerLayout mDrawerLayout;
 
@@ -91,6 +104,19 @@ public class MainActivity extends AppCompatActivity {
 
         mFab = (FloatingActionMenu) findViewById(R.id.main_fab);
 
+        createProject = (FloatingActionButton)findViewById(R.id.fabNewProject);
+        createProject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                CreateProjectFragment newFragment = CreateProjectFragment.newInstance();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                transaction.add(android.R.id.content, newFragment).addToBackStack(null).commit();
+            }
+        });
+
+
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
@@ -106,6 +132,9 @@ public class MainActivity extends AppCompatActivity {
                     }
                     mFragment = ProjectFragment.newInstance();
                     getSupportFragmentManager().beginTransaction().add(R.id.container, mFragment).commit();
+
+                    alertObjects = new ArrayList<>();
+
 
 
                     bottomBar = (BottomBar)findViewById(R.id.bottomBar);
@@ -151,6 +180,40 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
+                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("alerts").addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
+                            AlertObject alertObject = new AlertObject();
+                            alertObject.setAuthorId((String)dataSnapshot.child("author").child("key").getValue());
+                            alertObject.setAuthorName((String)dataSnapshot.child("author").child("name").getValue());
+                            alertObject.setAuthorPhotoUrl((String)dataSnapshot.child("author").child("img").getValue());
+                            alertObject.setTimestamp((long)dataSnapshot.child("timestamp").getValue());
+                            alertObject.setText((String)dataSnapshot.child("text").getValue());
+
+                            alertObjects.add(alertObject);
+                        }
+
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
 
 
                     Log.d("Firebase", "onAuthStateChanged:signed_in:" + user.getUid());
@@ -241,7 +304,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        //getMenuInflater().inflate(R.menu.menu_main, menu);
+        getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
@@ -250,7 +313,11 @@ public class MainActivity extends AppCompatActivity {
 
         switch(item.getItemId()){
             case R.id.toolbar_search:
-                Toast.makeText(this, "Some search results", Toast.LENGTH_SHORT).show();
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                AlertFragment newFragment = AlertFragment.newInstance();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                transaction.add(android.R.id.content, newFragment).addToBackStack(null).commit();
 
         }
         return super.onOptionsItemSelected(item);

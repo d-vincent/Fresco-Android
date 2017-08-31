@@ -37,11 +37,6 @@ public class MainFragment extends Fragment {
 
     FirebaseDatabase database;
 
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     private OnFragmentInteractionListener mListener;
 
     public MainFragment() {
@@ -68,8 +63,7 @@ public class MainFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
+
         }
 
         database = FirebaseDatabase.getInstance();
@@ -109,12 +103,6 @@ public class MainFragment extends Fragment {
 //            }
 //        });
 //
-
-
-
-
-
-
 
         // Specify that tabs should be displayed in the action bar.
 

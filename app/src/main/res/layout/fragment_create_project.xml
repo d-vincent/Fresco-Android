@@ -1,0 +1,320 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/white"
+    android:clickable="true"
+    tools:context="biome.fresco.Fragments.CreateProjectFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+
+    <biome.fresco.CustomTextViewLogo
+        android:textColor="@color/black"
+        android:textSize="32sp"
+        android:text="New Project"
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="4dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+    <biome.fresco.SourceSansRegularTextView
+        android:textSize="16sp"
+        android:layout_marginBottom="8dp"
+        android:id="@+id/sub_header"
+        android:text="Projects allows you and your collaborators to bring all your files and communications together in one place."
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/header"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+    
+    
+    <biome.fresco.SourceSansRegularTextView
+        android:textSize="17sp"
+        android:textColor="@color/black"
+        android:id="@+id/name_header"
+        android:text="Name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/sub_header"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+
+        android:textSize="16sp"
+        android:paddingLeft="8dp"
+        android:focusable="true"
+        android:id="@+id/name_input"
+        android:layout_marginBottom="8dp"
+        android:hint="Give your project a name"
+        android:layout_width="match_parent"
+        android:background="@drawable/edit_text_border"
+        android:layout_height="40dp"
+        android:layout_below="@+id/name_header"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+
+    <biome.fresco.SourceSansRegularTextView
+        android:textSize="17sp"
+        android:textColor="@color/black"
+        android:id="@+id/desc_header"
+        android:text="Description"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/name_input"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:textSize="16sp"
+        android:layout_marginBottom="8dp"
+        android:paddingLeft="8dp"
+        android:focusable="true"
+        android:id="@+id/desc_input"
+        android:hint="Describe your project to collaborators"
+        android:layout_width="match_parent"
+        android:background="@drawable/edit_text_border"
+        android:layout_height="40dp"
+        android:layout_below="@+id/desc_header"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+
+    <biome.fresco.SourceSansRegularTextView
+        android:id="@+id/permission_header"
+        android:textColor="@color/black"
+        android:textSize="17sp"
+        android:text="Permissions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/desc_input"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <LinearLayout
+        android:id="@+id/permission_box"
+        android:background="@drawable/edit_text_border"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_below="@+id/permission_header"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RadioGroup
+                android:id="@+id/radio_group"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:weightSum="3">
+
+                <RadioButton
+                    android:id="@+id/public_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <RadioButton
+                    android:id="@+id/restricted_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <RadioButton
+                    android:id="@+id/private_button"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </RadioGroup>
+
+
+            <LinearLayout
+                android:paddingLeft="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_toRightOf="@+id/radio_group"
+                android:orientation="vertical"
+                android:weightSum="3">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_weight="1">
+                    <RelativeLayout
+                        android:layout_centerVertical="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:layout_marginLeft="4dp"
+                        android:id="@+id/open_lock"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_lock_open_outline_black_36dp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_toRightOf="@+id/open_lock"
+                        android:text="Public"
+                        android:textColor="@color/black"
+                        android:textSize="16sp" />
+
+                    <TextView
+                        android:layout_marginStart="2dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_alignLeft="@+id/open_lock"
+                        android:layout_alignStart="@+id/open_lock"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/open_lock"
+                        android:text="Anybody can see and join this project." />
+
+                    </RelativeLayout>
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_weight="1">
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true">
+
+                    <ImageView
+                        android:id="@+id/closed_lock"
+                        android:layout_marginLeft="4dp"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_lock_outline_black_36dp"
+                        android:layout_alignTop="@+id/textView2"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true" />
+
+                    <TextView
+                        android:layout_marginTop="8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_toRightOf="@+id/closed_lock"
+                        android:text="Restricted"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:id="@+id/textView2" />
+
+                    <TextView
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_alignLeft="@+id/closed_lock"
+                        android:layout_alignStart="@+id/closed_lock"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/closed_lock"
+                        android:text="Anybody can see this project. You choose who joins it." />
+
+                    </RelativeLayout>
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_weight="1">
+
+
+                    <RelativeLayout
+                        android:layout_centerVertical="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                    <ImageView
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginTop="8dp"
+                        android:id="@+id/black_lock"
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/ic_lock_black_36dp"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Private"
+                        android:textColor="@color/black"
+                        android:textSize="16sp"
+                        android:id="@+id/textView"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginLeft="8dp"
+                        android:layout_alignTop="@+id/black_lock"
+                        android:layout_toRightOf="@+id/black_lock"
+                        android:layout_toEndOf="@+id/black_lock" />
+
+                    <TextView
+
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginStart="2dp"
+                        android:layout_alignLeft="@+id/black_lock"
+                        android:layout_alignStart="@+id/black_lock"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/black_lock"
+                        android:text="You choose who sees and joins this project." />
+
+                    </RelativeLayout>
+
+
+
+                </RelativeLayout>
+
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/submit"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/edit_text_border"
+        android:layout_below="@+id/permission_box"
+        android:layout_width="match_parent"
+        android:layout_height="45dp">
+
+        <biome.fresco.SourceSansProBoldTextView
+
+            android:textSize="20sp"
+            android:textColor="@color/white"
+            android:gravity="center"
+            android:text="Create Project"
+            android:background="@drawable/rounded_corner_colored_textview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+    </RelativeLayout>
+
+
+
+</RelativeLayout>
