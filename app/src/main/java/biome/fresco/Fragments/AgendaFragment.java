@@ -306,7 +306,7 @@ public class AgendaFragment extends Fragment {
                 holder.entireNoteLayout.setBackgroundColor(getResources().getColor(R.color.white));
             }
 
-            holder.entireNoteLayout.setOnClickListener(new View.OnClickListener() {
+            holder.viewExpander.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
 
@@ -363,6 +363,7 @@ public class AgendaFragment extends Fragment {
         SourceSansRegularTextView milestoneDescription;
         SourceSansRegularTextView daysLeftText;
         SourceSansRegularTextView taskCount;
+        View viewExpander;
         ExpandableLayout expandView;
         LinearLayout taskLayout;
         public View entireNoteLayout;
@@ -380,6 +381,7 @@ public class AgendaFragment extends Fragment {
             entireNoteLayout = itemView.findViewById(R.id.entire_milestone);
             expandView = (ExpandableLayout)itemView.findViewById(R.id.issue_expander);
             taskLayout = (LinearLayout) itemView.findViewById(R.id.add_tasks_here);
+            viewExpander = itemView.findViewById(R.id.main_milestone_stuff);
 
         }
 

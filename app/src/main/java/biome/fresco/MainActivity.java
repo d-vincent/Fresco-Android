@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -19,6 +20,8 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -41,6 +44,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.mancj.materialsearchbar.MaterialSearchBar;
 import com.roughike.bottombar.BottomBar;
 import com.roughike.bottombar.OnTabSelectListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -69,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
     public static String uid;
     public static String token;
     String toUserPhotoUrl;
+    NavigationView navigationView;
 
     FloatingActionButton createProject;
     FloatingActionButton crateTeam;
@@ -76,6 +81,9 @@ public class MainActivity extends AppCompatActivity {
     public List<AlertObject> alertObjects;
     public FloatingActionMenu mFab;
     DrawerLayout mDrawerLayout;
+
+    ImageView profileImage;
+    TextView userName;
 
     Fragment mFragment;
 
@@ -100,6 +108,13 @@ public class MainActivity extends AppCompatActivity {
         //FirebaseApp.initializeApp(this);
         //Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
+
+        navigationView = (NavigationView) findViewById(R.id.nvView);
+        profileImage = (ImageView)findViewById(R.id.userIcon);
+        userName = (TextView)findViewById(R.id.userName);
+
+
+
         registerReceiver(myReceiver, new IntentFilter(MyFireBaseMessagingService.INTENT_FILTER));
 
         mFab = (FloatingActionMenu) findViewById(R.id.main_fab);
@@ -116,6 +131,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        toolbar = (Toolbar)findViewById(R.id.my_toolbar);
+        // toolbar.setBackground(getResources().getDrawable(R.drawable.actionbar_top));
+        setSupportActionBar(toolbar);
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
@@ -133,10 +151,15 @@ public class MainActivity extends AppCompatActivity {
                     mFragment = ProjectFragment.newInstance();
                     getSupportFragmentManager().beginTransaction().add(R.id.container, mFragment).commit();
 
+                    Picasso.with(MainActivity.this).load(mAuth.getCurrentUser().getPhotoUrl()).transform(new CircleTransformation()).into(profileImage);
+                    userName.setText(mAuth.getCurrentUser().getDisplayName());
+
                     alertObjects = new ArrayList<>();
 
                     bottomBar = (BottomBar)findViewById(R.id.bottomBar);
                     bottomBar.setVisibility(View.VISIBLE);
+                    toolbar.setVisibility(View.VISIBLE);
+                    mFab.setVisibility(View.VISIBLE);
                     bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
                         @Override
                         public void onTabSelected(@IdRes int tabId) {
