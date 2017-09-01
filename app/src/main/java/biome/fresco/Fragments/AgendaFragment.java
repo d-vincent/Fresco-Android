@@ -10,8 +10,10 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -34,6 +36,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -112,6 +115,7 @@ public class AgendaFragment extends Fragment {
                 for (final DataSnapshot milestoneSnap : dataSnapshot.child("milestones").getChildren()) {
                     totalMileStones ++;
                     MilestoneObject milestone = new MilestoneObject();
+                    milestone.setId(milestoneSnap.getKey());
                     milestone.setAuthor((String)milestoneSnap.child("author").getValue());
                     milestone.setDescription((String)milestoneSnap.child("desc").getValue());
                     milestone.setDueDate((String)milestoneSnap.child("dueDate").getValue());
@@ -285,7 +289,62 @@ public class AgendaFragment extends Fragment {
                 holder.taskLayout.addView(view);
             }
 
-            layoutInflater.inflate(R.layout.add_new_issue, holder.taskLayout, true);
+            View newTaskView = layoutInflater.inflate(R.layout.add_new_issue, holder.taskLayout, true);
+            final View newTask = newTaskView.findViewById(R.id.add_new_task);
+            final View taskInput = newTaskView.findViewById(R.id.task_input_layout);
+
+            final EditText taskName = (EditText) newTaskView.findViewById(R.id.task_input);
+            View saveTask = newTaskView.findViewById(R.id.save_task);
+            View cancelTask = newTaskView.findViewById(R.id.cancel_task);
+
+            saveTask.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (taskName.getText().toString().length() > 0){
+                        HashMap<String, Object> taskValue = new HashMap<String, Object>();
+                        taskValue.put("author", mAuth.getCurrentUser().getUid());
+                        taskValue.put("completed", false);
+                        taskValue.put("completedChangedTimestamp", System.currentTimeMillis());
+                        taskValue.put("created", System.currentTimeMillis());
+                        taskValue.put("name", taskName.getText().toString());
+                        taskValue.put("milestone", mMilestones.get(position).getId());
+
+                        String taskKey = mDatabase.child("agendas").child(mProject.getProjectId()).child("tasks").push().getKey();
+                        mDatabase.child("agenda").child(mProject.getProjectId()).child("tasks").child(taskKey).setValue(taskValue);
+                        mDatabase.child("agenda").child(mProject.getProjectId()).child("milestones").child(mMilestones.get(position).getId()).child("tasks").child(taskKey).setValue(true);
+
+                        taskName.setText("");
+                        newTask.setVisibility(View.VISIBLE);
+                        taskInput.setVisibility(View.GONE);
+
+                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                    }
+                }
+            });
+            cancelTask.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    taskName.setText("");
+                    newTask.setVisibility(View.VISIBLE);
+                    taskInput.setVisibility(View.GONE);
+
+                    InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(newTask.getWindowToken(),0);
+                }
+            });
+
+            newTask.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    taskName.requestFocus();
+                    InputMethodManager imm = (InputMethodManager)   getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.showSoftInput(taskName, InputMethodManager.SHOW_IMPLICIT);
+                    newTask.setVisibility(View.GONE);
+                    taskInput.setVisibility(View.VISIBLE);
+                }
+            });
+
             holder.daysLeftText.setTextColor(getResources().getColor(R.color.colorPrimary));
 
             holder.bindProject(mMilestones.get(position), getContext());
@@ -312,6 +371,8 @@ public class AgendaFragment extends Fragment {
 
                     if (holder.expandView.isExpanded()){
                         holder.expandView.setExpanded(false, true);
+                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.hideSoftInputFromWindow(newTask.getWindowToken(),0);
                     }else{
                         holder.expandView.setExpanded(true, true);
                     }
@@ -379,7 +440,7 @@ public class AgendaFragment extends Fragment {
             taskCount = (SourceSansRegularTextView) itemView.findViewById(R.id.task_count);
             daysLeftText =(SourceSansRegularTextView) itemView.findViewById(R.id.days_left);
             entireNoteLayout = itemView.findViewById(R.id.entire_milestone);
-            expandView = (ExpandableLayout)itemView.findViewById(R.id.issue_expander);
+            expandView = (ExpandableLayout) itemView.findViewById(R.id.issue_expander);
             taskLayout = (LinearLayout) itemView.findViewById(R.id.add_tasks_here);
             viewExpander = itemView.findViewById(R.id.main_milestone_stuff);
 

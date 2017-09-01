@@ -12,6 +12,7 @@ public class MilestoneObject {
 
 
 
+
     public String getAuthor() {
         return author;
     }
@@ -68,6 +69,15 @@ public class MilestoneObject {
         this.tasks = tasks;
     }
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    String id;
     String author;
     Long createdTimestamp;
     String description;
