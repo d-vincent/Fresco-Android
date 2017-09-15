@@ -135,8 +135,6 @@ public class PhotoViewFragment extends Fragment {
                     ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
                             0);
                 }
-
-
             }
         });
         photoView = (PhotoView)view.findViewById(R.id.photo_view);
@@ -187,6 +185,7 @@ public class PhotoViewFragment extends Fragment {
                 Uri bmpUri = getLocalBitmapUri(photoView);
                 final Intent shareIntent = new Intent(Intent.ACTION_SEND);
                 shareIntent.setType("image/*");
+                shareIntent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
 
                 shareIntent.putExtra(Intent.EXTRA_STREAM, bmpUri);
                 startActivity(Intent.createChooser(shareIntent, "Share image using"));
@@ -254,7 +253,7 @@ public class PhotoViewFragment extends Fragment {
             FileOutputStream out = new FileOutputStream(file);
             bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
             out.close();
-            bmpUri = Uri.fromFile(file);
+            bmpUri = FileProvider.getUriForFile(getActivity(), getActivity().getApplicationContext().getPackageName() + ".biome.fresco.provider",file);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -80,6 +80,7 @@ public class UserNotes extends Fragment {
         }
         mNotes = new ArrayList<>();
         activeLabels = new ArrayList<>();
+        //todo it's trying to get this too fast and crashing yo
         mLabels = ProjectDetailActivity.mProject.getLabels();
 
 
