@@ -40,6 +40,7 @@ public class ProjectDetailActivity extends AppCompatActivity {
 
     public static ProjectObject mProject;
 
+    public static boolean viewingPhoto;
     float x;
     float y;
 
@@ -56,6 +57,10 @@ public class ProjectDetailActivity extends AppCompatActivity {
     @Override
     public void onBackPressed() {
 
+        if (viewingPhoto){
+            super.onBackPressed();
+            return;
+        }
 
         boolean wentBack = false;
         List<Fragment> fragmentList = getSupportFragmentManager().getFragments();
@@ -220,7 +225,7 @@ public class ProjectDetailActivity extends AppCompatActivity {
 
         // create the animator for this view (the start radius is zero)
         Animator circularReveal = ViewAnimationUtils.createCircularReveal(rootLayout, cx, cy, 0, finalRadius);
-        circularReveal.setDuration(500);
+        circularReveal.setDuration(350);
 
         // make the view visible and start the animation
         rootLayout.setVisibility(View.VISIBLE);
@@ -235,12 +240,12 @@ public class ProjectDetailActivity extends AppCompatActivity {
                 tabs.setVisibility(View.VISIBLE);
                 mainViewPager.setVisibility(View.VISIBLE);
                 AlphaAnimation anim = new AlphaAnimation(0.0f,1.0f);
-                anim.setDuration(350);
+                anim.setDuration(200);
                 toolbar.startAnimation(anim);
                 tabs.startAnimation(anim);
                 mainViewPager.startAnimation(anim);
             }
-        }, 500);
+        }, 350);
     }
 
 

@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import biome.fresco.R;
 import jp.wasabeef.richeditor.RichEditor;
@@ -23,17 +24,20 @@ import jp.wasabeef.richeditor.RichEditor;
 public class NoteDetailView extends Fragment {
 
     RichEditor noteEditor;
+    EditText titleEditor;
     String content;
+    String title;
 
     public NoteDetailView() {
         // Required empty public constructor
     }
 
 
-    public static NoteDetailView newInstance(String noteContent) {
+    public static NoteDetailView newInstance(String noteContent, String noteTitle) {
         NoteDetailView fragment = new NoteDetailView();
         Bundle args = new Bundle();
         args.putString("noteContent", noteContent);
+        args.putString("noteTitle", noteTitle);
         fragment.setArguments(args);
         return fragment;
     }
@@ -44,6 +48,7 @@ public class NoteDetailView extends Fragment {
         if (getArguments() != null) {
 
             content = getArguments().getString("noteContent", "Write your note here");
+            title = getArguments().getString("noteTitle", "");
         }
     }
 
@@ -55,6 +60,8 @@ public class NoteDetailView extends Fragment {
 
         noteEditor = (RichEditor)view.findViewById(R.id.note_detail_editor);
         noteEditor.setHtml(content);
+        titleEditor = (EditText) view.findViewById(R.id.note_title_editor);
+        titleEditor.setText(title);
 
         view.findViewById(R.id.action_undo).setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {

@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
     FloatingActionButton crateTeam;
     FloatingActionButton newMessage;
     public List<AlertObject> alertObjects;
-    public FloatingActionMenu mFab;
+    //public FloatingActionMenu mFab;
     DrawerLayout mDrawerLayout;
 
     ImageView profileImage;
@@ -117,19 +117,19 @@ public class MainActivity extends AppCompatActivity {
 
         registerReceiver(myReceiver, new IntentFilter(MyFireBaseMessagingService.INTENT_FILTER));
 
-        mFab = (FloatingActionMenu) findViewById(R.id.main_fab);
+        //mFab = (FloatingActionMenu) findViewById(R.id.main_fab);
 
-        createProject = (FloatingActionButton)findViewById(R.id.fabNewProject);
-        createProject.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                CreateProjectFragment newFragment = CreateProjectFragment.newInstance();
-                FragmentTransaction transaction = fragmentManager.beginTransaction();
-                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-                transaction.add(android.R.id.content, newFragment).addToBackStack(null).commit();
-            }
-        });
+//        createProject = (FloatingActionButton)findViewById(R.id.fabNewProject);
+//        createProject.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                FragmentManager fragmentManager = getSupportFragmentManager();
+//                CreateProjectFragment newFragment = CreateProjectFragment.newInstance();
+//                FragmentTransaction transaction = fragmentManager.beginTransaction();
+//                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+//                transaction.add(android.R.id.content, newFragment).addToBackStack(null).commit();
+//            }
+//        });
 
         toolbar = (Toolbar)findViewById(R.id.my_toolbar);
         // toolbar.setBackground(getResources().getDrawable(R.drawable.actionbar_top));
@@ -159,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
                     bottomBar = (BottomBar)findViewById(R.id.bottomBar);
                     bottomBar.setVisibility(View.VISIBLE);
                     toolbar.setVisibility(View.VISIBLE);
-                    mFab.setVisibility(View.VISIBLE);
+                    //mFab.setVisibility(View.VISIBLE);
                     bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
                         @Override
                         public void onTabSelected(@IdRes int tabId) {

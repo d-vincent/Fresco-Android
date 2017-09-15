@@ -1,6 +1,8 @@
 package biome.fresco;
 
 import android.content.Context;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -14,6 +16,7 @@ import com.squareup.picasso.Picasso;
 import java.io.File;
 import java.util.List;
 
+import biome.fresco.Fragments.CreateProjectFragment;
 import biome.fresco.Fragments.FolderForList;
 import biome.fresco.Fragments.ProjectFilesFragment;
 import biome.fresco.Fragments.ProjectNotes;
@@ -81,6 +84,17 @@ public class FileListAdapter extends UltimateViewAdapter<FileHolder> {
 
                     if (mThings.get(position).getType() == 0){
                         mFragment.enterFolder(mThings.get(position).getId());
+                    }
+                    else {
+                        String type = mThings.get(position).getFileType();
+                        String fileUrl = mThings.get(position).getFileUrl();
+                        String name = mThings.get(position).getName();
+                        if (type.contains("image")){
+                           mFragment.openPhoto(fileUrl, name);
+                        }
+                        else if (type.contains("pdf")){
+                            mFragment.openPdf(fileUrl);
+                        }
                     }
                 }
                 return true;

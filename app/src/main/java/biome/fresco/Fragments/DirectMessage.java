@@ -219,14 +219,14 @@ public class DirectMessage extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        ((MainActivity)getActivity()).mFab.setVisibility(View.GONE);
+
         ((MainActivity)getActivity()).bottomBar.setVisibility(View.GONE);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        ((MainActivity)getActivity()).mFab.setVisibility(View.VISIBLE);
+
         ((MainActivity)getActivity()).bottomBar.setVisibility(View.VISIBLE);
     }
 

@@ -244,8 +244,6 @@ public class ProjectNotes extends Fragment {
             }
         });
 
-
-
         return view;
     }
 

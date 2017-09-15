@@ -4,8 +4,7 @@
     android:layout_height="wrap_content"
     android:padding="16dp"
     android:background="#FFFFFF"
-    android:elevation="4dp"
-    android:layout_marginBottom="8dp"
+    android:layout_marginBottom="2dp"
     android:id="@+id/entire_project_view">
 
 
@@ -26,11 +25,11 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <View
-        android:layout_marginTop="4dp"
-        android:background="#F3F3F3"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"/>
+    <!--<View-->
+        <!--android:layout_marginTop="4dp"-->
+        <!--android:background="#F3F3F3"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="1dp"/>-->
 
     <biome.fresco.SourceSansProBoldTextView
 

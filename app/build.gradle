@@ -53,6 +53,8 @@ dependencies {
         transitive = true;
     }
 
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.github.ozodrukh:CircularReveal:2.0.1@aar'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:support-v4:25.3.1'
@@ -61,7 +63,6 @@ dependencies {
     compile 'com.google.firebase:firebase-auth:10.0.1'
     compile 'com.google.firebase:firebase-messaging:10.0.1'
     compile 'com.google.code.gson:gson:2.7'
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'com.squareup.retrofit2:converter-gson:2.1.0'
     compile 'io.reactivex:rxjava:1.1.6'
     compile 'io.reactivex:rxandroid:1.2.1'
@@ -80,8 +81,8 @@ dependencies {
     compile 'com.prolificinteractive:material-calendarview:1.4.3'
     compile 'com.github.stfalcon:chatkit:0.2.1'
     compile 'jp.wasabeef:richeditor-android:1.2.2'
-    compile 'com.squareup.retrofit2:retrofit:2.3.0'
     compile 'net.cachapa.expandablelayout:expandablelayout:2.9.1'
+    compile 'com.github.chrisbanes:PhotoView:2.0.0'
     androidTestCompile 'junit:junit:4.12'
 }
 

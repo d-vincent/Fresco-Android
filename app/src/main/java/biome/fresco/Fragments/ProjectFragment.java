@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +14,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.clans.fab.FloatingActionButton;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -45,6 +48,8 @@ public class ProjectFragment extends Fragment {
     private static final int SCROLL_DIRECTION_UP = -1;
 
     private String mId;
+
+    FloatingActionButton newProject;
 
     public ProjectFragment() {
         // Required empty public constructor
@@ -152,6 +157,18 @@ public class ProjectFragment extends Fragment {
             }
         });
 
+        newProject = (FloatingActionButton)view.findViewById(R.id.fabNewProject);
+        newProject.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+                CreateProjectFragment newFragment = CreateProjectFragment.newInstance();
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
+                transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                transaction.add(android.R.id.content, newFragment).addToBackStack(null).commit();
+            }
+        });
+
 // ...
 // Put this into your RecyclerView.OnScrollListener > onScrolled() method
 
@@ -244,7 +261,6 @@ public class ProjectFragment extends Fragment {
                             y += view.getHeight();
                         }
 
-
                         Intent intent = new Intent(getContext(), ProjectDetailActivity.class);
                         intent.putExtra("xcoord", x);
                         intent.putExtra("ycoord", y);
@@ -254,8 +270,6 @@ public class ProjectFragment extends Fragment {
                     }
                     return true;
                 }
-
-
             });
         }
 

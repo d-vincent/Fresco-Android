@@ -48,7 +48,7 @@
             android:value="b77b26bd331cad32cc0dd24a4c9c0f53b6989378" />
     </application>
 
-
-
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 </manifest>

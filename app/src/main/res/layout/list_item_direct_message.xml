@@ -42,7 +42,7 @@
         android:layout_toEndOf="@+id/contact_image_layout"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="20dp"
+        android:layout_height="wrap_content"
         android:id="@+id/who_when_layout">
 
         <TextView

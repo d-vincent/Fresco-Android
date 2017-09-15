@@ -77,7 +77,7 @@ public class NoteListAdapter extends UltimateViewAdapter<ProjectNotes.NoteHolder
 
                 if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
 
-                    NoteDetailView fragment = NoteDetailView.newInstance(mNotes.get(position).getContent());
+                    NoteDetailView fragment = NoteDetailView.newInstance(mNotes.get(position).getContent(), mNotes.get(position).getTitle());
 
                     android.support.v4.app.FragmentManager fm = ((ProjectDetailActivity)mContext).getSupportFragmentManager();
                     fm.beginTransaction().replace(R.id.root_layout, fragment ).addToBackStack(null).commit();

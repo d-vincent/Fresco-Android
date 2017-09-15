@@ -1,9 +1,13 @@
 package biome.fresco.Fragments;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -427,6 +431,26 @@ public class ProjectFilesFragment extends Fragment {
 
 
             return true;
+        }
+    }
+
+    public void openPhoto(String photoUrl, String name){
+        FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
+        PhotoViewFragment newFragment = PhotoViewFragment.newInstance(photoUrl, name);
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        transaction.add(android.R.id.content, newFragment).addToBackStack(null).commit();
+    }
+
+    public void openPdf(String pdfUrl){
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(Uri.parse(pdfUrl), "application/pdf");
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        Intent newIntent = Intent.createChooser(intent, "Open File");
+        try {
+            startActivity(newIntent);
+        } catch (ActivityNotFoundException e) {
+            // Instruct the user to install a PDF reader here, or something
         }
     }
 }
