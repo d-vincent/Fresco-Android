@@ -180,8 +180,6 @@ public class DirectMessage extends Fragment {
         mAdapter = new nameAdapter(messages);
         messageRecycler.setAdapter(mAdapter);
 
-
-
         messageInput = (EditText)view.findViewById(R.id.message_input);
         sendButton = (ImageView) view.findViewById(R.id.send_message);
         sendButton.setOnClickListener(new View.OnClickListener() {

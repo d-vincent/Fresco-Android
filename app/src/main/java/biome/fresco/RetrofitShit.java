@@ -57,4 +57,19 @@ public class RetrofitShit {
         });
     }
 
+    public static void createNote(String authorId, String name, String teamId, String desc, int visibility, int responseType, String[] labels, String projectId, String[] attachments){
+        APIService service = getClient(BASE_URL).create(APIService.class);
+        service.saveNote(authorId, name, teamId, desc, visibility, responseType, labels, projectId, attachments).enqueue(new Callback<ResponseBody>() {
+            @Override
+            public void onResponse(Call<ResponseBody> call, Response<ResponseBody> response) {
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseBody> call, Throwable t) {
+
+            }
+        });
+    }
+
 }

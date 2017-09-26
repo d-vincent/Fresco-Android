@@ -1,5 +1,8 @@
 package biome.fresco.Objects;
 
+import android.support.annotation.NonNull;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import io.fabric.sdk.android.services.concurrency.Task;
@@ -11,6 +14,26 @@ import io.fabric.sdk.android.services.concurrency.Task;
 public class MilestoneObject {
 
 
+    public MilestoneObject(){
+        this.tasks = new ArrayList<>();
+    }
+
+    public void removeTask(String id){
+        for (TaskObject task: tasks){
+            if (task.getId()==id){
+                tasks.remove(task);
+            }
+        }
+    }
+
+    public TaskObject getTask(String id){
+        for (TaskObject task: tasks){
+            if (task.getId()==id){
+                return task;
+            }
+        }
+        return null;
+    }
 
 
     public String getAuthor() {
@@ -69,6 +92,10 @@ public class MilestoneObject {
         this.tasks = tasks;
     }
 
+    public void addTask (TaskObject task){
+        tasks.add(task);
+    }
+
     public String getId() {
         return id;
     }
@@ -86,4 +113,9 @@ public class MilestoneObject {
     String name;
     List<TaskObject> tasks;
 
+
+//    @Override
+//    public int compareTo(@NonNull MilestoneObject o) {
+//        return o.createdTimestamp.compareTo(this.createdTimestamp);
+//    }
 }

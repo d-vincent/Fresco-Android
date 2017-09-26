@@ -75,6 +75,26 @@ public class FileListAdapter extends UltimateViewAdapter<FileHolder> {
     @Override
     public void onBindViewHolder(final FileHolder holder, final int position) {
         holder.bindProject(mThings.get(position));
+        holder.headerView.setVisibility(View.GONE);
+        if (position == 0 && mThings.get(position).getType()==0){
+            holder.headerView.setVisibility(View.VISIBLE);
+            holder.headerText.setText("Folder");
+        }else if (position == 0 && mThings.get(position).getType()==1){
+            holder.headerView.setVisibility(View.VISIBLE);
+            holder.headerText.setText("Files");
+        }else {
+            try{
+                if (mThings.get(position).getType() == 1 && mThings.get(position-1).getType() == 0){
+                    holder.headerView.setVisibility(View.VISIBLE);
+                    holder.headerText.setText("Files");
+                }
+            }catch (Exception e){
+
+            }
+
+
+        }
+
 
         holder.entireNoteLayout.setOnTouchListener(new View.OnTouchListener() {
             @Override

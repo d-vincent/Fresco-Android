@@ -1,36 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="72dp"
+    android:layout_height="wrap_content"
     android:elevation="4dp"
     android:id="@+id/entire_file_layout"
     android:layout_marginBottom="8dp">
 
+    <RelativeLayout
+        android:visibility="gone"
+        android:background="#F2F2F2"
+        android:id="@+id/header_layout"
+        android:layout_width="match_parent"
+        android:layout_height="56dp">
+        <biome.fresco.SourceSansRegularTextView
+
+            android:id="@+id/header_text"
+            android:textSize="17sp"
+            android:text="Files"
+            android:layout_marginLeft="16dp"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <View
+            android:layout_alignParentBottom="true"
+            android:background="@color/grey"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_below="@+id/header_layout"
+        android:layout_width="match_parent"
+        android:layout_height="56dp">
+
     <ImageView
+
+        android:layout_centerVertical="true"
+        android:background="@drawable/edit_text_border"
         android:layout_marginEnd="16dp"
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
-        android:layout_centerVertical="true"
         android:id="@+id/file_preview"
-        android:layout_width="40dp"
-        android:layout_height="40dp" />
+        android:layout_width="35dp"
+        android:layout_height="35dp" />
 
     <biome.fresco.CustomTextViewLogo
+        android:layout_centerVertical="true"
         android:id="@+id/file_name"
-        android:layout_alignTop="@+id/file_preview"
         android:layout_toRightOf="@+id/file_preview"
         android:text="Sample Folder/File name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <TextView
-        android:id="@+id/file_timestamp"
-        android:text="Jun 06 at 3:00pm"
-        android:layout_below="@+id/file_name"
-        android:layout_toRightOf="@+id/file_preview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
 
+    </RelativeLayout>
 
 
 </RelativeLayout>

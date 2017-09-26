@@ -32,7 +32,7 @@ public interface APIService {
                                      @Field("desc") String description,
                                      @Field("visibility") Integer visibility);
 
-    @POST("/createProject")
+    @POST("/saveNote")
     @FormUrlEncoded
     Call<ResponseBody> saveNote(@Field("key") String authorId,
                                      @Field("content") String name,

@@ -21,8 +21,10 @@ import biome.fresco.Objects.NoteObject;
 public class FileHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
     public CustomTextViewLogo fileName;
-    public TextView timeDateStamp;
+    //public TextView timeDateStamp;
     public View entireNoteLayout;
+    View headerView;
+    SourceSansRegularTextView headerText;
     ImageView filePreview;
     SimpleDateFormat timeFormat = new SimpleDateFormat("MMM dd h:mm a");
 
@@ -30,9 +32,11 @@ public class FileHolder extends RecyclerView.ViewHolder implements View.OnClickL
     public FileHolder(View itemView){
         super(itemView);
         fileName = (CustomTextViewLogo)itemView.findViewById(R.id.file_name);
-        timeDateStamp = (TextView)itemView.findViewById(R.id.file_timestamp);
+        //timeDateStamp = (TextView)itemView.findViewById(R.id.file_timestamp);
         entireNoteLayout = itemView.findViewById(R.id.entire_file_layout);
         filePreview = (ImageView)itemView.findViewById(R.id.file_preview);
+        headerView = itemView.findViewById(R.id.header_layout);
+        headerText = (SourceSansRegularTextView) itemView.findViewById(R.id.header_text);
     }
 
     @Override
@@ -44,7 +48,7 @@ public class FileHolder extends RecyclerView.ViewHolder implements View.OnClickL
     public void bindProject(FolderForList thing){
 
         fileName.setText(thing.getName());
-        timeDateStamp.setText(timeFormat.format(new Date(thing.getTimeStamp())));
+        //timeDateStamp.setText(timeFormat.format(new Date(thing.getTimeStamp())));
 
     }
 }

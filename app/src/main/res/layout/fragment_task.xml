@@ -1,0 +1,74 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    tools:context="biome.fresco.Fragments.TaskFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <RelativeLayout
+        android:id="@+id/milestoneTool"
+        android:layout_width="match_parent"
+        android:layout_height="56dp">
+
+        <ImageView
+            android:id="@+id/back"
+            android:src="@drawable/ic_arrow_left_black_48dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+        <TextView
+            android:layout_toLeftOf="@+id/edit_milestone"
+            android:layout_marginStart="8dp"
+            android:layout_marginLeft="8dp"
+            android:textColor="@color/black"
+            android:textSize="25sp"
+            android:layout_centerVertical="true"
+            android:text="Sample Milestone"
+            android:layout_toRightOf="@+id/back"
+            android:id="@+id/title"
+            android:ellipsize="end"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/edit_milestone"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/ic_pencil_black_48dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/description"
+        android:background="@drawable/edit_text_border"
+        android:layout_below="@+id/milestoneTool"
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
+
+    <EditText
+        android:id="@+id/task_name"
+        android:background="@drawable/edit_text_border"
+        android:layout_toLeftOf="@+id/add_task"
+        android:layout_below="@+id/description"
+        android:layout_width="match_parent"
+        android:layout_height="40dp" />
+
+    <ImageView
+        android:id="@+id/add_task"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/description"
+        android:src="@drawable/ic_check_grey600_48dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp" />
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/task_list"
+        android:layout_below="@+id/task_name"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+</RelativeLayout>

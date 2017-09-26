@@ -14,7 +14,96 @@
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="250dp"/>-->
 
+        <TextView
+            android:textSize="17sp"
+            android:textColor="@color/black"
+            android:paddingLeft="8dp"
+            android:text="New Milestone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <RelativeLayout
+            android:id="@+id/add_milestone_layout"
+            android:layout_width="match_parent"
+            android:layout_height="40dp">
+
+            <EditText
+                android:id="@+id/new_milestone_title"
+                android:layout_toStartOf="@+id/add_milestone"
+                android:layout_toLeftOf="@+id/add_milestone"
+                android:layout_marginRight="8dp"
+                android:layout_marginLeft="8dp"
+                android:background="@drawable/edit_text_border"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+            <ImageView
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:padding="8dp"
+                android:src="@drawable/plus_icon"
+                android:id="@+id/add_milestone"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_width="40dp"
+                android:layout_height="40dp" />
+
+
+        </RelativeLayout>
+
+        <net.cachapa.expandablelayout.ExpandableLayout
+
+            android:id="@+id/milestone_details"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <biome.fresco.SourceSansRegularTextView
+                    android:textColor="@color/black"
+                    android:textSize="17dp"
+                    android:layout_marginLeft="8dp"
+                    android:text="Description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <EditText
+                    android:id="@+id/description_input"
+                    android:paddingLeft="8dp"
+                    android:textSize="15sp"
+                    android:hint="Keep it short and simple"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/edit_text_border"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp" />
+
+                <biome.fresco.SourceSansRegularTextView
+                    android:textColor="@color/black"
+                    android:textSize="17dp"
+                    android:layout_marginLeft="8dp"
+                    android:text="Due Date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:id="@+id/due_date"
+                    android:paddingLeft="8dp"
+                    android:gravity="center_vertical"
+                    android:text="Tap to set a due date"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:background="@drawable/edit_text_border"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp" />
+
+            </LinearLayout>
+
+        </net.cachapa.expandablelayout.ExpandableLayout>
+
     <android.support.v7.widget.RecyclerView
+        android:layout_marginTop="8dp"
         android:id="@+id/milestone_recycler"
         app:recyclerviewEmptyView="@layout/empty_view"
         android:nestedScrollingEnabled="false"
