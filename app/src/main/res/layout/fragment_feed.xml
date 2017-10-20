@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context="biome.fresco.Fragments.Feed">
+    tools:context="biome.fresnotes.Fragments.Feed">
 
     <!-- TODO: Update blank fragment layout -->
 
@@ -21,7 +21,7 @@
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="56dp">-->
 
-        <!--<biome.fresco.CustomTextViewLogo-->
+        <!--<com.fresboard.fresnotesesboard.fresnotes.CustomTextViewLogo-->
             <!--android:textColor="@color/white"-->
             <!--android:text="New Conversation"-->
             <!--android:textSize="22sp"-->

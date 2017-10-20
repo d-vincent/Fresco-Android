@@ -12,7 +12,7 @@
         android:id="@+id/header_layout"
         android:layout_width="match_parent"
         android:layout_height="56dp">
-        <biome.fresco.SourceSansRegularTextView
+        <biome.fresnotes.SourceSansRegularTextView
 
             android:id="@+id/header_text"
             android:textSize="17sp"
@@ -44,7 +44,7 @@
         android:layout_width="35dp"
         android:layout_height="35dp" />
 
-    <biome.fresco.CustomTextViewLogo
+    <biome.fresnotes.CustomTextViewLogo
         android:layout_centerVertical="true"
         android:id="@+id/file_name"
         android:layout_toRightOf="@+id/file_preview"

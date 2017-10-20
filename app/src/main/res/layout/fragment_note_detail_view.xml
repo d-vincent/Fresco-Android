@@ -3,9 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    tools:context="biome.fresco.Fragments.NoteDetailView">
+    tools:context="biome.fresnotes.Fragments.NoteDetailView">
 
-    <biome.fresco.CustomTextViewLogo
+    <biome.fresnotes.CustomTextViewLogo
         android:textSize="17sp"
         android:layout_marginTop="8dp"
         android:layout_marginLeft="16dp"
@@ -29,7 +29,7 @@
         android:layout_marginBottom="8dp"
         android:layout_height="50dp"/>
 
-    <biome.fresco.CustomTextViewLogo
+    <biome.fresnotes.CustomTextViewLogo
         android:textSize="17sp"
         android:textColor="@color/black"
         android:layout_marginRight="16dp"

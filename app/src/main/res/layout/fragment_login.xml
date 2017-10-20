@@ -15,13 +15,13 @@
         android:paddingBottom="@dimen/activity_vertical_margin"
         android:paddingLeft="@dimen/activity_horizontal_margin"
         android:paddingRight="@dimen/activity_horizontal_margin"
-        tools:context="biome.fresco.Login"
+        tools:context="biome.fresnotes.Login"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
 
 
-        <biome.fresco.CustomTextViewLogo
+        <biome.fresnotes.CustomTextViewLogo
             android:layout_marginTop="86dp"
             android:layout_gravity="center_horizontal"
             android:textSize="75sp"
@@ -29,7 +29,7 @@
             android:text="fresco"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-        <biome.fresco.CustomTextViewLogo
+        <biome.fresnotes.CustomTextViewLogo
             android:textColor="@color/white"
             android:layout_gravity="center_horizontal"
             android:textSize="28sp"
@@ -110,7 +110,7 @@
                 android:layout_height="match_parent" />
 
         </LinearLayout>
-        <biome.fresco.CustomTextViewLogo
+        <biome.fresnotes.CustomTextViewLogo
             android:id="@+id/email_button"
             android:layout_marginTop="8dp"
             android:textColor="@color/white"

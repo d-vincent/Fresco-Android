@@ -15,11 +15,27 @@
       },
       "oauth_client": [
         {
+          "client_id": "131233411160-2sh4urauch99eoq09u8u78camb9ubth3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "biome.fresco",
+            "certificate_hash": "9ff881e9c996760fcad9c58d587bf0042e29b381"
+          }
+        },
+        {
+          "client_id": "131233411160-ggrnbgo89go5ompnd4po9e8k0379nnvo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "biome.fresco",
+            "certificate_hash": "b9594c53fae530160121430e26ddc71dad1954e6"
+          }
+        },
+        {
           "client_id": "131233411160-ed5kgsojdg29tit8418mm5njal2cm7mv.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "biome.fresco",
-            "certificate_hash": "C607A238126EDBFC0E6057C1579DBC86D1DCB8BF"
+            "certificate_hash": "c607a238126edbfc0e6057c1579dbc86d1dcb8bf"
           }
         },
         {
@@ -27,7 +43,7 @@
           "client_type": 1,
           "android_info": {
             "package_name": "biome.fresco",
-            "certificate_hash": "EE09BBB705593420D49E4C4FC132D4E08A4DCE4D"
+            "certificate_hash": "ee09bbb705593420d49e4c4fc132d4e08a4dce4d"
           }
         },
         {
@@ -48,15 +64,117 @@
           "status": 2,
           "other_platform_oauth_client": [
             {
-              "client_id": "131233411160-kr9kn50nti4r75roa9mb9gr7i87ahenr.apps.googleusercontent.com",
+              "client_id": "131233411160-k0cq567kc0b3icgq69285b7naef36k4b.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "131233411160-thi0vpenddf1va3gmrno9glgj91n0h71.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "com.adrianeves.Fresco-login"
+                "bundle_id": "org.reactjs.native.example.fresboard-react-native"
               }
-            },
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:131233411160:android:94b07de5879affc1",
+        "android_client_info": {
+          "package_name": "com.fresboard_react_native"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "131233411160-n5m6svmsqtu7fihgoj9j4m2j0ciue09u.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.fresboard_react_native",
+            "certificate_hash": "8aaa1ae196cc27f1fa25cb268d14263c6e7547ba"
+          }
+        },
+        {
+          "client_id": "131233411160-k0cq567kc0b3icgq69285b7naef36k4b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwqdbuGw0g2wdRpcmZ9RxcrbadygR7Uhc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
             {
               "client_id": "131233411160-k0cq567kc0b3icgq69285b7naef36k4b.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "131233411160-thi0vpenddf1va3gmrno9glgj91n0h71.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.fresboard-react-native"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:131233411160:android:8c413ea0db535a77",
+        "android_client_info": {
+          "package_name": "biome.com.fresboard.fresnotes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "131233411160-n7vmb49935kmltjahbne2452f9jpmr3b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "biome.com.fresboard.fresnotes",
+            "certificate_hash": "9ff881e9c996760fcad9c58d587bf0042e29b381"
+          }
+        },
+        {
+          "client_id": "131233411160-k0cq567kc0b3icgq69285b7naef36k4b.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCwqdbuGw0g2wdRpcmZ9RxcrbadygR7Uhc"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "131233411160-k0cq567kc0b3icgq69285b7naef36k4b.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "131233411160-thi0vpenddf1va3gmrno9glgj91n0h71.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.reactjs.native.example.fresboard-react-native"
+              }
             }
           ]
         },

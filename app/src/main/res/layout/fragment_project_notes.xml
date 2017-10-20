@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="biome.fresco.Fragments.ProjectNotes"
+    tools:context="biome.fresnotes.Fragments.ProjectNotes"
     android:background="@color/white"
     android:clipToPadding="false">
 

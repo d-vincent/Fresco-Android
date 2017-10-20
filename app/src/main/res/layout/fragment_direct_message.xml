@@ -4,7 +4,7 @@
 
     android:background="@color/white"
     android:layout_height="match_parent"
-    tools:context="biome.fresco.Fragments.DirectMessage">
+    tools:context="biome.fresnotes.Fragments.DirectMessage">
 
     <!-- TODO: Update blank fragment layout -->
 

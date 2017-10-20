@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"/>
 
-        <biome.fresco.SourceSansRegularTextView
+        <biome.fresnotes.SourceSansRegularTextView
 
             android:id="@+id/day_header_text"
             android:textColor="@color/black"

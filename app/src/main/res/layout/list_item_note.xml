@@ -14,7 +14,7 @@
         android:layout_width="36dp"
         android:layout_height="36dp" />
 
-    <biome.fresco.CustomTextViewLogo
+    <biome.fresnotes.CustomTextViewLogo
 
         android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"

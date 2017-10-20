@@ -8,7 +8,7 @@
     android:layout_marginBottom="8dp"
     android:elevation="4dp">
     
-    <biome.fresco.CustomTextViewLogo
+    <biome.fresnotes.CustomTextViewLogo
         android:id="@+id/team_name"
         android:textSize="24sp"
         android:textColor="@color/tw__composer_black"
@@ -16,7 +16,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
     
-    <biome.fresco.SourceSansRegularTextView
+    <biome.fresnotes.SourceSansRegularTextView
         android:id="@+id/team_description"
         android:layout_marginTop="6dp"
         android:textSize="16sp"

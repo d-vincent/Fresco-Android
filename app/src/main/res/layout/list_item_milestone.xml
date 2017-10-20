@@ -20,7 +20,7 @@
         android:layout_width="1dp"
         android:layout_height="match_parent">
 
-        <biome.fresco.SourceSansRegularTextView
+        <biome.fresnotes.SourceSansRegularTextView
             android:textSize="18sp"
             android:id="@+id/milestone_title"
             android:text="DO STUFF AND THINGS and maybe some wrap"
@@ -31,7 +31,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true" />
 
-        <biome.fresco.SourceSansRegularTextView
+        <biome.fresnotes.SourceSansRegularTextView
             android:id="@+id/milestone_description"
             android:text="The stuff and things, do them and some wrapping"
             android:layout_below="@+id/milestone_title"
@@ -47,7 +47,7 @@
         android:layout_width="1dp"
         android:layout_height="match_parent">
 
-        <biome.fresco.SourceSansRegularTextView
+        <biome.fresnotes.SourceSansRegularTextView
             android:id="@+id/task_count"
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
@@ -64,7 +64,7 @@
             android:layout_width="20dp"
             android:layout_height="20dp" />
 
-        <biome.fresco.SourceSansRegularTextView
+        <biome.fresnotes.SourceSansRegularTextView
 
             android:id="@+id/days_left"
             android:textColor="@color/colorPrimary"

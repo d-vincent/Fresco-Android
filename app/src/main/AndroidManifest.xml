@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="biome.fresco">
+    package="biome.fresnotes">
 
     <application
         android:allowBackup="true"
@@ -11,8 +11,8 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
         <provider
-            android:name=".GenericFileProvider"
-            android:authorities="${applicationId}.biome.fresco.provider"
+            android:name="biome.fresnotes.GenericFileProvider"
+            android:authorities="${applicationId}.biome.fresnotes.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
@@ -22,14 +22,14 @@
 
 
         <service
-            android:name="MyFireBaseMessagingService">
+            android:name="biome.fresnotes.MyFireBaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT"/>
             </intent-filter>
         </service>
 
         <service
-            android:name=".FirebaseInstanceHelper">
+            android:name="biome.fresnotes.FirebaseInstanceHelper">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
             </intent-filter>
@@ -37,9 +37,9 @@
 
 
 
-        <activity android:name=".Login"></activity>
+        <activity android:name="biome.fresnotes.Login"></activity>
         <activity
-            android:name=".MainActivity"
+            android:name="biome.fresnotes.MainActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan">
             <intent-filter>
@@ -48,7 +48,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ProjectDetailActivity"
+        <activity android:name="biome.fresnotes.ProjectDetailActivity"
             android:theme="@style/Theme.Transparent"
             android:launchMode="singleTask"/>
 

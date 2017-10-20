@@ -7,7 +7,7 @@
     android:id="@+id/entire_label"
     android:background="@drawable/label_corners">
 
-    <biome.fresco.CustomTextViewLogo
+    <biome.fresnotes.CustomTextViewLogo
         android:id="@+id/label_name"
         android:text="Sample Note Name"
         android:layout_width="wrap_content"

@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <biome.fresco.SourceSansRegularTextView
+    <biome.fresnotes.SourceSansRegularTextView
         android:textSize="18sp"
         android:text="Sample Task"
         android:layout_toRightOf="@+id/task_checkbox"

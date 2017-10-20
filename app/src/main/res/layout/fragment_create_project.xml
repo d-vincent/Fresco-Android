@@ -5,11 +5,11 @@
     android:padding="16dp"
     android:background="@color/white"
     android:clickable="true"
-    tools:context="biome.fresco.Fragments.CreateProjectFragment">
+    tools:context="biome.fresnotes.Fragments.CreateProjectFragment">
 
     <!-- TODO: Update blank fragment layout -->
 
-    <biome.fresco.CustomTextViewLogo
+    <biome.fresnotes.CustomTextViewLogo
         android:textColor="@color/black"
         android:textSize="32sp"
         android:text="New Project"
@@ -20,7 +20,7 @@
         android:layout_marginBottom="4dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
-    <biome.fresco.SourceSansRegularTextView
+    <biome.fresnotes.SourceSansRegularTextView
         android:textSize="16sp"
         android:layout_marginBottom="8dp"
         android:id="@+id/sub_header"
@@ -32,7 +32,7 @@
         android:layout_alignParentStart="true" />
     
     
-    <biome.fresco.SourceSansRegularTextView
+    <biome.fresnotes.SourceSansRegularTextView
         android:textSize="17sp"
         android:textColor="@color/black"
         android:id="@+id/name_header"
@@ -59,7 +59,7 @@
         android:layout_alignParentStart="true" />
 
 
-    <biome.fresco.SourceSansRegularTextView
+    <biome.fresnotes.SourceSansRegularTextView
         android:textSize="17sp"
         android:textColor="@color/black"
         android:id="@+id/desc_header"
@@ -85,7 +85,7 @@
         android:layout_alignParentStart="true" />
 
 
-    <biome.fresco.SourceSansRegularTextView
+    <biome.fresnotes.SourceSansRegularTextView
         android:id="@+id/permission_header"
         android:textColor="@color/black"
         android:textSize="17sp"
@@ -301,7 +301,7 @@
         android:layout_width="match_parent"
         android:layout_height="45dp">
 
-        <biome.fresco.SourceSansProBoldTextView
+        <biome.fresnotes.SourceSansProBoldTextView
 
             android:textSize="20sp"
             android:textColor="@color/white"

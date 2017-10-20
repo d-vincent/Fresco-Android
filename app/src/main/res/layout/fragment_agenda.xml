@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context="biome.fresco.Fragments.AgendaFragment">
+    tools:context="biome.fresnotes.Fragments.AgendaFragment">
     <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -62,7 +62,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
-                <biome.fresco.SourceSansRegularTextView
+                <biome.fresnotes.SourceSansRegularTextView
                     android:textColor="@color/black"
                     android:textSize="17dp"
                     android:layout_marginLeft="8dp"
@@ -80,7 +80,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp" />
 
-                <biome.fresco.SourceSansRegularTextView
+                <biome.fresnotes.SourceSansRegularTextView
                     android:textColor="@color/black"
                     android:textSize="17dp"
                     android:layout_marginLeft="8dp"
