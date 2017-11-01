@@ -1,6 +1,8 @@
 package biome.fresnotes;
 
 import android.content.Context;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -13,6 +15,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import biome.fresnotes.Fragments.CreateProjectFragment;
 import biome.fresnotes.Fragments.NoteDetailView;
 import biome.fresnotes.Fragments.ProjectNotes;
 import biome.fresnotes.Objects.NoteObject;
@@ -77,8 +80,15 @@ public class NoteListAdapter extends UltimateViewAdapter<ProjectNotes.NoteHolder
 
                     NoteDetailView fragment = NoteDetailView.newInstance(mNotes.get(position).getContent(), mNotes.get(position).getTitle());
 
-                    android.support.v4.app.FragmentManager fm = ((ProjectDetailActivity)mContext).getSupportFragmentManager();
-                    fm.beginTransaction().replace(R.id.root_layout, fragment ).addToBackStack(null).commit();
+//                    android.support.v4.app.FragmentManager fm = ((MainActivity)mContext).getSupportFragmentManager();
+//                    fm.beginTransaction().replace(R.id.container, fragment ).addToBackStack(null).commit();
+
+                    FragmentManager fragmentManager = ((MainActivity)mContext).getSupportFragmentManager();
+                    CreateProjectFragment newFragment = CreateProjectFragment.newInstance();
+                    FragmentTransaction transaction = fragmentManager.beginTransaction();
+                    transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+                    transaction.add(android.R.id.content, fragment).addToBackStack(null).commit();
+
 
                 }
                 return true;

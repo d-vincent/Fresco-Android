@@ -52,6 +52,7 @@ import biome.fresnotes.Fragments.AlertFragment;
 import biome.fresnotes.Fragments.Feed;
 import biome.fresnotes.Fragments.LoginFrag;
 import biome.fresnotes.Fragments.ProjectFragment;
+import biome.fresnotes.Fragments.UserNotes;
 import biome.fresnotes.Objects.AlertObject;
 import biome.fresnotes.Objects.ChatObject;
 import biome.fresnotes.Fragments.DirectMessage;
@@ -142,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
                     if (token != null) {
                         mDatabase.child("users").child(uid).child("tokens").child("android").child(token).setValue(true);
                     }
-                    mFragment = ProjectFragment.newInstance();
+                    mFragment = UserNotes.newInstance();
                     getSupportFragmentManager().beginTransaction().add(R.id.container, mFragment).commit();
 
                     Picasso.with(MainActivity.this).load(mAuth.getCurrentUser().getPhotoUrl()).transform(new CircleTransformation()).into(profileImage);
@@ -166,8 +167,8 @@ public class MainActivity extends AppCompatActivity {
 //                                    break;
                                 case R.id.tab_projects:
 
-                                    if (!(mFragment instanceof ProjectFragment)){
-                                        mFragment = ProjectFragment.newInstance();
+                                    if (!(mFragment instanceof UserNotes)){
+                                        mFragment = UserNotes.newInstance();
                                         getSupportFragmentManager().beginTransaction().replace(R.id.container, mFragment).commit();
                                     }
                                     break;

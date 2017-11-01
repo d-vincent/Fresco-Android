@@ -81,10 +81,10 @@ public class UserNotes extends Fragment {
         mNotes = new ArrayList<>();
         activeLabels = new ArrayList<>();
         //todo it's trying to get this too fast and crashing yo
-        mLabels = ProjectDetailActivity.mProject.getLabels();
+        //mLabels = ProjectDetailActivity.mProject.getLabels();
 
 
-        mDatabase.child("projects").child(ProjectDetailActivity.mProject.getProjectId()).child("notes").child(mAuth.getCurrentUser().getUid()).child("allNotes").addChildEventListener(new ChildEventListener() {
+        mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("notes").addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
 
@@ -197,12 +197,12 @@ public class UserNotes extends Fragment {
         mAdapter = new NoteListAdapter(mNotes, getContext());
         mRecyclerView.setAdapter(mAdapter);
 
-        mLabelRecyclerView = (UltimateRecyclerView)view.findViewById(R.id.label_recycler);
-        mLabelRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false));
-
-        mLabelAdapter = new LabelAdapter(mLabels, getContext());
-        mLabelRecyclerView.setAdapter(mLabelAdapter);
-        mLabelAdapter.notifyDataSetChanged();
+//        mLabelRecyclerView = (UltimateRecyclerView)view.findViewById(R.id.label_recycler);
+//        mLabelRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false));
+//
+//        mLabelAdapter = new LabelAdapter(mLabels, getContext());
+//        mLabelRecyclerView.setAdapter(mLabelAdapter);
+//        mLabelAdapter.notifyDataSetChanged();
 
         return view;
     }
