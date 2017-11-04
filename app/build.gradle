@@ -16,11 +16,16 @@ repositories {
         url "https://jitpack.io"
     }
 
+    google()
+    maven {
+        url 'https://maven.google.com/'
+        name 'Google'
+    }
 }
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '25.0.0'
+    buildToolsVersion '26.0.2'
 
     dexOptions {
         jumboMode true
@@ -83,6 +88,7 @@ dependencies {
     compile 'jp.wasabeef:richeditor-android:1.2.2'
     compile 'net.cachapa.expandablelayout:expandablelayout:2.9.1'
     compile 'com.github.chrisbanes:PhotoView:2.0.0'
+    compile 'com.jrummyapps:colorpicker:2.1.6'
     androidTestCompile 'junit:junit:4.12'
 }
 

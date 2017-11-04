@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="wrap_content"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:padding="8dp"
+    android:padding="0dp"
     android:layout_margin="8dp"
     android:id="@+id/entire_label"
     android:background="@drawable/label_corners">
@@ -10,8 +10,59 @@
     <biome.fresnotes.CustomTextViewLogo
         android:id="@+id/label_name"
         android:text="Sample Note Name"
+        android:layout_margin="8dp"
+        android:gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="21dp" />
+
+    <biome.fresnotes.BackAwareEditText
+        android:layout_centerVertical="true"
+        android:layout_margin="3dp"
+        android:maxLines="1"
+        android:minLines="1"
+        android:background="@color/white"
+        android:visibility="gone"
+        android:id="@+id/new_label_name"
+        android:minWidth="100dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+    <View
+        android:layout_marginRight="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_centerVertical="true"
+        android:background="@drawable/label_corners"
+        android:layout_toRightOf="@+id/new_label_name"
+        android:layout_toEndOf="@+id/new_label_name"
+        android:visibility="gone"
+        android:id="@+id/color_picker"
+        android:layout_width="21dp"
+        android:layout_height="21dp"/>
 
-</LinearLayout>
+    <ImageView
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:id="@+id/cancel_label"
+        android:visibility="gone"
+        android:layout_toRightOf="@+id/color_picker"
+        android:layout_toEndOf="@+id/color_picker"
+        android:layout_centerVertical="true"
+        android:src="@drawable/red_x"
+        android:layout_width="21dp"
+        android:layout_height="21dp" />
+
+    <ImageView
+
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_centerVertical="true"
+        android:id="@+id/create_label"
+        android:visibility="invisible"
+        android:layout_toEndOf="@+id/cancel_label"
+        android:layout_toRightOf="@+id/cancel_label"
+        android:src="@drawable/plus_icon"
+        android:layout_width="21dp"
+        android:layout_height="21dp" />
+
+
+</RelativeLayout>

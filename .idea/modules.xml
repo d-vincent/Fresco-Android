@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/Fresco.iml" filepath="$PROJECT_DIR$/Fresco.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Fresco-Android - Copy.iml" filepath="$PROJECT_DIR$/Fresco-Android - Copy.iml" />
+      <module fileurl="file://C:\Users\dmcdo\StudioProjects\Fresnotes\Fresco.iml" filepath="C:\Users\dmcdo\StudioProjects\Fresnotes\Fresco.iml" />
+      <module fileurl="file://C:\Users\dmcdo\StudioProjects\Fresnotes\Fresco-Android - Copy.iml" filepath="C:\Users\dmcdo\StudioProjects\Fresnotes\Fresco-Android - Copy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Fresnotes.iml" filepath="$PROJECT_DIR$/.idea/Fresnotes.iml" />
       <module fileurl="file://$PROJECT_DIR$/RevealLayout/RevealLayout.iml" filepath="$PROJECT_DIR$/RevealLayout/RevealLayout.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>

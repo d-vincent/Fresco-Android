@@ -232,9 +232,10 @@ public class LoginFrag extends Fragment {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
 
+                    Fragment mFragment = UserNotes.newInstance();
 //                    FirebaseUser user = mAuth.getCurrentUser();
 //                    Toast.makeText(getContext(), user.getEmail(), Toast.LENGTH_SHORT).show();
-//                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, ProjectFragment.newInstance()).commit();
+                    getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.container, mFragment).commit();
                 }
             });
 

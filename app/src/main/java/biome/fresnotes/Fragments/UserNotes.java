@@ -1,9 +1,13 @@
 package biome.fresnotes.Fragments;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
@@ -11,18 +15,26 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
+import android.widget.ImageView;
 
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
+import com.jrummyapps.android.colorpicker.ColorPickerDialog;
+import com.jrummyapps.android.colorpicker.ColorPickerDialogListener;
 import com.marshalchen.ultimaterecyclerview.UltimateRecyclerView;
 import com.marshalchen.ultimaterecyclerview.UltimateViewAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
+import biome.fresnotes.BackAwareEditText;
 import biome.fresnotes.CustomTextViewLogo;
+import biome.fresnotes.MainActivity;
 import biome.fresnotes.NoteListAdapter;
 import biome.fresnotes.Objects.LabelObject;
 import biome.fresnotes.Objects.NoteObject;
@@ -48,15 +60,16 @@ public class UserNotes extends Fragment {
     NoteListAdapter mAdapter;
 
     UltimateRecyclerView mLabelRecyclerView;
-    LabelAdapter mLabelAdapter;
+    public LabelAdapter mLabelAdapter;
 
     List<LabelObject> activeLabels;
     List<LabelObject> mLabels;
 
+    ColorPickerDialog dialog;
+    String selectedColorHex;
+
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
 
     private OnFragmentInteractionListener mListener;
 
@@ -80,8 +93,33 @@ public class UserNotes extends Fragment {
         }
         mNotes = new ArrayList<>();
         activeLabels = new ArrayList<>();
+
+        selectedColorHex = String.format("#%06X", (0xFFFFFF & getResources().getColor(R.color.colorPrimary)));
+
+        dialog = ColorPickerDialog.newBuilder().setColor(getResources().getColor(R.color.colorPrimary)).create();
+        dialog.setColorPickerDialogListener(new ColorPickerDialogListener() {
+            @Override
+            public void onColorSelected(int dialogId, int color) {
+                selectedColorHex = String.format("#%06X", (0xFFFFFF & color));
+                mLabelAdapter.notifyDataSetChanged();
+                //holder.colorPicker.setBackgroundColor(color);
+            }
+
+            @Override
+            public void onDialogDismissed(int dialogId) {
+
+
+            }
+        });
+
         //todo it's trying to get this too fast and crashing yo
-        //mLabels = ProjectDetailActivity.mProject.getLabels();
+        mLabels = ((MainActivity)getActivity()).labels;
+
+        LabelObject newLabel = new LabelObject();
+        newLabel.setLabelName("New Label");
+
+        mLabels.add(newLabel);
+
 
 
         mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("notes").addChildEventListener(new ChildEventListener() {
@@ -197,12 +235,12 @@ public class UserNotes extends Fragment {
         mAdapter = new NoteListAdapter(mNotes, getContext());
         mRecyclerView.setAdapter(mAdapter);
 
-//        mLabelRecyclerView = (UltimateRecyclerView)view.findViewById(R.id.label_recycler);
-//        mLabelRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false));
-//
-//        mLabelAdapter = new LabelAdapter(mLabels, getContext());
-//        mLabelRecyclerView.setAdapter(mLabelAdapter);
-//        mLabelAdapter.notifyDataSetChanged();
+        mLabelRecyclerView = (UltimateRecyclerView)view.findViewById(R.id.label_recycler);
+        mLabelRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.HORIZONTAL, false));
+
+        mLabelAdapter = new LabelAdapter(mLabels, getContext());
+        mLabelRecyclerView.setAdapter(mLabelAdapter);
+        mLabelAdapter.notifyDataSetChanged();
 
         return view;
     }
@@ -296,54 +334,98 @@ public class UserNotes extends Fragment {
             holder.bindLabel(mLabels.get(position));
 
             holder.entireViewWithBorder.setSelected(selectedItems.get(position, false));
+            if(position == 0){
+                holder.labelName.setTextColor(getResources().getColor(R.color.white));
+            }
+            else{
+                int labelColor = Color.parseColor(mLabels.get(position).getColorhex());
+                holder.labelName.setTextColor(labelColor);
+            }
+            if (position == 0 && !holder.isOpen){
+                holder.entireViewWithBorder.setBackground(getResources().getDrawable(R.drawable.new_label_background));
 
-            holder.entireViewWithBorder.setOnTouchListener(new View.OnTouchListener() {
+            }
+            else {
+                holder.entireViewWithBorder.setBackground(getResources().getDrawable(R.drawable.label_corners));
+            }
+
+            holder.labelName.setOnTouchListener(new View.OnTouchListener() {
                 @Override
                 public boolean onTouch(View view, MotionEvent motionEvent) {
 
-                    if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
 
-                        if (selectedItems.get(position, false)) {
-                            selectedItems.delete(position);
-                            holder.entireViewWithBorder.setSelected(false);
+                    if (position != 0) {
+                        if (motionEvent.getAction() == MotionEvent.ACTION_UP) {
 
-                            activeLabels.remove(mLabels.get(position));
-                            if (activeLabels.size() > 0){
+                            if (selectedItems.get(position, false)) {
+                                selectedItems.delete(position);
+                                holder.entireViewWithBorder.setSelected(false);
 
+                                activeLabels.remove(mLabels.get(position));
+                                if (activeLabels.size() > 0) {
+
+                                    List<NoteObject> newNoteList = new ArrayList<NoteObject>();
+                                    for (NoteObject noteObject : mNotes) {
+                                        for (LabelObject labelObject : activeLabels) {
+                                            if (labelObject.getIdsForNotesWithThisLabel().contains(noteObject.getId()) && !newNoteList.contains(noteObject)) {
+                                                newNoteList.add(noteObject);
+
+                                            }
+                                        }
+                                    }
+                                    mAdapter.mNotes = newNoteList;
+
+                                } else {
+                                    mAdapter.mNotes = mNotes;
+                                }
+                                mAdapter.notifyDataSetChanged();
+
+                            } else {
+                                selectedItems.put(position, true);
+                                holder.entireViewWithBorder.setSelected(true);
+
+                                activeLabels.add(mLabels.get(position));
                                 List<NoteObject> newNoteList = new ArrayList<NoteObject>();
-                                for (NoteObject noteObject: mNotes){
-                                    for (LabelObject labelObject: activeLabels){
-                                        if (labelObject.getIdsForNotesWithThisLabel().contains(noteObject.getId()) && !newNoteList.contains(noteObject)){
-                                            newNoteList.add(noteObject);
+                                for (NoteObject noteObject : mNotes) {
+                                    for (LabelObject labelObject : activeLabels) {
+                                        try {
+                                            if (labelObject.getIdsForNotesWithThisLabel().contains(noteObject.getId()) && !newNoteList.contains(noteObject)) {
+                                                newNoteList.add(noteObject);
+
+                                            }
+                                        }catch (Exception e){
 
                                         }
                                     }
                                 }
                                 mAdapter.mNotes = newNoteList;
-
+                                mAdapter.notifyDataSetChanged();
                             }
-                            else {
-                                mAdapter.mNotes = mNotes;
-                            }
-                            mAdapter.notifyDataSetChanged();
-
-                        } else {
-                            selectedItems.put(position, true);
-                            holder.entireViewWithBorder.setSelected(true);
-
-                            activeLabels.add(mLabels.get(position));
-                            List<NoteObject> newNoteList = new ArrayList<NoteObject>();
-                            for (NoteObject noteObject: mNotes){
-                                for (LabelObject labelObject: activeLabels){
-                                    if (labelObject.getIdsForNotesWithThisLabel().contains(noteObject.getId()) && !newNoteList.contains(noteObject)){
-                                        newNoteList.add(noteObject);
-
-                                    }
-                                }
-                            }
-                            mAdapter.mNotes = newNoteList;
-                            mAdapter.notifyDataSetChanged();
                         }
+                    }else {
+
+                        ValueAnimator va = ValueAnimator.ofFloat(0f, 200f);
+                        int mDuration = 500; //in millis
+                        va.setDuration(mDuration);
+                        va.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                            public void onAnimationUpdate(ValueAnimator animation) {
+                                Float value = (Float) animation.getAnimatedValue();
+                                holder.newLabelName.getLayoutParams().width = value.intValue();
+                                holder.newLabelName.requestLayout();
+
+                            }
+                        });
+
+                        holder.entireViewWithBorder.setBackground(getResources().getDrawable(R.drawable.label_corners));
+                        holder.labelName.setVisibility(View.INVISIBLE);
+                        holder.newLabelName.setVisibility(View.VISIBLE);
+                        //va.start();
+                        holder.createNewLabel.setVisibility(View.VISIBLE);
+                        holder.cancelLabel.setVisibility(View.VISIBLE);
+                        holder.isOpen = true;
+                        holder.colorPicker.setVisibility(View.VISIBLE);
+                        holder.newLabelName.setText("");
+                        //User wants to make a new label
                     }
 
 
@@ -351,10 +433,74 @@ public class UserNotes extends Fragment {
                 }
             });
 
+            int parseColor = Color.parseColor(selectedColorHex);
+            holder.colorPicker.setBackgroundColor(parseColor);
+
+            holder.colorPicker.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    holder.newLabelName.clearFocus();
+                    dialog.show(getActivity().getFragmentManager(),"");
+                    InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+
+                }
+            });
+
+            holder.createNewLabel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    holder.createNewLabel.setVisibility(view.GONE);
+                    holder.newLabelName.setVisibility(view.GONE);
+                    holder.labelName.setVisibility(View.VISIBLE);
+                    holder.entireViewWithBorder.setBackground(getResources().getDrawable(R.drawable.new_label_background));
+                    holder.cancelLabel.setVisibility(View.GONE);
+                    holder.colorPicker.setVisibility(View.GONE);
+                    holder.isOpen = false;
+
+                    HashMap<String, Object> labelMap = new HashMap<>();
+                    labelMap.put("color", selectedColorHex);
+                    labelMap.put("name", holder.newLabelName.getText().toString());
+
+                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("labels").push().setValue(labelMap);
+                    InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+            });
+
+            holder.cancelLabel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    holder.createNewLabel.setVisibility(view.GONE);
+                    holder.newLabelName.setVisibility(view.GONE);
+                    holder.labelName.setVisibility(View.VISIBLE);
+                    holder.entireViewWithBorder.setBackground(getResources().getDrawable(R.drawable.new_label_background));
+                    holder.cancelLabel.setVisibility(View.GONE);
+                    holder.colorPicker.setVisibility(View.GONE);
+                    InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                    holder.isOpen = false;
+                }
+            });
+
 
             holder.labelName.setText(mLabels.get(position).getLabelName());
+            holder.newLabelName.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
 
-
+                    if (b) {
+                        InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+                    }
+                }
+            });
+            holder.newLabelName.setBackPressedListener(new BackAwareEditText.BackPressedListener() {
+                @Override
+                public void onImeBack(BackAwareEditText editText) {
+                    holder.newLabelName.clearFocus();
+                }
+            });
 
 
         }
@@ -369,6 +515,8 @@ public class UserNotes extends Fragment {
             LayoutInflater layoutInflater = LayoutInflater.from(mContext);
             View view = layoutInflater.inflate(R.layout.list_item_label, parent, false);
 
+
+
             return new LabelHolder(view);
         }
 
@@ -381,12 +529,22 @@ public class UserNotes extends Fragment {
 
             public CustomTextViewLogo labelName;
             public View entireViewWithBorder;
+            public BackAwareEditText newLabelName;
+            public ImageView createNewLabel;
+            public ImageView cancelLabel;
+            public View colorPicker;
+            public boolean isOpen = false;
 
 
             public LabelHolder(View itemView){
                 super(itemView);
                 labelName = (CustomTextViewLogo)itemView.findViewById(R.id.label_name);
                 entireViewWithBorder = itemView.findViewById(R.id.entire_label);
+                newLabelName = (BackAwareEditText)itemView.findViewById(R.id.new_label_name);
+                createNewLabel = (ImageView)itemView.findViewById(R.id.create_label);
+                cancelLabel = (ImageView)itemView.findViewById(R.id.cancel_label);
+                colorPicker = itemView.findViewById(R.id.color_picker);
+
 
             }
 

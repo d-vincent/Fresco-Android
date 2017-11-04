@@ -56,6 +56,7 @@ import biome.fresnotes.Fragments.UserNotes;
 import biome.fresnotes.Objects.AlertObject;
 import biome.fresnotes.Objects.ChatObject;
 import biome.fresnotes.Fragments.DirectMessage;
+import biome.fresnotes.Objects.LabelObject;
 import io.fabric.sdk.android.Fabric;
 
 
@@ -80,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
     ImageView profileImage;
     TextView userName;
 
+    public ArrayList<LabelObject> labels;
+
     Fragment mFragment;
 
     private BroadcastReceiver myReceiver = new BroadcastReceiver() {
@@ -103,6 +106,9 @@ public class MainActivity extends AppCompatActivity {
         //FirebaseApp.initializeApp(this);
         //Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
+
+        labels = new ArrayList<>();
+
 
         navigationView = (NavigationView) findViewById(R.id.nvView);
         profileImage = (ImageView)findViewById(R.id.userIcon);
@@ -152,7 +158,7 @@ public class MainActivity extends AppCompatActivity {
                     alertObjects = new ArrayList<>();
 
                     bottomBar = (BottomBar)findViewById(R.id.bottomBar);
-                    bottomBar.setVisibility(View.VISIBLE);
+                    //bottomBar.setVisibility(View.VISIBLE);
                     toolbar.setVisibility(View.VISIBLE);
                     //mFab.setVisibility(View.VISIBLE);
                     bottomBar.setOnTabSelectListener(new OnTabSelectListener() {
@@ -231,6 +237,47 @@ public class MainActivity extends AppCompatActivity {
                         }
                     });
 
+                    mDatabase.child("users").child(mAuth.getCurrentUser().getUid()).child("labels").addChildEventListener(new ChildEventListener() {
+                        @Override
+                        public void onChildAdded(DataSnapshot labelSnap, String s) {
+
+                            LabelObject lObject = new LabelObject();
+                            lObject.setId(labelSnap.getKey());
+                            lObject.setColorhex((String)labelSnap.child("color").getValue());
+                            lObject.setLabelName((String)labelSnap.child("name").getValue());
+                            ArrayList<String> strArray = new ArrayList<String>();
+                            for(DataSnapshot noteSnap: labelSnap.child("notes").getChildren()){
+                                strArray.add((String)noteSnap.getKey());
+                            }
+                            lObject.setIdsForNotesWithThisLabel(strArray);
+
+                            labels.add(lObject);
+
+                            if (!(mFragment instanceof UserNotes)){
+                                ((UserNotes)mFragment).mLabelAdapter.notifyDataSetChanged();
+                            }
+                        }
+
+                        @Override
+                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                        }
+
+                        @Override
+                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
 
                     Log.d("Firebase", "onAuthStateChanged:signed_in:" + user.getUid());
                 } else {
